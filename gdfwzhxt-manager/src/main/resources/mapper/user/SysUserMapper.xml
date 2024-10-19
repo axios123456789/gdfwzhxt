@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.SysUserMapper">
+    <sql id="columns">
+        id,
+        login_account loginAccount,
+        login_password loginPassword,
+        `name`,
+        status,
+        `level`,
+        address,
+        avatar,
+        show_image showImage,
+        company,
+        create_time createTime,
+        update_time updateTime,
+        is_deleted isDeleted
+    </sql>
+
+    <!-- 根据账号查询用户信息 -->
+    <select id="getSysUserByAccount" resultType="com.wangwen.gdfwzhxt.model.entity.system.SysUser">
+        select <include refid="columns"/>
+          from t_user
+        where login_account = #{loginAccount}
+          and is_deleted = 0
+          and `status` = 1
+    </select>
+</mapper>
