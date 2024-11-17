@@ -21,4 +21,7 @@ public class BaseEntity {
 
     @Schema(description = "是否删除")
     private Integer isDeleted;
+
+    @Schema(description = "用户所属供电公司")
+    private String company;
 }

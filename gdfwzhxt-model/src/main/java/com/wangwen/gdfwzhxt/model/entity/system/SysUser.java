@@ -31,9 +31,6 @@ public class SysUser extends BaseEntity {
     @Schema(description = "用户展示图片信息")
     private String showImage;
 
-    @Schema(description = "用户所属供电公司")
-    private String company;
-
     @Schema(description = "性别")
     private Integer sex;
 }

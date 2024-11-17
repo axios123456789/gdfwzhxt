@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.SysRoleMapper">
+    <sql id="columns">
+        id,
+        role_name as roleName,
+        role_code as roleCode,
+        description,
+        create_time as createTime,
+        update_time as updateTime,
+        is_deleted as isDeleted,
+        company
+    </sql>
+
+    <select id="findByPage" resultType="com.wangwen.gdfwzhxt.model.entity.system.SysRole">
+        select <include refid="columns"/>
+          from t_role t
+        <where>
+            <if test="roleName != null and roleName != ''">
+                and t.role_name like concat('%', #{roleName}, '%')
+            </if>
+            and t.is_deleted = 0
+            and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+        </where>
+    </select>
+</mapper>
