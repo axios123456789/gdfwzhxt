@@ -27,4 +27,9 @@
           and t.`status` = 1
           and (t.company = '-1' or (select count(1) from t_user t1 where t1.id = t.company and t1.is_deleted = 0) > 0)
     </select>
+
+    <!--  查询用户表注册的公司数  -->
+    <select id="getCompanyCount" resultType="java.lang.Integer">
+        select count(1) from t_user t where t.is_deleted = 0 and t.`level` = 1
+    </select>
 </mapper>

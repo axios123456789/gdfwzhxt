@@ -25,8 +25,40 @@ public class SysRoleController {
     @GetMapping("/findByPage/{current}/{limit}")
     public Result findByPage(@PathVariable("current") Integer current,
                              @PathVariable("limit") Integer limit,
-                             @RequestBody SysRoleDto sysRoleDto){
+                             SysRoleDto sysRoleDto){
         PageInfo<SysRole> pageInfo  = sysRoleService.findByPage(sysRoleDto, current, limit);
         return Result.build(pageInfo, ResultCodeEnum.SUCCESS);
+    }
+
+    /**
+     * 添加或修改角色
+     * @param sysRole
+     * @return
+     */
+    @PostMapping("/saveRole")
+    public Result saveRole(@RequestBody SysRole sysRole){
+        try {
+            //开始保存操作
+            sysRoleService.saveRole(sysRole);
+
+            return Result.build(null, ResultCodeEnum.SUCCESS);
+        } catch (Exception e) {
+            return Result.build(null, 500, "保存角色失败！");
+        }
+    }
+
+    /**
+     * 通过ID删除角色
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/deleteRoleById/{roleId}")
+    public Result deleteRoleById(@PathVariable("roleId") String id){
+        try {
+            sysRoleService.deleteRoleById(id);
+            return Result.build(null, ResultCodeEnum.SUCCESS);
+        } catch (Exception e) {
+            return Result.build(null, 500, "删除角色失败！");
+        }
     }
 }

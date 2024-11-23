@@ -7,4 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface SysUserMapper {
     //根据账号查询用户信息
     SysUser getSysUserByAccount(String loginAccount);
+
+    //查询用户表注册的公司数
+    int getCompanyCount();
 }

@@ -25,6 +25,16 @@ public class IndexController {
     private ValidateCodeService validateCodeService;
 
     /**
+     * 查询系统是否注册了公司
+     * @return
+     */
+    @GetMapping("/companyIsExists")
+    public Result companyIsExists(){
+        boolean flag = sysUserService.getCompanyExistsFlag();
+        return Result.build(flag, ResultCodeEnum.SUCCESS);
+    }
+
+    /**
      * 用户退出登录
      * @param token
      * @return

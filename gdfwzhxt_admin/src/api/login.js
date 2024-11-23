@@ -43,3 +43,11 @@ export const Logout = () => {
     method: 'get',
   })
 }
+
+//判断系统是否注册过公司
+export const IsRegister = () => {
+  return request({
+    url: '/electricity/system/index/companyIsExists',
+    method: 'get'
+  })
+}

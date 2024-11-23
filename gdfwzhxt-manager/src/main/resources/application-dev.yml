@@ -26,3 +26,4 @@ gdfw:
     noAuthUrls:
       - /electricity/system/index/login
       - /electricity/system/index/generateValidateCode
+      - /electricity/system/index/companyIsExists

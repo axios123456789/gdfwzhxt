@@ -13,4 +13,7 @@ public interface SysUserService {
 
     //用户退出登录
     void logout(String token);
+
+    //查询系统是否注册了公司
+    boolean getCompanyExistsFlag();
 }

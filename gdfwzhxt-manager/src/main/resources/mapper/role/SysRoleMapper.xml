@@ -12,6 +12,28 @@
         company
     </sql>
 
+    <!-- 添加角色  -->
+    <insert id="addRole">
+        insert into t_role (id, role_name, role_code, description, create_time, company)
+        values (#{id}, #{roleName}, #{roleCode}, #{description}, now(), #{company})
+    </insert>
+
+    <!--  修改角色  -->
+    <update id="updateRole">
+        update t_role set
+        <if test="roleName != null and roleName != ''">
+            role_name = #{roleName},
+        </if>
+        <if test="roleCode != null and roleCode != ''">
+            role_code = #{roleCode},
+        </if>
+        <if test="description != null and description != ''">
+            description = #{description},
+        </if>
+        update_time = now()
+        where id = #{id}
+    </update>
+
     <select id="findByPage" resultType="com.wangwen.gdfwzhxt.model.entity.system.SysRole">
         select <include refid="columns"/>
           from t_role t

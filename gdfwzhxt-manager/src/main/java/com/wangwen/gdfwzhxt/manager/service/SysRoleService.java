@@ -13,4 +13,16 @@ public interface SysRoleService {
      * @return
      */
     PageInfo<SysRole> findByPage(SysRoleDto sysRoleDto, Integer current, Integer limit);
+
+    /**
+     * 添加或修改角色
+     * @param sysRole
+     */
+    void saveRole(SysRole sysRole);
+
+    /**
+     * 通过ID删除角色
+     * @param id
+     */
+    void deleteRoleById(String id);
 }

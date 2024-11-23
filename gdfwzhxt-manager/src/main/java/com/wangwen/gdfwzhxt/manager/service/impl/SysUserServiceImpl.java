@@ -104,4 +104,19 @@ public class SysUserServiceImpl implements SysUserService {
     public void logout(String token) {
         redisTemplate.delete("user:login"+token);
     }
+
+    /**
+     * 查询系统是否注册了公司
+     * @return
+     */
+    @Override
+    public boolean getCompanyExistsFlag() {
+        //查询用户表中的公司数量（一般只有1个或0个）
+        int companyNum = sysUserMapper.getCompanyCount();
+        if (companyNum == 0){
+            return false;
+        }else {
+            return true;
+        }
+    }
 }
