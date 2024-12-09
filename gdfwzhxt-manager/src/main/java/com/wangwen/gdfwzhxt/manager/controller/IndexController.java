@@ -14,6 +14,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 用户登录及准备工作
+ */
 @Tag(name = "用户接口")
 @RestController
 @RequestMapping(value = "/electricity/system/index")

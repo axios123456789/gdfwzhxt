@@ -9,6 +9,9 @@ import com.wangwen.gdfwzhxt.model.vo.common.ResultCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 系统管理-角色管理
+ */
 @RestController
 @RequestMapping("/electricity/system/sysRole")
 public class SysRoleController {
@@ -40,7 +43,6 @@ public class SysRoleController {
         try {
             //开始保存操作
             sysRoleService.saveRole(sysRole);
-
             return Result.build(null, ResultCodeEnum.SUCCESS);
         } catch (Exception e) {
             return Result.build(null, 500, "保存角色失败！");

@@ -15,7 +15,9 @@
         create_time createTime,
         update_time updateTime,
         is_deleted isDeleted,
-        sex
+        sex,
+        phone,
+        description
     </sql>
 
     <!-- 根据账号查询用户信息 -->

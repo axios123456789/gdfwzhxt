@@ -33,4 +33,11 @@ public class SysUser extends BaseEntity {
 
     @Schema(description = "性别")
     private Integer sex;
+
+    @Schema(description = "账号所属人电话号码")
+    private String phone;
+
+    @Schema(description = "账号描述")
+    private String description;
+
 }

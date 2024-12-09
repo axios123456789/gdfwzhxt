@@ -50,10 +50,6 @@
 
     <!--- 角色表格数据 -->
     <el-table :data="list" style="width: 100%">
-      <el-table-column prop="roleName" label="角色名称" width="180" />
-      <el-table-column prop="roleCode" label="角色code" width="180" />
-      <el-table-column prop="createTime" label="创建时间" />
-      <el-table-column prop="description" label="描述" width="300"/>
       <el-table-column label="操作" align="center" width="280" #default="scope">
         <el-button type="primary" size="small" @click="editRole(scope.row)">
           修改
@@ -62,11 +58,15 @@
           删除
         </el-button>
       </el-table-column>
+      <el-table-column prop="roleName" label="角色名称" width="180" />
+      <el-table-column prop="roleCode" label="角色code" width="180" />
+      <el-table-column prop="createTime" label="创建时间" />
+      <el-table-column prop="description" label="描述" width="300"/>
     </el-table>
 
     <!--分页条-->
     <el-pagination
-        style="margin-top: 50px"
+        style="margin-top: 30px"
         v-model:current-page="pageParams.page"
         v-model:page-size="pageParams.limit"
         :page-sizes="[10, 20, 50, 100]"
@@ -141,6 +141,14 @@ const editRole = (row) => {
 
 //点击添加或修改模态窗口中的提交按钮后触发
 const submit = async () => {
+  if (sysRole.value.roleName == undefined){
+    ElMessage.warning("【角色名称】不能为空");
+    return;
+  }
+  if (sysRole.value.roleCode == undefined){
+    ElMessage.warning("【角色编码】不能为空");
+    return;
+  }
   const {code, message} = await SaveRole(sysRole.value);
   if (code === 200){
     //关闭弹窗

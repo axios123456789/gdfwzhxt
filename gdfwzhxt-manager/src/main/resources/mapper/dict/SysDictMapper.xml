@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.SysDictMapper">
+    <sql id="columns">
+        id,
+        code,
+        value,
+        type,
+        create_time createTime,
+        update_time updateTime,
+        is_deleted isDeleted,
+        description
+    </sql>
+
+    <!--  根据type查询所有  -->
+    <select id="getCodesByType" resultType="com.wangwen.gdfwzhxt.model.entity.system.SysCode">
+        select <include refid="columns"/> from t_code c
+        where c.is_deleted = 0
+          and c.type = #{param1}
+    </select>
+</mapper>
