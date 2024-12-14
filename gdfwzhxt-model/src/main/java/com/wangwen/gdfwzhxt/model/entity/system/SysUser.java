@@ -22,6 +22,9 @@ public class SysUser extends BaseEntity {
     @Schema(description = "账号等级")
     private Integer level;
 
+    @Schema(description = "账号等级名称")
+    private String levelName;
+
     @Schema(description = "用户地址")
     private String address ;
 

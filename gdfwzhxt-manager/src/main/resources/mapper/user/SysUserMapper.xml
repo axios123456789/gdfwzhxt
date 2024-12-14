@@ -34,4 +34,51 @@
     <select id="getCompanyCount" resultType="java.lang.Integer">
         select count(1) from t_user t where t.is_deleted = 0 and t.`level` = 1
     </select>
+
+    <!--  条件查询用户列表  -->
+    <select id="findByPage" resultType="com.wangwen.gdfwzhxt.model.entity.system.SysUser">
+        select id,
+               login_account loginAccount,
+               login_password loginPassword,
+               `name`,
+               status,
+               `level`,
+               (select c.value from t_code c where c.type = 't_user_level' and c.code = t.level) as levelName,
+               address,
+               avatar,
+               show_image showImage,
+               (case when t.company = '-1' then '' else (select u.name from t_user u where u.id = t.company) end) company,
+               create_time createTime,
+               update_time updateTime,
+               is_deleted isDeleted,
+               sex,
+               phone,
+               description
+          from t_user t
+        <where>
+            <if test="account != null and account != ''">
+                and t.login_account like concat('%', #{account},'%')
+            </if>
+            <if test="name != null and name != ''">
+                and t.name like concat('%', #{name}, '%')
+            </if>
+            <if test="beginTime != null and beginTime != ''">
+                and t.create_time &gt;= #{beginTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and t.create_time &lt;= #{endTime}
+            </if>
+            <if test="level != null and level.size() > 0">
+                and t.level in
+                <foreach collection="level" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="status != null and status != null">
+                and t.status = #{status}
+            </if>
+            and t.is_deleted = 0
+            and (t.level = 1 or exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company))
+        </where>
+    </select>
 </mapper>

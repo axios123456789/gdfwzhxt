@@ -1,6 +1,8 @@
 package com.wangwen.gdfwzhxt.manager.service;
 
+import com.github.pagehelper.PageInfo;
 import com.wangwen.gdfwzhxt.model.dto.system.LoginDto;
+import com.wangwen.gdfwzhxt.model.dto.system.SysUserDto;
 import com.wangwen.gdfwzhxt.model.entity.system.SysUser;
 import com.wangwen.gdfwzhxt.model.vo.system.LoginVo;
 
@@ -16,4 +18,7 @@ public interface SysUserService {
 
     //查询系统是否注册了公司
     boolean getCompanyExistsFlag();
+
+    //查询系统用户列表
+    PageInfo<SysUser> findByPage(Integer current, Integer limit, SysUserDto sysUserDto);
 }

@@ -2,10 +2,13 @@ package com.wangwen.gdfwzhxt.manager.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.wangwen.gdfwzhxt.common_service.exception.ElectricityException;
 import com.wangwen.gdfwzhxt.manager.mapper.SysUserMapper;
 import com.wangwen.gdfwzhxt.manager.service.SysUserService;
 import com.wangwen.gdfwzhxt.model.dto.system.LoginDto;
+import com.wangwen.gdfwzhxt.model.dto.system.SysUserDto;
 import com.wangwen.gdfwzhxt.model.entity.system.SysUser;
 import com.wangwen.gdfwzhxt.model.vo.common.ResultCodeEnum;
 import com.wangwen.gdfwzhxt.model.vo.system.LoginVo;
@@ -14,6 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -118,5 +122,26 @@ public class SysUserServiceImpl implements SysUserService {
         }else {
             return true;
         }
+    }
+
+    /**
+     * 查询系统用户列表
+     * @param current
+     * @param limit
+     * @param sysUserDto
+     * @return
+     */
+    @Override
+    public PageInfo<SysUser> findByPage(Integer current, Integer limit, SysUserDto sysUserDto) {
+        //设置分页参数
+        PageHelper.startPage(current, limit);
+
+        //条件查询所有数据
+        List<SysUser> list = sysUserMapper.findByPage(sysUserDto);
+
+        //封装pageInfo对象
+        PageInfo<SysUser> pageInfo = new PageInfo<>(list);
+
+        return pageInfo;
     }
 }

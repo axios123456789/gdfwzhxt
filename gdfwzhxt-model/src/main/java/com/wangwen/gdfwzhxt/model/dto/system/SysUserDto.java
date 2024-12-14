@@ -3,6 +3,8 @@ package com.wangwen.gdfwzhxt.model.dto.system;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Schema(description = "用户请求参数实体类")
 public class SysUserDto {
@@ -19,7 +21,7 @@ public class SysUserDto {
     private String endTime;
 
     @Schema(description = "账号等级")
-    private Integer level;
+    private List<Integer> level;
 
     @Schema(description = "账号状态")
     private Integer status;
