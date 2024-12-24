@@ -27,3 +27,9 @@ gdfw:
       - /electricity/system/index/login
       - /electricity/system/index/generateValidateCode
       - /electricity/system/index/companyIsExists
+
+  minio:
+    endpointUrl: http://127.0.0.1:9000
+    accessKey: minioadmin
+    secreKey: minioadmin
+    bucketName: gdfwzhxt-bucket

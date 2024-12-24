@@ -74,8 +74,45 @@
 
   <!--添加按钮-->
   <div class="tools-div">
-    <el-button type="success" size="small">添 加</el-button>
+    <el-button type="success" size="small" @click="addUser">添 加</el-button>
   </div>
+
+  <!-- 添加修改用户模态窗口 -->
+  <el-dialog v-model="dialogVisible" title="添加修改用户" width="40%">
+    <el-form label-width="120px">
+      <el-form-item label="用户账号">
+        <el-input v-model="sysUser.loginAccount"/>
+      </el-form-item>
+      <el-form-item v-if="sysUser.id == null" label="密码">
+        <el-input type="password" show-password v-model="sysUser.loginPassword"/>
+      </el-form-item>
+      <el-form-item label="用户姓名">
+        <el-input v-model="sysUser.name"/>
+      </el-form-item>
+      <el-form-item label="手机">
+        <el-input v-model="sysUser.phone"/>
+      </el-form-item>
+      <el-form-item label="头像">
+        <el-upload
+            class="avatar-uploader"
+            action="http://localhost:8501/electricity/system/fileUpload"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :headers="headers"
+        >
+          <img v-if="sysUser.avatar" :src="sysUser.avatar" class="avatar" />
+          <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+        </el-upload>
+      </el-form-item>
+      <el-form-item label="描述">
+        <el-input  v-model="sysUser.description"/>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="submit">提交</el-button>
+        <el-button @click="dialogVisible = false">取消</el-button>
+      </el-form-item>
+    </el-form>
+  </el-dialog>
 
   <!---数据表格-->
   <el-table :data="list" style="width: 100%">
@@ -124,6 +161,7 @@
 import {onMounted, ref} from 'vue';
 import {GetKeyAndValueByType} from "@/api/sysDict";
 import {GetSysUserListByPage} from "@/api/sysUser";
+import {useApp} from "@/pinia/modules/app";
 
 //-----------------------------------------------------------列表方法---------------------------------------------
 //表格数据模型
@@ -195,6 +233,42 @@ const searchSysUser = () => {
 const resetData = () => {
   queryDto.value = {};
   fetchData();
+}
+
+//----------------------------------------------添加/修改用户--------------------------------------------
+const sysUser = ref({
+  id: "",
+  loginAccount:"",
+  name: "" ,
+  status: "",
+  level: "",
+  address: "",
+  sex: "",
+  phone: "" ,
+  loginPassword: "",
+  description:"",
+  avatar: ""
+}); //用户对象模型
+
+const dialogVisible = ref(false); //模态窗口默认关闭
+const addUser = () => {
+  sysUser.value = {};
+  dialogVisible.value = true;
+}
+
+//提交方法
+const submit = async () => {
+
+}
+
+//-------------------------------------------------文件上传--------------------------------------------
+const headers = {
+  token: useApp().authorization.token     // 从pinia中获取token，在进行文件上传的时候将token设置到请求头中
+}
+
+// 图像上传成功以后的事件处理函数
+const handleAvatarSuccess = (response, uploadFile) => {
+  sysUser.value.avatar = response.data
 }
 
 </script>
