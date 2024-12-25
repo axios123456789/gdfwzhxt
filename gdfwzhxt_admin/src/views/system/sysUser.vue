@@ -86,8 +86,39 @@
       <el-form-item v-if="sysUser.id == null" label="密码">
         <el-input type="password" show-password v-model="sysUser.loginPassword"/>
       </el-form-item>
+      <el-form-item v-if="sysUser.id != null" label="状态">
+        <el-select v-model="sysUser.status" placeholder="请选择" style="width: 100%" clearable>
+          <el-option
+              v-for="item in StatusItem"
+              :key="item.value"
+              :label="item.text"
+              :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="账号等级">
+        <el-select v-model="sysUser.level" placeholder="请选择" style="width: 100%" clearable>
+          <el-option
+              v-for="item in levelItemByPower"
+              :key="item.value"
+              :label="item.text"
+              :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="用户姓名">
         <el-input v-model="sysUser.name"/>
+      </el-form-item>
+      <el-form-item label="性别">
+        <el-radio-group v-model="sysUser.sex">
+          <el-radio
+              v-for="(item, index) in sexItem"
+              :key="index"
+              :label="item.value"
+          >
+            {{ item.text }}
+          </el-radio>
+        </el-radio-group>
       </el-form-item>
       <el-form-item label="手机">
         <el-input v-model="sysUser.phone"/>
@@ -104,6 +135,9 @@
           <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
         </el-upload>
       </el-form-item>
+      <el-form-item label="用户地址">
+        <el-input  v-model="sysUser.address"/>
+      </el-form-item>
       <el-form-item label="描述">
         <el-input  v-model="sysUser.description"/>
       </el-form-item>
@@ -116,8 +150,8 @@
 
   <!---数据表格-->
   <el-table :data="list" style="width: 100%">
-    <el-table-column label="操作" align="center" width="280" >
-      <el-button type="primary" size="small">
+    <el-table-column label="操作" align="center" width="280" #default="scope">
+      <el-button type="primary" size="small" @click="editUser(scope.row)">
         修改
       </el-button>
       <el-button type="danger" size="small">
@@ -141,6 +175,9 @@
       {{ scope.row.status == 1 ? '正常' : '停用' }}
     </el-table-column>
     <el-table-column prop="createTime" label="创建时间" width="180" />
+    <el-table-column prop="createBy" label="创建者" width="120" />
+    <el-table-column prop="updateTime" label="修改时间" width="180" />
+    <el-table-column prop="updateBy" label="修改者" width="120" />
   </el-table>
 
   <!--分页条-->
@@ -159,7 +196,7 @@
 
 <script setup>
 import {onMounted, ref} from 'vue';
-import {GetKeyAndValueByType} from "@/api/sysDict";
+import {GetKeyAndValueByType, GetUserLevelByPower} from "@/api/sysDict";
 import {GetSysUserListByPage} from "@/api/sysUser";
 import {useApp} from "@/pinia/modules/app";
 
@@ -249,16 +286,38 @@ const sysUser = ref({
   description:"",
   avatar: ""
 }); //用户对象模型
-
+const sexItem = ref([]); //性别下拉列表
+const levelItemByPower = ref([]); //账号等级下拉列表（权限分级）
 const dialogVisible = ref(false); //模态窗口默认关闭
+
+//添加用户按钮触发事件
 const addUser = () => {
+  getSexItem();
+  getLevelItemByPower();
   sysUser.value = {};
   dialogVisible.value = true;
+}
+//修改用户按钮触发事件
+const editUser = (row) => {
+  getSexItem();
+  getLevelItemByPower();
+  sysUser.value = row;
+  dialogVisible.value = true;
+}
+//获取性别下拉列表
+const getSexItem = async () => {
+  const {data} = await GetKeyAndValueByType("t_user_sex");
+  sexItem.value = data
+}
+//获取账号等级下拉列表
+const getLevelItemByPower = async () => {
+  const {data} = await GetUserLevelByPower("t_user_level");
+  levelItemByPower.value = data
 }
 
 //提交方法
 const submit = async () => {
-
+  console.log("数据",sysUser.value)
 }
 
 //-------------------------------------------------文件上传--------------------------------------------

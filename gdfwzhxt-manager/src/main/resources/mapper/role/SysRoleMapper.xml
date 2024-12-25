@@ -8,14 +8,16 @@
         description,
         create_time as createTime,
         update_time as updateTime,
+        create_by as createBy,
+        update_by as updateBy,
         is_deleted as isDeleted,
         company
     </sql>
 
     <!-- 添加角色  -->
     <insert id="addRole">
-        insert into t_role (id, role_name, role_code, description, create_time, company)
-        values (#{id}, #{roleName}, #{roleCode}, #{description}, now(), #{company})
+        insert into t_role (id, role_name, role_code, description, create_time, company, create_by)
+        values (#{id}, #{roleName}, #{roleCode}, #{description}, now(), #{company}, #{createBy})
     </insert>
 
     <!--  修改角色  -->
@@ -30,7 +32,8 @@
         <if test="description != null and description != ''">
             description = #{description},
         </if>
-        update_time = now()
+        update_time = now(),
+        update_by = #{updateBy}
         where id = #{id}
     </update>
 
@@ -44,5 +47,6 @@
             and t.is_deleted = 0
             and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
         </where>
+        order by t.create_time desc
     </select>
 </mapper>

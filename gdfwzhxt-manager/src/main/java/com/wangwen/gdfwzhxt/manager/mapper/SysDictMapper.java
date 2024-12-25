@@ -9,4 +9,7 @@ import java.util.List;
 public interface SysDictMapper {
     //根据type查询所有
     List<SysCode> getCodesByType(String type);
+
+    //根据type查询对应权限的账号等级(只能是自己的下级权限)
+    List<SysCode> getUserLevelByPower(String type, int level);
 }

@@ -34,4 +34,10 @@ public class SysCode {
 
     @Schema(description = "描述")
     private String description;
+
+    @Schema(description = "创建者")
+    private String createBy;
+
+    @Schema(description = "修改者")
+    private String updateBy;
 }

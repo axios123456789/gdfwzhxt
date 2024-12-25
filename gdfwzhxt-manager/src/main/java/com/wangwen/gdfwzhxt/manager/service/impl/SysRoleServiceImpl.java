@@ -51,12 +51,14 @@ public class SysRoleServiceImpl implements SysRoleService {
         if (sysRole.getId() == null || sysRole.getId() == ""){//添加
             sysRole.setId(UUIDUtil.getUUID());
             sysRole.setCompany(company);
+            sysRole.setCreateBy(AuthContextUtil.get().getName());
 
             //添加
             sysRoleMapper.addRole(sysRole);
             return;
         }
         //修改
+        sysRole.setUpdateBy(AuthContextUtil.get().getName());
         sysRoleMapper.updateRole(sysRole);
     }
 

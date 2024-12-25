@@ -8,6 +8,8 @@
         type,
         create_time createTime,
         update_time updateTime,
+        create_by createBy,
+        update_by updateBy,
         is_deleted isDeleted,
         description
     </sql>
@@ -17,5 +19,13 @@
         select <include refid="columns"/> from t_code c
         where c.is_deleted = 0
           and c.type = #{param1}
+    </select>
+
+    <!-- 根据type查询对应权限的账号等级(只能是自己的下级权限)  -->
+    <select id="getUserLevelByPower" resultType="com.wangwen.gdfwzhxt.model.entity.system.SysCode">
+        select <include refid="columns"/> from t_code c
+        where c.is_deleted = 0
+          and c.type = #{param1}
+          and c.code > #{param2}
     </select>
 </mapper>

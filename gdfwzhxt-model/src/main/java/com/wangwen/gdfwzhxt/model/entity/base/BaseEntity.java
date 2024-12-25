@@ -24,4 +24,10 @@ public class BaseEntity {
 
     @Schema(description = "用户所属供电公司")
     private String company;
+
+    @Schema(description = "创建者")
+    private String createBy;
+
+    @Schema(description = "修改者")
+    private String updateBy;
 }

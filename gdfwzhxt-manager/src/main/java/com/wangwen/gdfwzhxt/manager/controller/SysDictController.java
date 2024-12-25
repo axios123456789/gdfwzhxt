@@ -31,4 +31,15 @@ public class SysDictController {
         List<Map<String, Object>> list = sysDictService.getKeyAndValueByType(type);
         return Result.build(list, ResultCodeEnum.SUCCESS);
     }
+
+    /**
+     * 根据当前账号的权限查询对应的账号等级
+     * @param type
+     * @return
+     */
+    @GetMapping("/getUserLevelByPower/{type}")
+    public Result getUserLevelByPower(@PathVariable("type") String type){
+        List<Map<String, Object>> list = sysDictService.getUserLevelByPower(type);
+        return Result.build(list, ResultCodeEnum.SUCCESS);
+    }
 }

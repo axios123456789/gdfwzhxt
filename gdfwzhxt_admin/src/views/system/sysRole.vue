@@ -60,7 +60,10 @@
       </el-table-column>
       <el-table-column prop="roleName" label="角色名称" width="180" />
       <el-table-column prop="roleCode" label="角色code" width="180" />
-      <el-table-column prop="createTime" label="创建时间" />
+      <el-table-column prop="createTime" label="创建时间" width="200"/>
+      <el-table-column prop="createBy" label="创建者" width="120"/>
+      <el-table-column prop="updateTime" label="修改时间" width="200"/>
+      <el-table-column prop="updateBy" label="修改者" width="120"/>
       <el-table-column prop="description" label="描述" width="300"/>
     </el-table>
 
