@@ -32,4 +32,34 @@ public class SysUserController {
         PageInfo<SysUser> pageInfo = sysUserService.findByPage(current, limit, sysUserDto);
         return Result.build(pageInfo, ResultCodeEnum.SUCCESS);
     }
+
+    /**
+     * 保存用户（添加或修改用户）
+     * @param sysUser
+     * @return
+     */
+    @PostMapping("/saveUser")
+    public Result saveUser(@RequestBody SysUser sysUser){
+        try {
+            sysUserService.saveUser(sysUser);
+            return Result.build(null, ResultCodeEnum.SUCCESS);
+        } catch (Exception e) {
+            return Result.build(null, 500, "报错用户失败！");
+        }
+    }
+
+    /**
+     * 删除用户根据id
+     * @param id
+     * @return
+     */
+    @PostMapping("/deleteUserById/{userId}")
+    public Result deleteUserById(@PathVariable("userId") String id){
+        try {
+            sysUserService.deleteUserById(id);
+            return Result.build(null, ResultCodeEnum.SUCCESS);
+        } catch (Exception e) {
+            return Result.build(null, 500, "删除用户失败！");
+        }
+    }
 }

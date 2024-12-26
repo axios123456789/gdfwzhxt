@@ -25,4 +25,7 @@ public class SysUserDto {
 
     @Schema(description = "账号状态")
     private Integer status;
+
+    @Schema(description = "当前登录用户的账户等级")
+    private Integer currentUserLevel;
 }

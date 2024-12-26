@@ -154,7 +154,7 @@
       <el-button type="primary" size="small" @click="editUser(scope.row)">
         修改
       </el-button>
-      <el-button type="danger" size="small">
+      <el-button type="danger" size="small" @click="deleteUserById(scope.row)">
         删除
       </el-button>
       <el-button type="warning" size="small">
@@ -163,6 +163,9 @@
     </el-table-column>
     <el-table-column prop="loginAccount" label="账号" width="100" />
     <el-table-column prop="name" label="用户姓名" width="120" />
+    <el-table-column prop="sex" label="性别" #default="scope" width="100">
+      {{ scope.row.sex == 1 ? '男' : scope.row.sex == 2 ? '女' : '无' }}
+    </el-table-column>
     <el-table-column prop="phone" label="手机" width="120" />
     <el-table-column prop="levelName" label="账号等级" width="80" />
     <el-table-column prop="avatar" label="头像" #default="scope" >
@@ -170,7 +173,7 @@
     </el-table-column>
     <el-table-column prop="description" label="描述" width="200" />
     <el-table-column prop="address" label="地址" width="200" />
-    <el-table-column prop="compamy" label="所属公司" width="120" />
+    <el-table-column prop="company" label="所属公司" width="120" />
     <el-table-column prop="status" label="状态" #default="scope" width="100">
       {{ scope.row.status == 1 ? '正常' : '停用' }}
     </el-table-column>
@@ -197,8 +200,9 @@
 <script setup>
 import {onMounted, ref} from 'vue';
 import {GetKeyAndValueByType, GetUserLevelByPower} from "@/api/sysDict";
-import {GetSysUserListByPage} from "@/api/sysUser";
+import {DeleteUserById, GetSysUserListByPage, SaveSysUser} from "@/api/sysUser";
 import {useApp} from "@/pinia/modules/app";
+import {ElMessage, ElMessageBox} from "element-plus";
 
 //-----------------------------------------------------------列表方法---------------------------------------------
 //表格数据模型
@@ -301,7 +305,7 @@ const addUser = () => {
 const editUser = (row) => {
   getSexItem();
   getLevelItemByPower();
-  sysUser.value = row;
+  sysUser.value = {...row};
   dialogVisible.value = true;
 }
 //获取性别下拉列表
@@ -317,7 +321,39 @@ const getLevelItemByPower = async () => {
 
 //提交方法
 const submit = async () => {
-  console.log("数据",sysUser.value)
+  if (sysUser.value.loginAccount == undefined){
+    ElMessage.warning("【用户账号】不能为空");
+    return;
+  }
+  if (sysUser.value.loginPassword == undefined){
+    ElMessage.warning("【密码】不能为空");
+    return;
+  }
+  if (sysUser.value.name == undefined){
+    ElMessage.warning("【用户名称】不能为空");
+    return;
+  }
+  if (sysUser.value.sex == undefined){
+    ElMessage.warning("【性别】不能为空");
+    return;
+  }
+  if (sysUser.value.level == undefined){
+    ElMessage.warning("【账号等级】不能为空");
+    return;
+  }
+  const {code, message} = await SaveSysUser(sysUser.value);
+  if (code === 200){
+    //关闭弹窗
+    dialogVisible.value = false;
+
+    //提升消息
+    ElMessage.success(message);
+
+    //刷新页面
+    fetchData();
+  }else {
+    ElMessage.error(message);
+  }
 }
 
 //-------------------------------------------------文件上传--------------------------------------------
@@ -328,6 +364,23 @@ const headers = {
 // 图像上传成功以后的事件处理函数
 const handleAvatarSuccess = (response, uploadFile) => {
   sysUser.value.avatar = response.data
+}
+
+//---------------------------------------------删除用户----------------------------------------------
+const deleteUserById = (row) => {
+  ElMessageBox.confirm('此操作将永久删除该记录, 是否继续?', 'Warning', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  }).then(async () => {
+    const {code, message} = await DeleteUserById(row.id);
+    if (code === 200){
+      ElMessage.success(message);
+      fetchData();
+    }else {
+      ElMessage.error(message);
+    }
+  })
 }
 
 </script>

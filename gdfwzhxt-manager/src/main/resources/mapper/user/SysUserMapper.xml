@@ -22,6 +22,84 @@
         description
     </sql>
 
+    <!--  添加用户  -->
+    <insert id="addUser">
+        insert into t_user(
+            id,
+            login_account,
+            login_password,
+            name,
+            status,
+            level,
+            address,
+            avatar,
+            show_image,
+            company,
+            create_time,
+            sex,
+            phone,
+            description,
+            create_by
+        )values (
+            #{id},
+            #{loginAccount},
+            #{loginPassword},
+            #{name},
+            #{status},
+            #{level},
+            #{address},
+            #{avatar},
+            #{showImage},
+            #{company},
+            now(),
+            #{sex},
+            #{phone},
+            #{description},
+            #{createBy}
+       )
+    </insert>
+
+    <!--  修改用户  -->
+    <update id="updateUser">
+        update t_user set
+        <if test="loginAccount != null and loginAccount != ''">
+            login_account = #{loginAccount},
+        </if>
+        <if test="loginPassword != null and loginPassword != ''">
+            login_password = #{loginPassword},
+        </if>
+        <if test="name != null and name != ''">
+            name = #{name},
+        </if>
+        <if test="status != null">
+            status = #{status},
+        </if>
+        <if test="level != null">
+            level = #{level},
+        </if>
+        <if test="address != null and address != ''">
+            address = #{address},
+        </if>
+        <if test="avatar != null and avatar != ''">
+            avatar = #{avatar},
+        </if>
+        <if test="showImage != null and showImage != ''">
+            show_image = #{showImage},
+        </if>
+        <if test="sex != null">
+            sex = #{sex},
+        </if>
+        <if test="phone != null and phone != ''">
+            phone = #{phone},
+        </if>
+        <if test="description != null and description != ''">
+            description = #{description},
+        </if>
+        update_time = now(),
+        update_by = #{updateBy}
+        where id = #{id}
+    </update>
+
     <!-- 根据账号查询用户信息 -->
     <select id="getSysUserByAccount" resultType="com.wangwen.gdfwzhxt.model.entity.system.SysUser">
         select <include refid="columns"/>
@@ -45,7 +123,7 @@
                `name`,
                status,
                `level`,
-               (select c.value from t_code c where c.type = 't_user_level' and c.code = t.level) as levelName,
+               (select c.value from t_code c where c.type = 't_user_level' and c.code = t.level and c.is_deleted = 0 limit 1) as levelName,
                address,
                avatar,
                show_image showImage,
@@ -82,6 +160,7 @@
                 and t.status = #{status}
             </if>
             and t.is_deleted = 0
+            and t.level > #{currentUserLevel}
             and (t.level = 1 or exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company))
         </where>
         order by t.create_time desc

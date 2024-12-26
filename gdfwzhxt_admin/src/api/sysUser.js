@@ -10,3 +10,20 @@ export const GetSysUserListByPage = (current, limit, queryDto) => {
         data: queryDto
     })
 }
+
+//保存用户
+export const SaveSysUser = (sysUser) => {
+    return request({
+        url: `${base_api}/saveUser`,
+        method: 'post',
+        data: sysUser
+    })
+}
+
+//根据id删除用户
+export const DeleteUserById = (userId) => {
+    return request({
+        url: `${base_api}/deleteUserById/${userId}`,
+        method: 'post',
+    })
+}

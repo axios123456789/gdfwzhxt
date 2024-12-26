@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wangwen.gdfwzhxt.common_service.exception.ElectricityException;
+import com.wangwen.gdfwzhxt.common_util.AuthContextUtil;
+import com.wangwen.gdfwzhxt.common_util.UUIDUtil;
 import com.wangwen.gdfwzhxt.manager.mapper.SysUserMapper;
 import com.wangwen.gdfwzhxt.manager.service.SysUserService;
 import com.wangwen.gdfwzhxt.model.dto.system.LoginDto;
@@ -136,6 +138,9 @@ public class SysUserServiceImpl implements SysUserService {
         //设置分页参数
         PageHelper.startPage(current, limit);
 
+        //设置当前账户等级
+        sysUserDto.setCurrentUserLevel(AuthContextUtil.get().getLevel());
+
         //条件查询所有数据
         List<SysUser> list = sysUserMapper.findByPage(sysUserDto);
 
@@ -143,5 +148,41 @@ public class SysUserServiceImpl implements SysUserService {
         PageInfo<SysUser> pageInfo = new PageInfo<>(list);
 
         return pageInfo;
+    }
+
+    /**
+     * 保存用户（添加或修改用户）
+     * @param sysUser
+     */
+    @Override
+    public void saveUser(SysUser sysUser) {
+        if (sysUser.getId() == null || sysUser.getId() == ""){//添加
+            //设置id
+            sysUser.setId(UUIDUtil.getUUID());
+            //对密码进行加密设置
+            sysUser.setLoginPassword(DigestUtils.md5DigestAsHex(sysUser.getLoginPassword().getBytes()));
+            //设置状态为正常
+            sysUser.setStatus(1);
+            //设置所属公司
+            sysUser.setCompany(AuthContextUtil.get().getLevel() == 1 ? AuthContextUtil.get().getId() : AuthContextUtil.get().getCompany());
+            //设置创建者
+            sysUser.setCreateBy(AuthContextUtil.get().getName());
+
+            //添加
+            sysUserMapper.addUser(sysUser);
+            return;
+        }
+        //修改
+        //设置修改者
+        sysUser.setUpdateBy(AuthContextUtil.get().getName());
+        sysUserMapper.updateUser(sysUser);
+    }
+
+    /**
+     * 根据id删除用户
+     */
+    @Override
+    public void deleteUserById(String id) {
+        sysUserMapper.deleteUserById(id);
     }
 }

@@ -21,4 +21,10 @@ public interface SysUserService {
 
     //查询系统用户列表
     PageInfo<SysUser> findByPage(Integer current, Integer limit, SysUserDto sysUserDto);
+
+    //保存用户（添加或修改用户）
+    void saveUser(SysUser sysUser);
+
+    //根据id删除用户
+    void deleteUserById(String id);
 }
