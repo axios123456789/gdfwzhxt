@@ -199,7 +199,7 @@
   <el-dialog v-model="dialogRoleVisible" title="分配角色" width="40%">
     <el-form label-width="80px">
       <el-form-item label="用户名">
-        <el-input disabled :value="sysUser.userName"></el-input>
+        <el-input disabled :value="sysUser.name"></el-input>
       </el-form-item>
 
       <el-form-item label="角色列表">
@@ -467,6 +467,11 @@ const showAssignRole = async (row) => {
 
 //点击提交后分配角色
 const doAssign = async () => {
+  if(userRoleIds.value.length == 0){
+    ElMessage.warning("必须选择一个或多个角色");
+    return;
+  }
+
   let assignRoleVo = {
     userId: sysUser.value.id,
     roleIdList: userRoleIds.value
