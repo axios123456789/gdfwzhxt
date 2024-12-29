@@ -30,3 +30,11 @@ export const DeleteRoleById = (roleId) => {
         method: 'delete'
     })
 }
+
+//获取所有角色已经所选用户已分配的角色
+export const getAllRoles = (userId) => {
+    return request({
+        url: `${base_api}/getAllRole/${userId}`,
+        method: 'get'
+    })
+}

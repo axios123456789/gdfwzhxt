@@ -9,6 +9,8 @@ import com.wangwen.gdfwzhxt.model.vo.common.ResultCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /**
  * 系统管理-角色管理
  */
@@ -62,5 +64,16 @@ public class SysRoleController {
         } catch (Exception e) {
             return Result.build(null, 500, "删除角色失败！");
         }
+    }
+
+    /**
+     * 获取所有角色和用户已经分配的角色
+     * @param userId
+     * @return
+     */
+    @GetMapping("/getAllRole/{userId}")
+    public Result getAllRole(@PathVariable("userId") String userId){
+        Map<String, Object> map = sysRoleService.getAllRoles(userId);
+        return Result.build(map, ResultCodeEnum.SUCCESS);
     }
 }

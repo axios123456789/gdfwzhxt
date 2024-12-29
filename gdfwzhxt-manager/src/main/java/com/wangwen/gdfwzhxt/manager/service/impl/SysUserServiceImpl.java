@@ -7,8 +7,10 @@ import com.github.pagehelper.PageInfo;
 import com.wangwen.gdfwzhxt.common_service.exception.ElectricityException;
 import com.wangwen.gdfwzhxt.common_util.AuthContextUtil;
 import com.wangwen.gdfwzhxt.common_util.UUIDUtil;
+import com.wangwen.gdfwzhxt.manager.mapper.SysUserAndRoleRelationMapper;
 import com.wangwen.gdfwzhxt.manager.mapper.SysUserMapper;
 import com.wangwen.gdfwzhxt.manager.service.SysUserService;
+import com.wangwen.gdfwzhxt.model.dto.system.DistributeRoleDto;
 import com.wangwen.gdfwzhxt.model.dto.system.LoginDto;
 import com.wangwen.gdfwzhxt.model.dto.system.SysUserDto;
 import com.wangwen.gdfwzhxt.model.entity.system.SysUser;
@@ -17,11 +19,15 @@ import com.wangwen.gdfwzhxt.model.vo.system.LoginVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 public class SysUserServiceImpl implements SysUserService {
@@ -30,6 +36,9 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private SysUserAndRoleRelationMapper sysUserAndRoleRelationMapper;
 
     /**
      * 用户登录
@@ -184,5 +193,29 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public void deleteUserById(String id) {
         sysUserMapper.deleteUserById(id);
+    }
+
+    /**
+     * 用户分配角色
+     * @param distributeRoleDto
+     */
+    @Override
+    @Transactional
+    public void distributeRole(DistributeRoleDto distributeRoleDto) {
+        //分配角色前先删除之前已经分配的角色
+        sysUserAndRoleRelationMapper.deleteRoleByUserId(distributeRoleDto.getUserId());
+
+        //处理数据
+        List<Map<String, Object>> userAndRoleList = distributeRoleDto.getRoleIdList().stream().map(roleId -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", UUIDUtil.getUUID());
+            map.put("userId", distributeRoleDto.getUserId());
+            map.put("roleId", roleId);
+            map.put("company", AuthContextUtil.get().getLevel() == 1 ? AuthContextUtil.get().getId() : AuthContextUtil.get().getCompany());
+            return map;
+        }).collect(Collectors.toList());
+
+        //分配角色
+        sysUserAndRoleRelationMapper.addRoleByUserId(userAndRoleList);
     }
 }

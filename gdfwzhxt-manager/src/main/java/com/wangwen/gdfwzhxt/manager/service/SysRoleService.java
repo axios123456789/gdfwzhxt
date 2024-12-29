@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.wangwen.gdfwzhxt.model.dto.system.SysRoleDto;
 import com.wangwen.gdfwzhxt.model.entity.system.SysRole;
 
+import java.util.Map;
+
 public interface SysRoleService {
     /**
      * 角色列表的方法
@@ -25,4 +27,11 @@ public interface SysRoleService {
      * @param id
      */
     void deleteRoleById(String id);
+
+    /**
+     * 获取所有角色和用户已经分配的角色
+     * @param userId
+     * @return
+     */
+    Map<String, Object> getAllRoles(String userId);
 }

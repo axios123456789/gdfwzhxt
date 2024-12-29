@@ -157,7 +157,7 @@
       <el-button type="danger" size="small" @click="deleteUserById(scope.row)">
         删除
       </el-button>
-      <el-button type="warning" size="small">
+      <el-button type="warning" size="small" @click="showAssignRole(scope.row)">
         分配角色
       </el-button>
     </el-table-column>
@@ -195,14 +195,37 @@
       :total="total"
   />
 
+  <!-- 分配角色的模态窗口 -->
+  <el-dialog v-model="dialogRoleVisible" title="分配角色" width="40%">
+    <el-form label-width="80px">
+      <el-form-item label="用户名">
+        <el-input disabled :value="sysUser.userName"></el-input>
+      </el-form-item>
+
+      <el-form-item label="角色列表">
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+        <div style="margin: 15px 0;"></div>
+        <el-checkbox-group v-model="userRoleIds" @change="handleCheckedCitiesChange">
+          <el-checkbox v-for="role in allRoles" :label="role.id" :key="role.id">{{role.roleName}}</el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
+
+      <el-form-item>
+        <el-button type="primary" @click="doAssign">提交</el-button>
+        <el-button @click="dialogRoleVisible = false">取消</el-button>
+      </el-form-item>
+    </el-form>
+  </el-dialog>
+
 </template>
 
 <script setup>
 import {onMounted, ref} from 'vue';
 import {GetKeyAndValueByType, GetUserLevelByPower} from "@/api/sysDict";
-import {DeleteUserById, GetSysUserListByPage, SaveSysUser} from "@/api/sysUser";
+import {allocateRoles, DeleteUserById, GetSysUserListByPage, SaveSysUser} from "@/api/sysUser";
 import {useApp} from "@/pinia/modules/app";
 import {ElMessage, ElMessageBox} from "element-plus";
+import {getAllRoles} from "@/api/sysRole";
 
 //-----------------------------------------------------------列表方法---------------------------------------------
 //表格数据模型
@@ -381,6 +404,83 @@ const deleteUserById = (row) => {
       ElMessage.error(message);
     }
   })
+}
+
+//-------------------------------------------分配角色--------------------------------------------
+const dialogRoleVisible = ref(false);
+
+//设置 indeterminate 状态，只负责样式控制
+const isIndeterminate = ref(true);
+
+//设置全选状态
+const checkAll = ref(false);
+
+//设置默认选中的角色
+const userRoleIds = ref([]);
+
+//所有角色的数据模型
+/*const allRoles = ref({
+  id: "",
+  roleName: ""
+});*/
+const allRoles = ref([
+  {"id":1 , "roleName":"管理员"},
+  {"id":2 , "roleName":"业务人员"},
+  {"id":3 , "roleName":"商品录入员"},
+])
+
+const handleCheckAllChange = () =>{
+  if (checkAll.value){
+    for (let i = 0; i < allRoles.value.length; i++) {
+      userRoleIds.value[i] = allRoles.value[i].id;
+    }
+    isIndeterminate.value = false;
+  }else {
+    userRoleIds.value = [];
+    isIndeterminate.value = true;
+  }
+};
+const handleCheckedCitiesChange = () =>{
+  //console.log("data",userRoleIds.value)
+  if (userRoleIds.value.length === allRoles.value.length){
+    checkAll.value = true;
+    isIndeterminate.value = false;
+  }
+  if (userRoleIds.value.length > 0 && userRoleIds.value.length < allRoles.value.length){
+    checkAll.value = false;
+    isIndeterminate.value = true;
+  }
+}
+
+//点击分配角色后触发
+const showAssignRole = async (row) => {
+  sysUser.value = {...row};
+  dialogRoleVisible.value = true;
+
+  //查询所有角色
+  const {data} = await getAllRoles(row.id);
+  allRoles.value = data.allRoleList;
+
+  //用户分配过的角色
+  userRoleIds.value = data.sysUserRoles;
+}
+
+//点击提交后分配角色
+const doAssign = async () => {
+  let assignRoleVo = {
+    userId: sysUser.value.id,
+    roleIdList: userRoleIds.value
+  }
+
+  //发送axios请求，进行分配角色
+  const {code, message} = await allocateRoles(assignRoleVo);
+  if (code === 200){
+    ElMessage.success(message);
+    dialogRoleVisible.value = false;
+    fetchData();
+  }else {
+    ElMessage.error(message);
+  }
 }
 
 </script>

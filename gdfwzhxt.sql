@@ -11,7 +11,7 @@
  Target Server Version : 80035
  File Encoding         : 65001
 
- Date: 26/12/2024 21:16:34
+ Date: 29/12/2024 15:36:32
 */
 
 SET NAMES utf8mb4;
@@ -96,7 +96,7 @@ CREATE TABLE `t_role`  (
 -- ----------------------------
 INSERT INTO `t_role` VALUES ('19165643fab342038bbc855af1844f36', '测试人员', 'test', '其主要负责测试系统的各方面功能，确保系统无bug！', '2024-11-23 17:00:32', '2024-12-25 19:09:25', 0, '5d1f6eed770f40dd9916098fb17934bc', NULL, '赣州供电局');
 INSERT INTO `t_role` VALUES ('23315a6badcb42e78d70ce6d9439d653', '平台管理员', 'administrators', '管理平台的运行，操作用户权限等...', '2024-11-17 16:55:59', '2024-12-25 18:22:15', 0, '5d1f6eed770f40dd9916098fb17934bc', NULL, '赣州供电局');
-INSERT INTO `t_role` VALUES ('59ed1e3ebece42a09f4ae7fa90b3ccad', '电路维修师父', 'editor', '有电路故障事件时，维修师父第一时间收到，修好后提交维修记录', '2024-12-25 18:24:37', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc', '赣州供电局', NULL);
+INSERT INTO `t_role` VALUES ('59ed1e3ebece42a09f4ae7fa90b3ccad', '电路维修师父', 'editor', '有电路故障事件时，维修师父第一时间收到，修好后提交维修记录。', '2024-12-25 18:24:37', '2024-12-29 10:33:27', 0, '5d1f6eed770f40dd9916098fb17934bc', '赣州供电局', '赣州供电局');
 INSERT INTO `t_role` VALUES ('65a987200dbf48a6b8b16dea71cb34a9', 'test1', 'test1', NULL, '2024-12-26 11:41:21', NULL, 1, '5d1f6eed770f40dd9916098fb17934bc', '赣州供电局', NULL);
 INSERT INTO `t_role` VALUES ('a0f24a6726d748ecbbe49af62844d331', 'sd', 'd', NULL, '2024-12-01 13:55:45', NULL, 1, '5d1f6eed770f40dd9916098fb17934bc', NULL, NULL);
 INSERT INTO `t_role` VALUES ('cbf1901522b347fbbfef03a0756136a0', '普通用户', 'admin', '普通的员工用户，负责系统的各种数据观测和处理。', '2024-11-23 16:23:42', '2024-12-26 10:13:00', 0, '5d1f6eed770f40dd9916098fb17934bc', NULL, '赣州供电局');
@@ -154,6 +154,7 @@ CREATE TABLE `t_user`  (
 INSERT INTO `t_user` VALUES ('0ed453d14de143f58c6a54b0d6979a95', 'xk123', 'f379eaf3c831b04de153469d1bec345e', '肖大侠', 1, 3, '江西吉安', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241226/7a84d8082f924f9eb7c6fbce3ccaa47f33068c1ae01941d2b53a7efd2f806203_t1.png', NULL, '5d1f6eed770f40dd9916098fb17934bc', '2024-12-26 20:08:23', '2024-12-26 20:51:16', 0, 1, '13667961644', '系统开发者', '赣州供电局', '王文');
 INSERT INTO `t_user` VALUES ('355e4d747e104801854d0a46f7ad73c3', 'ww123', 'f379eaf3c831b04de153469d1bec345e', '王文', 1, 2, '赣州', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241226/4315ec15f7e34674a91f3e64c23fedaa01.png', NULL, '5d1f6eed770f40dd9916098fb17934bc', '2024-12-26 19:51:21', '2024-12-26 20:32:39', 0, 2, '18779867786', '聪明人', '赣州供电局', '赣州供电局');
 INSERT INTO `t_user` VALUES ('5d1f6eed770f40dd9916098fb17934bc', 'wangwen', 'e10adc3949ba59abbe56e057f20f883e', '赣州供电局', 1, 1, '江西赣州', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241226/cdbda25360104e449eda7beef697ca14gdgs.jpg', NULL, '-1', '2024-10-04 17:37:50', '2024-12-26 20:01:22', 0, 3, '0791-95598', '该账户为供电公司账户，权限最大，可以操作所有菜单。', NULL, '赣州供电局');
+INSERT INTO `t_user` VALUES ('bd375d793ae24830891689038d0cf054', 'wx123', 'f379eaf3c831b04de153469d1bec345e', '王辛', 1, 3, '江西省上饶市广信区', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241228/e5ee66fd0925407f96890769acd80bb794a1939c30a2495a9ed11747ff5c132c_p1.png', NULL, '5d1f6eed770f40dd9916098fb17934bc', '2024-12-28 17:02:24', NULL, 0, 1, '1582025202', '维修电路，及时排查', '王文', NULL);
 
 -- ----------------------------
 -- Table structure for t_user_role
@@ -173,5 +174,9 @@ CREATE TABLE `t_user_role`  (
 -- ----------------------------
 -- Records of t_user_role
 -- ----------------------------
+INSERT INTO `t_user_role` VALUES ('396847b727b54d31aaa484c087c1a9ee', '19165643fab342038bbc855af1844f36', '355e4d747e104801854d0a46f7ad73c3', '2024-12-29 15:35:50', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_user_role` VALUES ('68b01c912e6d4db0b3c06d324a800191', 'cbf1901522b347fbbfef03a0756136a0', '355e4d747e104801854d0a46f7ad73c3', '2024-12-29 15:35:50', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_user_role` VALUES ('90a736dc2d7a409c85465e501683ec72', '59ed1e3ebece42a09f4ae7fa90b3ccad', '355e4d747e104801854d0a46f7ad73c3', '2024-12-29 15:35:50', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_user_role` VALUES ('cb3ef5cc7d5041a5ac7762b0597f0bc5', '23315a6badcb42e78d70ce6d9439d653', '355e4d747e104801854d0a46f7ad73c3', '2024-12-29 15:35:50', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -27,3 +27,12 @@ export const DeleteUserById = (userId) => {
         method: 'post',
     })
 }
+
+//分配角色
+export const allocateRoles = (assignRoleVo) => {
+    return request({
+        url: `${base_api}/distributeRole`,
+        method: 'post',
+        data: assignRoleVo
+    })
+}

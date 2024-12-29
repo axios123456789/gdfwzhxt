@@ -1,6 +1,7 @@
 package com.wangwen.gdfwzhxt.manager.service;
 
 import com.github.pagehelper.PageInfo;
+import com.wangwen.gdfwzhxt.model.dto.system.DistributeRoleDto;
 import com.wangwen.gdfwzhxt.model.dto.system.LoginDto;
 import com.wangwen.gdfwzhxt.model.dto.system.SysUserDto;
 import com.wangwen.gdfwzhxt.model.entity.system.SysUser;
@@ -27,4 +28,7 @@ public interface SysUserService {
 
     //根据id删除用户
     void deleteUserById(String id);
+
+    //用户分配角色
+    void distributeRole(DistributeRoleDto distributeRoleDto);
 }

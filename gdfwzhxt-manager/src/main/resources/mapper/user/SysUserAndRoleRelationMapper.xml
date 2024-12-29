@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.SysUserAndRoleRelationMapper">
+    <!-- 分配角色根据用户ID -->
+    <insert id="addRoleByUserId">
+        insert into t_user_role(
+             id,
+             role_id,
+             user_id,
+             create_time,
+             company
+        )values
+        <foreach collection="userAndRoleList" item="item" separator=",">
+            (#{item.id}, #{item.roleId}, #{item.userId}, now(), #{item.company})
+        </foreach>
+    </insert>
+</mapper>

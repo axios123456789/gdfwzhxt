@@ -2,6 +2,7 @@ package com.wangwen.gdfwzhxt.manager.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.wangwen.gdfwzhxt.manager.service.SysUserService;
+import com.wangwen.gdfwzhxt.model.dto.system.DistributeRoleDto;
 import com.wangwen.gdfwzhxt.model.dto.system.SysUserDto;
 import com.wangwen.gdfwzhxt.model.entity.system.SysUser;
 import com.wangwen.gdfwzhxt.model.vo.common.Result;
@@ -60,6 +61,21 @@ public class SysUserController {
             return Result.build(null, ResultCodeEnum.SUCCESS);
         } catch (Exception e) {
             return Result.build(null, 500, "删除用户失败！");
+        }
+    }
+
+    /**
+     * 用户分配角色
+     * @param distributeRoleDto
+     * @return
+     */
+    @PostMapping("/distributeRole")
+    public Result distributeRole(@RequestBody DistributeRoleDto distributeRoleDto){
+        try {
+            sysUserService.distributeRole(distributeRoleDto);
+            return Result.build(null, ResultCodeEnum.SUCCESS);
+        } catch (Exception e) {
+            return Result.build(null, 500, "角色分配失败！");
         }
     }
 }

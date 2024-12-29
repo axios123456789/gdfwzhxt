@@ -5,18 +5,24 @@ import com.github.pagehelper.PageInfo;
 import com.wangwen.gdfwzhxt.common_util.AuthContextUtil;
 import com.wangwen.gdfwzhxt.common_util.UUIDUtil;
 import com.wangwen.gdfwzhxt.manager.mapper.SysRoleMapper;
+import com.wangwen.gdfwzhxt.manager.mapper.SysUserAndRoleRelationMapper;
 import com.wangwen.gdfwzhxt.manager.service.SysRoleService;
 import com.wangwen.gdfwzhxt.model.dto.system.SysRoleDto;
 import com.wangwen.gdfwzhxt.model.entity.system.SysRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SysRoleServiceImpl implements SysRoleService {
     @Autowired
     private SysRoleMapper sysRoleMapper;
+
+    @Autowired
+    SysUserAndRoleRelationMapper sysUserAndRoleRelationMapper;
 
     /**
      * 角色列表的方法
@@ -69,5 +75,25 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Override
     public void deleteRoleById(String id) {
         sysRoleMapper.deleteRoleById(id);
+    }
+
+    /**
+     * 获取所有角色和用户已经分配的角色
+     * @param userId
+     * @return
+     */
+    @Override
+    public Map<String, Object> getAllRoles(String userId) {
+        //获取所有角色
+        List<SysRole> sysRoleList = sysRoleMapper.getAllRoles();
+
+        //获取该用户已经分配的角色
+        List<String> ids = sysUserAndRoleRelationMapper.getRoleIdsByUserId(userId);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("allRoleList", sysRoleList);
+        map.put("sysUserRoles", ids);
+
+        return map;
     }
 }
