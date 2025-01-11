@@ -19,10 +19,10 @@ public class SysMenu extends BaseEntity {
     private String component;
 
     @Schema(description = "排序值")
-    private String sortValue;
+    private Integer sortValue;
 
     @Schema(description = "状态")
-    private String status;
+    private Integer status;
 
     //下级列表
     @Schema(description = "子节点")

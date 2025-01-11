@@ -11,111 +11,147 @@
  Target Server Version : 80035
  File Encoding         : 65001
 
- Date: 29/12/2024 15:36:32
+ Date: 11/01/2025 16:15:21
 */
 
 SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
+SET
+FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
 -- Table structure for t_code
 -- ----------------------------
 DROP TABLE IF EXISTS `t_code`;
-CREATE TABLE `t_code`  (
-                           `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '主键',
-                           `code` int(0) NULL DEFAULT NULL COMMENT '状态码',
-                           `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '码值',
-                           `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '类型',
-                           `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
-                           `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '修改时间',
-                           `is_deleted` int(0) NULL DEFAULT 0 COMMENT '删除标识',
-                           `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '描述',
-                           `create_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '创建者',
-                           `update_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '修改者',
-                           PRIMARY KEY (`id`) USING BTREE
+CREATE TABLE `t_code`
+(
+    `id`          varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '' 主键 '',
+    `code`        int(0) NULL DEFAULT NULL COMMENT '' 状态码 '',
+    `value`       varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 码值 '',
+    `type`        varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 类型 '',
+    `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '' 创建时间 '',
+    `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '' 修改时间 '',
+    `is_deleted`  int(0) NULL DEFAULT 0 COMMENT '' 删除标识 '',
+    `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 描述 '',
+    `create_by`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 创建者 '',
+    `update_by`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 修改者 '',
+    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_code
 -- ----------------------------
-INSERT INTO `t_code` VALUES ('03f7c591-9429-11ef-98c4-005056c00001', 5, '前台账号', 't_user_level', '2024-10-27 14:02:15', NULL, 1, NULL, NULL, NULL);
-INSERT INTO `t_code` VALUES ('5586351a-9428-11ef-98c4-005056c00001', 1, '公司账号', 't_user_level', '2024-10-27 13:57:22', NULL, 0, NULL, NULL, NULL);
-INSERT INTO `t_code` VALUES ('6180cd54-9429-11ef-98c4-005056c00001', 1, '正常', 't_user_status', '2024-10-27 14:04:52', NULL, 0, NULL, NULL, NULL);
-INSERT INTO `t_code` VALUES ('67fec8dc-9429-11ef-98c4-005056c00001', 0, '异常', 't_user_status', '2024-10-27 14:05:03', NULL, 0, NULL, NULL, NULL);
-INSERT INTO `t_code` VALUES ('9abe8d3d-966b-11ef-a4bf-005056c00001', 1, '男性', 't_user_sex', '2024-10-30 11:03:57', NULL, 0, NULL, NULL, NULL);
-INSERT INTO `t_code` VALUES ('a7414f98-966b-11ef-a4bf-005056c00001', 2, '女性', 't_user_sex', '2024-10-30 11:04:18', NULL, 0, NULL, NULL, NULL);
-INSERT INTO `t_code` VALUES ('bc884c18-9428-11ef-98c4-005056c00001', 2, '管理员账号', 't_user_level', '2024-10-27 14:00:15', NULL, 0, NULL, NULL, NULL);
-INSERT INTO `t_code` VALUES ('cf4fea45-9428-11ef-98c4-005056c00001', 3, '领导账号', 't_user_level', '2024-10-27 14:00:46', NULL, 1, NULL, NULL, NULL);
-INSERT INTO `t_code` VALUES ('fce03f73-9428-11ef-98c4-005056c00001', 3, '员工账号', 't_user_level', '2024-10-27 14:02:03', NULL, 0, NULL, NULL, NULL);
-INSERT INTO `t_code` VALUES ('fce03f73-9428-11ef-98c4-005056c02002', 3, '无', 't_user_sex', '2024-12-26 11:51:32', NULL, 0, NULL, NULL, NULL);
+INSERT INTO `t_code`
+VALUES (''03f7c591-9429-11ef-98c4-005056c00001'', 5, ''前台账号'', ''t_user_level'', ''2024-10-27 14:02:15'', NULL, 1, NULL, NULL, NULL);
+INSERT INTO `t_code`
+VALUES (''5586351a-9428-11ef-98c4-005056c00001'', 1, ''公司账号'', ''t_user_level'', ''2024-10-27 13:57:22'', NULL, 0, NULL, NULL, NULL);
+INSERT INTO `t_code`
+VALUES (''6180cd54-9429-11ef-98c4-005056c00001'', 1, ''正常'', ''t_user_status'', ''2024-10-27 14:04:52'', NULL, 0, NULL, NULL, NULL);
+INSERT INTO `t_code`
+VALUES (''67fec8dc-9429-11ef-98c4-005056c00001'', 0, ''异常'', ''t_user_status'', ''2024-10-27 14:05:03'', NULL, 0, NULL, NULL, NULL);
+INSERT INTO `t_code`
+VALUES (''9abe8d3d-966b-11ef-a4bf-005056c00001'', 1, ''男性'', ''t_user_sex'', ''2024-10-30 11:03:57'', NULL, 0, NULL, NULL, NULL);
+INSERT INTO `t_code`
+VALUES (''a7414f98-966b-11ef-a4bf-005056c00001'', 2, ''女性'', ''t_user_sex'', ''2024-10-30 11:04:18'', NULL, 0, NULL, NULL, NULL);
+INSERT INTO `t_code`
+VALUES (''bc884c18-9428-11ef-98c4-005056c00001'', 2, ''管理员账号'', ''t_user_level'', ''2024-10-27 14:00:15'', NULL, 0, NULL, NULL, NULL);
+INSERT INTO `t_code`
+VALUES (''cf4fea45-9428-11ef-98c4-005056c00001'', 3, ''领导账号'', ''t_user_level'', ''2024-10-27 14:00:46'', NULL, 1, NULL, NULL, NULL);
+INSERT INTO `t_code`
+VALUES (''fce03f73-9428-11ef-98c4-005056c00001'', 3, ''员工账号'', ''t_user_level'', ''2024-10-27 14:02:03'', NULL, 0, NULL, NULL, NULL);
+INSERT INTO `t_code`
+VALUES (''fce03f73-9428-11ef-98c4-005056c02002'', 3, ''无'', ''t_user_sex'', ''2024-12-26 11:51:32'', NULL, 0, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for t_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `t_menu`;
-CREATE TABLE `t_menu`  (
-                           `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '主键',
-                           `parent_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '所属上级',
-                           `title` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '菜单标题',
-                           `component` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '组件名称',
-                           `sort_value` int(0) NULL DEFAULT NULL COMMENT '排序',
-                           `status` tinyint(0) NULL DEFAULT NULL COMMENT '状态（0：异常 1：正常）',
-                           `create_time` timestamp(0) NULL DEFAULT NULL,
-                           `update_time` timestamp(0) NULL DEFAULT NULL,
-                           `is_deleted` int(0) NULL DEFAULT 0,
-                           `company` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '所属供电公司id',
-                           `create_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-                           `update_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-                           PRIMARY KEY (`id`) USING BTREE
+CREATE TABLE `t_menu`
+(
+    `id`          varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '' 主键 '',
+    `parent_id`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 所属上级（为0表示顶级菜单）'',
+    `title`       varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 菜单标题 '',
+    `component`   varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 组件名称 '',
+    `sort_value`  int(0) NULL DEFAULT NULL COMMENT '' 排序 '',
+    `status`      tinyint(0) NULL DEFAULT NULL COMMENT '' 状态（0：异常 1：正常）'',
+    `create_time` timestamp(0) NULL DEFAULT NULL,
+    `update_time` timestamp(0) NULL DEFAULT NULL,
+    `is_deleted`  int(0) NULL DEFAULT 0,
+    `company`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 所属供电公司id '',
+    `create_by`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+    `update_by`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_menu
 -- ----------------------------
+INSERT INTO `t_menu`
+VALUES (''03dc8d35a8b24ac196f5abfe91693866'', ''f75b896a53d84b19bf7d4e20030bc15e'', ''角色管理'', ''sysRole'', 2, 1, ''2025-01-11 15:35:09'', NULL, 0, ''5d1f6eed770f40dd9916098fb17934bc'', ''赣州供电局'', NULL);
+INSERT INTO `t_menu`
+VALUES (''323bdcfbf0e243718bf71f828de04acb'', ''3c5da8df5abc4b7a9237a33018d866bd'', ''测试子节点'', ''test1'', 1, 0, ''2025-01-11 16:14:17'', NULL, 1, ''5d1f6eed770f40dd9916098fb17934bc'', ''赣州供电局'', NULL);
+INSERT INTO `t_menu`
+VALUES (''3c5da8df5abc4b7a9237a33018d866bd'', ''0'', ''测试'', ''test'', 2, 1, ''2025-01-11 16:13:58'', NULL, 1, ''5d1f6eed770f40dd9916098fb17934bc'', ''赣州供电局'', NULL);
+INSERT INTO `t_menu`
+VALUES (''d20c094cffb24cb5a41e6cb2b0bc3b7a'', ''f75b896a53d84b19bf7d4e20030bc15e'', ''用户管理'', ''sysUser'', 1, 1, ''2025-01-11 15:34:39'', NULL, 0, ''5d1f6eed770f40dd9916098fb17934bc'', ''赣州供电局'', NULL);
+INSERT INTO `t_menu`
+VALUES (''e2c56b46a6624ebf87e35c256a44af5d'', ''f75b896a53d84b19bf7d4e20030bc15e'', ''菜单管理'', ''sysMenu'', 3, 1, ''2025-01-11 15:35:16'', ''2025-01-11 15:36:27'', 0, ''5d1f6eed770f40dd9916098fb17934bc'', ''赣州供电局'', ''赣州供电局'');
+INSERT INTO `t_menu`
+VALUES (''f75b896a53d84b19bf7d4e20030bc15e'', ''0'', ''系统管理'', ''system'', 1, 1, ''2025-01-11 15:33:55'', ''2025-01-11 15:35:57'', 0, ''5d1f6eed770f40dd9916098fb17934bc'', ''赣州供电局'', ''赣州供电局'');
 
 -- ----------------------------
 -- Table structure for t_role
 -- ----------------------------
 DROP TABLE IF EXISTS `t_role`;
-CREATE TABLE `t_role`  (
-                           `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '主键',
-                           `role_name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '角色名称',
-                           `role_code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '角色编码',
-                           `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '描述',
-                           `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
-                           `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '修改时间',
-                           `is_deleted` int(0) NULL DEFAULT 0 COMMENT '删除标识',
-                           `company` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '所属供电公司',
-                           `create_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-                           `update_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-                           PRIMARY KEY (`id`) USING BTREE
+CREATE TABLE `t_role`
+(
+    `id`          varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '' 主键 '',
+    `role_name`   varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NOT NULL COMMENT '' 角色名称 '',
+    `role_code`   varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NOT NULL COMMENT '' 角色编码 '',
+    `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 描述 '',
+    `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '' 创建时间 '',
+    `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '' 修改时间 '',
+    `is_deleted`  int(0) NULL DEFAULT 0 COMMENT '' 删除标识 '',
+    `company`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 所属供电公司 '',
+    `create_by`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+    `update_by`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_role
 -- ----------------------------
-INSERT INTO `t_role` VALUES ('19165643fab342038bbc855af1844f36', '测试人员', 'test', '其主要负责测试系统的各方面功能，确保系统无bug！', '2024-11-23 17:00:32', '2024-12-25 19:09:25', 0, '5d1f6eed770f40dd9916098fb17934bc', NULL, '赣州供电局');
-INSERT INTO `t_role` VALUES ('23315a6badcb42e78d70ce6d9439d653', '平台管理员', 'administrators', '管理平台的运行，操作用户权限等...', '2024-11-17 16:55:59', '2024-12-25 18:22:15', 0, '5d1f6eed770f40dd9916098fb17934bc', NULL, '赣州供电局');
-INSERT INTO `t_role` VALUES ('59ed1e3ebece42a09f4ae7fa90b3ccad', '电路维修师父', 'editor', '有电路故障事件时，维修师父第一时间收到，修好后提交维修记录。', '2024-12-25 18:24:37', '2024-12-29 10:33:27', 0, '5d1f6eed770f40dd9916098fb17934bc', '赣州供电局', '赣州供电局');
-INSERT INTO `t_role` VALUES ('65a987200dbf48a6b8b16dea71cb34a9', 'test1', 'test1', NULL, '2024-12-26 11:41:21', NULL, 1, '5d1f6eed770f40dd9916098fb17934bc', '赣州供电局', NULL);
-INSERT INTO `t_role` VALUES ('a0f24a6726d748ecbbe49af62844d331', 'sd', 'd', NULL, '2024-12-01 13:55:45', NULL, 1, '5d1f6eed770f40dd9916098fb17934bc', NULL, NULL);
-INSERT INTO `t_role` VALUES ('cbf1901522b347fbbfef03a0756136a0', '普通用户', 'admin', '普通的员工用户，负责系统的各种数据观测和处理。', '2024-11-23 16:23:42', '2024-12-26 10:13:00', 0, '5d1f6eed770f40dd9916098fb17934bc', NULL, '赣州供电局');
-INSERT INTO `t_role` VALUES ('f0403832bde34b7d904818a5362297b3', 'read用户', 'readAdmin', '该用户只有查询数据的权限', '2024-11-23 16:51:28', '2024-12-25 19:37:05', 0, '5d1f6eed770f40dd9916098fb17934bc', NULL, '赣州供电局');
+INSERT INTO `t_role`
+VALUES (''19165643fab342038bbc855af1844f36'', ''测试人员'', ''test'', ''其主要负责测试系统的各方面功能，确保系统无bug！'', ''2024-11-23 17:00:32'', ''2024-12-25 19:09:25'', 0, ''5d1f6eed770f40dd9916098fb17934bc'', NULL, ''赣州供电局'');
+INSERT INTO `t_role`
+VALUES (''23315a6badcb42e78d70ce6d9439d653'', ''平台管理员'', ''administrators'', ''管理平台的运行，操作用户权限等...'', ''2024-11-17 16:55:59'', ''2024-12-25 18:22:15'', 0, ''5d1f6eed770f40dd9916098fb17934bc'', NULL, ''赣州供电局'');
+INSERT INTO `t_role`
+VALUES (''59ed1e3ebece42a09f4ae7fa90b3ccad'', ''电路维修师父'', ''editor'', ''有电路故障事件时，维修师父第一时间收到，修好后提交维修记录。'', ''2024-12-25 18:24:37'', ''2024-12-29 15:38:52'', 0, ''5d1f6eed770f40dd9916098fb17934bc'', ''赣州供电局'', ''赣州供电局'');
+INSERT INTO `t_role`
+VALUES (''65a987200dbf48a6b8b16dea71cb34a9'', ''test1'', ''test1'', NULL, ''2024-12-26 11:41:21'', NULL, 1, ''5d1f6eed770f40dd9916098fb17934bc'', ''赣州供电局'', NULL);
+INSERT INTO `t_role`
+VALUES (''a0f24a6726d748ecbbe49af62844d331'', ''sd'', ''d'', NULL, ''2024-12-01 13:55:45'', NULL, 1, ''5d1f6eed770f40dd9916098fb17934bc'', NULL, NULL);
+INSERT INTO `t_role`
+VALUES (''cbf1901522b347fbbfef03a0756136a0'', ''普通用户'', ''admin'', ''普通的员工用户，负责系统的各种数据观测和处理。'', ''2024-11-23 16:23:42'', ''2024-12-26 10:13:00'', 0, ''5d1f6eed770f40dd9916098fb17934bc'', NULL, ''赣州供电局'');
+INSERT INTO `t_role`
+VALUES (''de05cbb207ad4d9c9d531423d81221d7'', ''开发者'', ''developer'', ''系统的开发者，拥有所有菜单的操作权限！'', ''2025-01-11 15:46:57'', NULL, 0, ''5d1f6eed770f40dd9916098fb17934bc'', ''赣州供电局'', NULL);
+INSERT INTO `t_role`
+VALUES (''f0403832bde34b7d904818a5362297b3'', ''read用户'', ''readAdmin'', ''该用户只有查询数据的权限'', ''2024-11-23 16:51:28'', ''2024-12-25 19:37:05'', 0, ''5d1f6eed770f40dd9916098fb17934bc'', NULL, ''赣州供电局'');
 
 -- ----------------------------
 -- Table structure for t_role_mune
 -- ----------------------------
 DROP TABLE IF EXISTS `t_role_mune`;
-CREATE TABLE `t_role_mune`  (
-                                `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '主键',
-                                `role_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '角色id',
-                                `menu_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '菜单id',
-                                `create_time` timestamp(0) NULL DEFAULT NULL,
-                                `update_time` timestamp(0) NULL DEFAULT NULL,
-                                `is_deleted` int(0) NULL DEFAULT 0,
-                                `is_half` tinyint(0) NULL DEFAULT NULL,
-                                `company` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-                                PRIMARY KEY (`id`) USING BTREE
+CREATE TABLE `t_role_mune`
+(
+    `id`          varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '' 主键 '',
+    `role_id`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 角色id '',
+    `menu_id`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 菜单id '',
+    `create_time` timestamp(0) NULL DEFAULT NULL,
+    `update_time` timestamp(0) NULL DEFAULT NULL,
+    `is_deleted`  int(0) NULL DEFAULT 0,
+    `is_half`     tinyint(0) NULL DEFAULT NULL,
+    `company`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -126,57 +162,104 @@ CREATE TABLE `t_role_mune`  (
 -- Table structure for t_user
 -- ----------------------------
 DROP TABLE IF EXISTS `t_user`;
-CREATE TABLE `t_user`  (
-                           `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '主键',
-                           `login_account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '账号',
-                           `login_password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '密码',
-                           `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户名称',
-                           `status` int(0) NULL DEFAULT NULL COMMENT '账号状态',
-                           `level` int(0) NULL DEFAULT NULL COMMENT '账号等级',
-                           `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户地址',
-                           `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '头像',
-                           `show_image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '展示图片',
-                           `company` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '所属公司',
-                           `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
-                           `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '修改时间',
-                           `is_deleted` int(0) NULL DEFAULT 0 COMMENT '是否删除',
-                           `sex` int(0) NULL DEFAULT NULL COMMENT '性别',
-                           `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '电话号码',
-                           `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '描述',
-                           `create_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-                           `update_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-                           PRIMARY KEY (`id`) USING BTREE
+CREATE TABLE `t_user`
+(
+    `id`             varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '' 主键 '',
+    `login_account`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 账号 '',
+    `login_password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 密码 '',
+    `name`           varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 用户名称 '',
+    `status`         int(0) NULL DEFAULT NULL COMMENT '' 账号状态 '',
+    `level`          int(0) NULL DEFAULT NULL COMMENT '' 账号等级 '',
+    `address`        varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 用户地址 '',
+    `avatar`         varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 头像 '',
+    `show_image`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 展示图片 '',
+    `company`        varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 所属公司 '',
+    `create_time`    timestamp(0) NULL DEFAULT NULL COMMENT '' 创建时间 '',
+    `update_time`    timestamp(0) NULL DEFAULT NULL COMMENT '' 修改时间 '',
+    `is_deleted`     int(0) NULL DEFAULT 0 COMMENT '' 是否删除 '',
+    `sex`            int(0) NULL DEFAULT NULL COMMENT '' 性别 '',
+    `phone`          varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 电话号码 '',
+    `description`    varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 描述 '',
+    `create_by`      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+    `update_by`      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_user
 -- ----------------------------
-INSERT INTO `t_user` VALUES ('0ed453d14de143f58c6a54b0d6979a95', 'xk123', 'f379eaf3c831b04de153469d1bec345e', '肖大侠', 1, 3, '江西吉安', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241226/7a84d8082f924f9eb7c6fbce3ccaa47f33068c1ae01941d2b53a7efd2f806203_t1.png', NULL, '5d1f6eed770f40dd9916098fb17934bc', '2024-12-26 20:08:23', '2024-12-26 20:51:16', 0, 1, '13667961644', '系统开发者', '赣州供电局', '王文');
-INSERT INTO `t_user` VALUES ('355e4d747e104801854d0a46f7ad73c3', 'ww123', 'f379eaf3c831b04de153469d1bec345e', '王文', 1, 2, '赣州', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241226/4315ec15f7e34674a91f3e64c23fedaa01.png', NULL, '5d1f6eed770f40dd9916098fb17934bc', '2024-12-26 19:51:21', '2024-12-26 20:32:39', 0, 2, '18779867786', '聪明人', '赣州供电局', '赣州供电局');
-INSERT INTO `t_user` VALUES ('5d1f6eed770f40dd9916098fb17934bc', 'wangwen', 'e10adc3949ba59abbe56e057f20f883e', '赣州供电局', 1, 1, '江西赣州', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241226/cdbda25360104e449eda7beef697ca14gdgs.jpg', NULL, '-1', '2024-10-04 17:37:50', '2024-12-26 20:01:22', 0, 3, '0791-95598', '该账户为供电公司账户，权限最大，可以操作所有菜单。', NULL, '赣州供电局');
-INSERT INTO `t_user` VALUES ('bd375d793ae24830891689038d0cf054', 'wx123', 'f379eaf3c831b04de153469d1bec345e', '王辛', 1, 3, '江西省上饶市广信区', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241228/e5ee66fd0925407f96890769acd80bb794a1939c30a2495a9ed11747ff5c132c_p1.png', NULL, '5d1f6eed770f40dd9916098fb17934bc', '2024-12-28 17:02:24', NULL, 0, 1, '1582025202', '维修电路，及时排查', '王文', NULL);
+INSERT INTO `t_user`
+VALUES (''0ed453d14de143f58c6a54b0d6979a95'', ''xk123'', ''f379eaf3c831b04de153469d1bec345e'', ''肖大侠'', 1, 3, ''江西吉安'',
+        ''http://127.0.0.1:9000/gdfwzhxt-bucket/20241226/7a84d8082f924f9eb7c6fbce3ccaa47f33068c1ae01941d2b53a7efd2f806203_t1.png'',
+        NULL, ''5d1f6eed770f40dd9916098fb17934bc'', ''2024-12-26 20:08:23'', ''2024-12-29 15:39:01'', 0, 1,
+        ''13667961644'', ''系统开发者'', ''赣州供电局'', ''赣州供电局'');
+INSERT INTO `t_user`
+VALUES (''355e4d747e104801854d0a46f7ad73c3'', ''ww123'', ''f379eaf3c831b04de153469d1bec345e'', ''王文'', 1, 2, ''赣州'',
+        ''http://127.0.0.1:9000/gdfwzhxt-bucket/20241226/4315ec15f7e34674a91f3e64c23fedaa01.png'', NULL,
+        ''5d1f6eed770f40dd9916098fb17934bc'', ''2024-12-26 19:51:21'', ''2024-12-26 20:32:39'', 0, 2, ''18779867786'',
+        ''聪明人'', ''赣州供电局'', ''赣州供电局'');
+INSERT INTO `t_user`
+VALUES (''5d1f6eed770f40dd9916098fb17934bc'', ''wangwen'', ''e10adc3949ba59abbe56e057f20f883e'', ''赣州供电局'', 1, 1,
+        ''江西赣州'', ''http://127.0.0.1:9000/gdfwzhxt-bucket/20241226/cdbda25360104e449eda7beef697ca14gdgs.jpg'', NULL,
+        '' - 1 '', ''2024-10-04 17:37:50'', ''2024-12-26 20:01:22'', 0, 3, ''0791-95598'',
+        ''该账户为供电公司账户，权限最大，可以操作所有菜单。'', NULL, ''赣州供电局'');
+INSERT INTO `t_user`
+VALUES (''7d12fff3e576406ca5cec1840cc0d9f6'', ''wanwen'', ''96e79218965eb72c92a549dd5a330112'', ''王德法'', 1, 2, NULL,
+        ''http://127.0.0.1:9000/gdfwzhxt-bucket/20241229/da8a7ecd82b34412853719ffa396607fu=381243566,
+        2034797184&fm=253&fmt=auto&app=120&f=JPEG.webp'', NULL, ''5d1f6eed770f40dd9916098fb17934bc'',
+        ''2024-12-29 16:39:08'', ''2024-12-29 16:39:35'', 0, 2, NULL, NULL, ''赣州供电局'', ''赣州供电局'');
+INSERT INTO `t_user`
+VALUES (''bd375d793ae24830891689038d0cf054'', ''wx123'', ''f379eaf3c831b04de153469d1bec345e'', ''王辛'', 1, 3,
+        ''江西省上饶市广信区'',
+        ''http://127.0.0.1:9000/gdfwzhxt-bucket/20241228/e5ee66fd0925407f96890769acd80bb794a1939c30a2495a9ed11747ff5c132c_p1.png'',
+        NULL, ''5d1f6eed770f40dd9916098fb17934bc'', ''2024-12-28 17:02:24'', NULL, 0, 1, ''1582025202'', ''维修电路，及时排查'',
+        ''王文'', NULL);
 
 -- ----------------------------
 -- Table structure for t_user_role
 -- ----------------------------
 DROP TABLE IF EXISTS `t_user_role`;
-CREATE TABLE `t_user_role`  (
-                                `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '主键',
-                                `role_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '角色id',
-                                `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户id',
-                                `create_time` timestamp(0) NULL DEFAULT NULL,
-                                `update_time` timestamp(0) NULL DEFAULT NULL,
-                                `is_deleted` int(0) NULL DEFAULT 0,
-                                `company` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-                                PRIMARY KEY (`id`) USING BTREE
+CREATE TABLE `t_user_role`
+(
+    `id`          varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '' 主键 '',
+    `role_id`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 角色id '',
+    `user_id`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '' 用户id '',
+    `create_time` timestamp(0) NULL DEFAULT NULL,
+    `update_time` timestamp(0) NULL DEFAULT NULL,
+    `is_deleted`  int(0) NULL DEFAULT 0,
+    `company`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_user_role
 -- ----------------------------
-INSERT INTO `t_user_role` VALUES ('396847b727b54d31aaa484c087c1a9ee', '19165643fab342038bbc855af1844f36', '355e4d747e104801854d0a46f7ad73c3', '2024-12-29 15:35:50', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
-INSERT INTO `t_user_role` VALUES ('68b01c912e6d4db0b3c06d324a800191', 'cbf1901522b347fbbfef03a0756136a0', '355e4d747e104801854d0a46f7ad73c3', '2024-12-29 15:35:50', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
-INSERT INTO `t_user_role` VALUES ('90a736dc2d7a409c85465e501683ec72', '59ed1e3ebece42a09f4ae7fa90b3ccad', '355e4d747e104801854d0a46f7ad73c3', '2024-12-29 15:35:50', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
-INSERT INTO `t_user_role` VALUES ('cb3ef5cc7d5041a5ac7762b0597f0bc5', '23315a6badcb42e78d70ce6d9439d653', '355e4d747e104801854d0a46f7ad73c3', '2024-12-29 15:35:50', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_user_role`
+VALUES (''0267ffbfd38e481696dedbd0c6562560'', ''f0403832bde34b7d904818a5362297b3'', ''0ed453d14de143f58c6a54b0d6979a95'', ''2024-12-29 16:01:09'', NULL, 0, ''5d1f6eed770f40dd9916098fb17934bc'');
+INSERT INTO `t_user_role`
+VALUES (''0b010228b0e34bdfa0889c103a1df8b0'', ''f0403832bde34b7d904818a5362297b3'', ''bd375d793ae24830891689038d0cf054'', ''2024-12-29 16:38:33'', NULL, 0, ''5d1f6eed770f40dd9916098fb17934bc'');
+INSERT INTO `t_user_role`
+VALUES (''0f7260349c3442ea964df71cb3ae0624'', ''59ed1e3ebece42a09f4ae7fa90b3ccad'', ''355e4d747e104801854d0a46f7ad73c3'', ''2024-12-29 16:00:57'', NULL, 0, ''5d1f6eed770f40dd9916098fb17934bc'');
+INSERT INTO `t_user_role`
+VALUES (''1b62f5a6cf8f4a81b4856a3d131fe497'', ''19165643fab342038bbc855af1844f36'', ''bd375d793ae24830891689038d0cf054'', ''2024-12-29 16:38:33'', NULL, 0, ''5d1f6eed770f40dd9916098fb17934bc'');
+INSERT INTO `t_user_role`
+VALUES (''3d00646ff6364687a19d4548a2c3b07d'', ''19165643fab342038bbc855af1844f36'', ''355e4d747e104801854d0a46f7ad73c3'', ''2024-12-29 16:00:57'', NULL, 0, ''5d1f6eed770f40dd9916098fb17934bc'');
+INSERT INTO `t_user_role`
+VALUES (''513021f34b994f73aa287f36b637425d'', ''23315a6badcb42e78d70ce6d9439d653'', ''bd375d793ae24830891689038d0cf054'', ''2024-12-29 16:38:33'', NULL, 0, ''5d1f6eed770f40dd9916098fb17934bc'');
+INSERT INTO `t_user_role`
+VALUES (''62ad96d135d04852b34c495d531c09d6'', ''23315a6badcb42e78d70ce6d9439d653'', ''355e4d747e104801854d0a46f7ad73c3'', ''2024-12-29 16:00:57'', NULL, 0, ''5d1f6eed770f40dd9916098fb17934bc'');
+INSERT INTO `t_user_role`
+VALUES (''a88b59349ef14a4a889f89a116ca428d'', ''f0403832bde34b7d904818a5362297b3'', ''355e4d747e104801854d0a46f7ad73c3'', ''2024-12-29 16:00:57'', NULL, 0, ''5d1f6eed770f40dd9916098fb17934bc'');
+INSERT INTO `t_user_role`
+VALUES (''c258390e18764fcfb051446486b8cb54'', ''19165643fab342038bbc855af1844f36'', ''7d12fff3e576406ca5cec1840cc0d9f6'', ''2025-01-07 19:07:52'', NULL, 0, ''5d1f6eed770f40dd9916098fb17934bc'');
+INSERT INTO `t_user_role`
+VALUES (''ce5e90083e4f4322a3cd768d012858e5'', ''f0403832bde34b7d904818a5362297b3'', ''7d12fff3e576406ca5cec1840cc0d9f6'', ''2025-01-07 19:07:52'', NULL, 0, ''5d1f6eed770f40dd9916098fb17934bc'');
+INSERT INTO `t_user_role`
+VALUES (''fcd5fc26bacc4ecfad0a0363ddeec8cb'', ''23315a6badcb42e78d70ce6d9439d653'', ''7d12fff3e576406ca5cec1840cc0d9f6'', ''2025-01-07 19:07:52'', NULL, 0, ''5d1f6eed770f40dd9916098fb17934bc'');
+INSERT INTO `t_user_role`
+VALUES (''fe2bc95f84ae4222a4bd6ce4a30ce985'', ''de05cbb207ad4d9c9d531423d81221d7'', ''5d1f6eed770f40dd9916098fb17934bc'', ''2025-01-11 15:49:26'', NULL, 0, ''5d1f6eed770f40dd9916098fb17934bc'');
+INSERT INTO `t_user_role`
+VALUES (''fe2bc95f84ae4222a4bd6ce4a30cf983'', ''cbf1901522b347fbbfef03a0756136a0'', ''355e4d747e104801854d0a46f7ad73c3'', ''2024-12-29 16:00:57'', NULL, 0, ''5d1f6eed770f40dd9916098fb17934bc'');
 
-SET FOREIGN_KEY_CHECKS = 1;
+SET
+FOREIGN_KEY_CHECKS = 1;

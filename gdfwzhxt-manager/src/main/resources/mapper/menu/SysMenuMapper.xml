@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.SysMenuMapper">
+    <sql id="columns">
+        id,
+        parent_id as parentId,
+        title,
+        component,
+        sort_value as sortValue,
+        status,
+        create_time as createTime,
+        update_time as updateTime,
+        is_deleted as isDeleted,
+        company,
+        create_by as createBy,
+        update_by as updateBy
+    </sql>
+
+    <!--  添加菜单  -->
+    <insert id="addMenu">
+        insert into t_menu(
+            id,
+            parent_id,
+            title,
+            component,
+            sort_value,
+            status,
+            create_time,
+            company,
+            create_by
+        )values (
+            #{id},
+            #{parentId},
+            #{title},
+            #{component},
+            #{sortValue},
+            #{status},
+            now(),
+            #{company},
+            #{createBy}
+       )
+    </insert>
+
+    <!--  修改菜单  -->
+    <update id="updateMenu">
+        update t_menu set
+        <if test="title != null and title != ''">
+            title = #{title},
+        </if>
+        <if test="component != null and component != ''">
+            component = #{component},
+        </if>
+        <if test="sortValue != null">
+            sort_value = #{sortValue},
+        </if>
+        <if test="status != null">
+            status = #{status},
+        </if>
+        update_time = now(),
+        update_by = #{updateBy}
+        where id = #{id}
+    </update>
+
+    <!--  查询所有菜单  -->
+    <select id="getAllMenu" resultType="com.wangwen.gdfwzhxt.model.entity.system.SysMenu">
+        select <include refid="columns"/>
+          from t_menu
+        where is_deleted = 0
+        order by sort_value
+    </select>
+
+    <!--  根据id查询子菜单的数量  -->
+    <select id="getChildrenCountById" resultType="java.lang.Integer">
+        select count(1) from t_menu where parent_id = #{param1} and is_deleted = 0
+    </select>
+</mapper>
