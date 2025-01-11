@@ -38,3 +38,12 @@ export const getAllRoles = (userId) => {
         method: 'get'
     })
 }
+
+//分配菜单
+export const allocateMenus = (assignMenuDto) => {
+    return request({
+        url: `${base_api}/allocateMenus`,
+        method: 'post',
+        data: assignMenuDto,
+    })
+}

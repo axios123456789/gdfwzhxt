@@ -23,4 +23,9 @@ public interface SysMenuMapper {
     //根据id删除菜单
     @Update("update t_menu set is_deleted = 1 where id = #{param1}")
     void deleteById(String id);
+
+    SysMenu getMenuById(String parentId);
+
+    //根据用户id查询用户可操作的菜单
+    List<SysMenu> findMenusByUserId(String userId);
 }

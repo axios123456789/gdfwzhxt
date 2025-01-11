@@ -2,6 +2,7 @@ package com.wangwen.gdfwzhxt.manager.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.wangwen.gdfwzhxt.manager.service.SysRoleService;
+import com.wangwen.gdfwzhxt.model.dto.system.DistributeMenuDto;
 import com.wangwen.gdfwzhxt.model.dto.system.SysRoleDto;
 import com.wangwen.gdfwzhxt.model.entity.system.SysRole;
 import com.wangwen.gdfwzhxt.model.vo.common.Result;
@@ -75,5 +76,20 @@ public class SysRoleController {
     public Result getAllRole(@PathVariable("userId") String userId){
         Map<String, Object> map = sysRoleService.getAllRoles(userId);
         return Result.build(map, ResultCodeEnum.SUCCESS);
+    }
+
+    /**
+     * 保存角色分配菜单数据
+     * @param distributeMenuDto
+     * @return
+     */
+    @PostMapping("/allocateMenus")
+    public Result allocateMenus(@RequestBody DistributeMenuDto distributeMenuDto){
+        try {
+            sysRoleService.allocateMenus(distributeMenuDto);
+            return Result.build(null, ResultCodeEnum.SUCCESS);
+        } catch (Exception e) {
+            return Result.build(null, 500, "分配菜单失败，请联系管理员");
+        }
     }
 }

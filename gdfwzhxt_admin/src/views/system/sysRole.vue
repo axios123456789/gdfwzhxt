@@ -57,6 +57,9 @@
         <el-button type="danger" size="small" @click="deleteRoleById(scope.row)">
           删除
         </el-button>
+        <el-button type="warning" size="small" @click="showAssignMenu(scope.row)">
+          分配菜单
+        </el-button>
       </el-table-column>
       <el-table-column prop="roleName" label="角色名称" width="180" />
       <el-table-column prop="roleCode" label="角色code" width="180" />
@@ -66,6 +69,27 @@
       <el-table-column prop="updateBy" label="修改者" width="120"/>
       <el-table-column prop="description" label="描述" width="300"/>
     </el-table>
+
+    <!-- 分配菜单的对话框
+        // tree组件添加ref属性，后期方便进行tree组件对象的获取
+        -->
+    <el-dialog v-model="dialogMenuVisible" title="分配菜单" width="40%">
+      <el-form label-width="80px">
+        <el-tree
+            :data="sysMenuTreeList"
+            ref="tree"
+            show-checkbox
+            default-expand-all
+            :check-on-click-node="true"
+            node-key="id"
+            :props="defaultProps"
+        />
+        <el-form-item>
+          <el-button type="primary" @click="doAssign">提交</el-button>
+          <el-button @click="dialogMenuVisible = false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
 
     <!--分页条-->
     <el-pagination
@@ -84,8 +108,70 @@
 
 <script setup>
 import {onMounted, ref} from 'vue';
-import {DeleteRoleById, GetSysRoleListByPage, SaveRole} from "@/api/sysRole";
+import {allocateMenus, DeleteRoleById, GetSysRoleListByPage, SaveRole} from "@/api/sysRole";
 import {ElMessage, ElMessageBox} from "element-plus";
+import {getAllMenus} from "@/api/SysMenu";
+
+//---------------------分配菜单-------------------
+const defaultProps = {
+  children: 'children',
+  label: 'title',
+}
+const dialogMenuVisible = ref(false)
+const sysMenuTreeList = ref([])
+
+// 树对象变量
+const tree = ref()
+
+// 默认选中的菜单数据集合
+let roleId = ref()
+const showAssignMenu = async row => {
+  dialogMenuVisible.value = true
+  roleId = row.id
+  const { data } = await getAllMenus(row.id)   // 请求后端地址获取所有的菜单数据，以及当前角色所对应的菜单数据
+  sysMenuTreeList.value = data.sysMenuList
+  tree.value.setCheckedKeys(data.roleMenuIds)   // 进行数据回显
+  //console.log("data"+data.roleMenuIds)
+}
+
+const doAssign = async () => {
+  const checkedNodes = tree.value.getCheckedNodes() ; // 获取选中的节点
+  const checkedNodesIds = checkedNodes.map(node => {  // 获取选中的节点的id
+    return {
+      id: node.id,
+      isHalf: 0
+    }
+  })
+
+  // 获取半选中的节点数据，当一个节点的子节点被部分选中时，该节点会呈现出半选中的状态
+  const halfCheckedNodes = tree.value.getHalfCheckedNodes() ;
+  const halfCheckedNodesIds = halfCheckedNodes.map(node => {   // 获取半选中节点的id
+    return {
+      id: node.id,
+      isHalf: 1
+    }
+  })
+
+  // 将选中的节点id和半选中的节点的id进行合并
+  const menuIds = [...checkedNodesIds , ...halfCheckedNodesIds]
+  //console.log(menuIds);
+
+  // 构建请求数据
+  const assignMenuDto = {
+    roleId: roleId,
+    menuIdList: menuIds
+  }
+
+  // 发送请求
+  const {code, message} = await allocateMenus(assignMenuDto) ;
+  if (code === 200) {
+    ElMessage.success(message)
+    dialogMenuVisible.value = false
+    fetchData()
+  }else {
+    ElMessage.error(message)
+  }
+}
 
 //------------------------------------------角色列表---------------------------------------------
 //定义数据模型

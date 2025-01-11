@@ -73,4 +73,29 @@
     <select id="getChildrenCountById" resultType="java.lang.Integer">
         select count(1) from t_menu where parent_id = #{param1} and is_deleted = 0
     </select>
+
+    <!--  根据id查询菜单  -->
+    <select id="getMenuById" resultType="com.wangwen.gdfwzhxt.model.entity.system.SysMenu">
+        select <include refid="columns"/> from t_menu where id = #{param1} and is_deleted = 0
+    </select>
+
+    <!-- 根据用户id查询用户可操作的菜单  -->
+    <select id="findMenusByUserId" resultType="com.wangwen.gdfwzhxt.model.entity.system.SysMenu">
+        select distinct
+            m.id,
+            m.parent_id,
+            m.title,
+            m.component,
+            m.sort_value,
+            m.status,
+            m.create_time,
+            m.update_time,
+            m.is_deleted,
+            m.create_by,
+            m.update_by
+        from t_menu m
+        join t_role_menu rm on m.id = rm.menu_id
+        join t_user_role ur on rm.role_id = ur.role_id
+        where ur.user_id = #{param1} and m.is_deleted = 0 and rm.is_deleted = 0 and ur.is_deleted = 0
+    </select>
 </mapper>

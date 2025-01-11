@@ -1,18 +1,21 @@
 package com.wangwen.gdfwzhxt.manager.controller;
 
 import com.wangwen.gdfwzhxt.common_util.AuthContextUtil;
+import com.wangwen.gdfwzhxt.manager.service.SysMenuService;
 import com.wangwen.gdfwzhxt.manager.service.SysUserService;
 import com.wangwen.gdfwzhxt.manager.service.ValidateCodeService;
 import com.wangwen.gdfwzhxt.model.dto.system.LoginDto;
-import com.wangwen.gdfwzhxt.model.entity.system.SysUser;
 import com.wangwen.gdfwzhxt.model.vo.common.Result;
 import com.wangwen.gdfwzhxt.model.vo.common.ResultCodeEnum;
 import com.wangwen.gdfwzhxt.model.vo.system.LoginVo;
+import com.wangwen.gdfwzhxt.model.vo.system.SysMenuVo;
 import com.wangwen.gdfwzhxt.model.vo.system.ValidateCodeVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 用户登录及准备工作
@@ -26,6 +29,16 @@ public class IndexController {
 
     @Autowired
     private ValidateCodeService validateCodeService;
+
+    @Autowired
+    private SysMenuService sysMenuService;
+
+    //查询用户可以操作菜单
+    @GetMapping("/menus")
+    public Result menus(){
+        List<SysMenuVo> sysMenuVos = sysMenuService.findMenusByUserId();
+        return Result.build(sysMenuVos, ResultCodeEnum.SUCCESS);
+    }
 
     /**
      * 查询系统是否注册了公司

@@ -11,7 +11,7 @@
  Target Server Version : 80035
  File Encoding         : 65001
 
- Date: 11/01/2025 16:40:12
+ Date: 11/01/2025 22:10:29
 */
 
 SET NAMES utf8mb4;
@@ -110,10 +110,10 @@ INSERT INTO `t_role` VALUES ('de05cbb207ad4d9c9d531423d81221d7', '开发者', 'd
 INSERT INTO `t_role` VALUES ('f0403832bde34b7d904818a5362297b3', 'read用户', 'readAdmin', '该用户只有查询数据的权限', '2024-11-23 16:51:28', '2024-12-25 19:37:05', 0, '5d1f6eed770f40dd9916098fb17934bc', NULL, '赣州供电局');
 
 -- ----------------------------
--- Table structure for t_role_mune
+-- Table structure for t_role_menu
 -- ----------------------------
-DROP TABLE IF EXISTS `t_role_mune`;
-CREATE TABLE `t_role_mune`  (
+DROP TABLE IF EXISTS `t_role_menu`;
+CREATE TABLE `t_role_menu`  (
                                 `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '主键',
                                 `role_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '角色id',
                                 `menu_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '菜单id',
@@ -126,8 +126,14 @@ CREATE TABLE `t_role_mune`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of t_role_mune
+-- Records of t_role_menu
 -- ----------------------------
+INSERT INTO `t_role_menu` VALUES ('295617cadc164e47bfd2b1f9e89115a1', 'de05cbb207ad4d9c9d531423d81221d7', '03dc8d35a8b24ac196f5abfe91693866', '2025-01-11 21:57:15', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_role_menu` VALUES ('2a5eeade1cf94ea18d71ce91c6ee9ddf', 'de05cbb207ad4d9c9d531423d81221d7', 'e2c56b46a6624ebf87e35c256a44af5d', '2025-01-11 21:57:15', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_role_menu` VALUES ('8429f4626dcf4bba89485507fb5b7651', 'de05cbb207ad4d9c9d531423d81221d7', 'f75b896a53d84b19bf7d4e20030bc15e', '2025-01-11 21:57:15', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_role_menu` VALUES ('84bbb7a3352a481fae01215c4bba8fc1', 'de05cbb207ad4d9c9d531423d81221d7', 'd20c094cffb24cb5a41e6cb2b0bc3b7a', '2025-01-11 21:57:15', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_role_menu` VALUES ('a4c169fa57104149a74620a11d84b521', '23315a6badcb42e78d70ce6d9439d653', 'd20c094cffb24cb5a41e6cb2b0bc3b7a', '2025-01-11 22:07:33', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_role_menu` VALUES ('d0f67df0fca4493994647326461eaf9c', '23315a6badcb42e78d70ce6d9439d653', 'f75b896a53d84b19bf7d4e20030bc15e', '2025-01-11 22:07:33', NULL, 0, 1, '5d1f6eed770f40dd9916098fb17934bc');
 
 -- ----------------------------
 -- Table structure for t_user
@@ -161,7 +167,7 @@ CREATE TABLE `t_user`  (
 INSERT INTO `t_user` VALUES ('0ed453d14de143f58c6a54b0d6979a95', 'xk123', 'f379eaf3c831b04de153469d1bec345e', '肖大侠', 1, 3, '江西吉安', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241226/7a84d8082f924f9eb7c6fbce3ccaa47f33068c1ae01941d2b53a7efd2f806203_t1.png', NULL, '5d1f6eed770f40dd9916098fb17934bc', '2024-12-26 20:08:23', '2024-12-29 15:39:01', 0, 1, '13667961644', '系统开发者', '赣州供电局', '赣州供电局');
 INSERT INTO `t_user` VALUES ('355e4d747e104801854d0a46f7ad73c3', 'ww123', 'f379eaf3c831b04de153469d1bec345e', '王文', 1, 2, '赣州', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241226/4315ec15f7e34674a91f3e64c23fedaa01.png', NULL, '5d1f6eed770f40dd9916098fb17934bc', '2024-12-26 19:51:21', '2024-12-26 20:32:39', 0, 2, '18779867786', '聪明人', '赣州供电局', '赣州供电局');
 INSERT INTO `t_user` VALUES ('5d1f6eed770f40dd9916098fb17934bc', 'wangwen', 'e10adc3949ba59abbe56e057f20f883e', '赣州供电局', 1, 1, '江西赣州', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241226/cdbda25360104e449eda7beef697ca14gdgs.jpg', NULL, '-1', '2024-10-04 17:37:50', '2024-12-26 20:01:22', 0, 3, '0791-95598', '该账户为供电公司账户，权限最大，可以操作所有菜单。', NULL, '赣州供电局');
-INSERT INTO `t_user` VALUES ('7d12fff3e576406ca5cec1840cc0d9f6', 'wanwen', '96e79218965eb72c92a549dd5a330112', '王德法', 1, 2, NULL, 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241229/da8a7ecd82b34412853719ffa396607fu=381243566,2034797184&fm=253&fmt=auto&app=120&f=JPEG.webp', NULL, '5d1f6eed770f40dd9916098fb17934bc', '2024-12-29 16:39:08', '2024-12-29 16:39:35', 0, 2, NULL, NULL, '赣州供电局', '赣州供电局');
+INSERT INTO `t_user` VALUES ('7d12fff3e576406ca5cec1840cc0d9f6', 'wanwen', '96e79218965eb72c92a549dd5a330112', '王德法', 1, 3, NULL, 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241229/da8a7ecd82b34412853719ffa396607fu=381243566,2034797184&fm=253&fmt=auto&app=120&f=JPEG.webp', NULL, '5d1f6eed770f40dd9916098fb17934bc', '2024-12-29 16:39:08', '2025-01-11 22:07:53', 0, 2, NULL, NULL, '赣州供电局', '赣州供电局');
 INSERT INTO `t_user` VALUES ('bd375d793ae24830891689038d0cf054', 'wx123', 'f379eaf3c831b04de153469d1bec345e', '王辛', 1, 3, '江西省上饶市广信区', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241228/e5ee66fd0925407f96890769acd80bb794a1939c30a2495a9ed11747ff5c132c_p1.png', NULL, '5d1f6eed770f40dd9916098fb17934bc', '2024-12-28 17:02:24', NULL, 0, 1, '1582025202', '维修电路，及时排查', '王文', NULL);
 
 -- ----------------------------
@@ -184,16 +190,12 @@ CREATE TABLE `t_user_role`  (
 -- ----------------------------
 INSERT INTO `t_user_role` VALUES ('0267ffbfd38e481696dedbd0c6562560', 'f0403832bde34b7d904818a5362297b3', '0ed453d14de143f58c6a54b0d6979a95', '2024-12-29 16:01:09', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
 INSERT INTO `t_user_role` VALUES ('0b010228b0e34bdfa0889c103a1df8b0', 'f0403832bde34b7d904818a5362297b3', 'bd375d793ae24830891689038d0cf054', '2024-12-29 16:38:33', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
-INSERT INTO `t_user_role` VALUES ('0f7260349c3442ea964df71cb3ae0624', '59ed1e3ebece42a09f4ae7fa90b3ccad', '355e4d747e104801854d0a46f7ad73c3', '2024-12-29 16:00:57', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
 INSERT INTO `t_user_role` VALUES ('1b62f5a6cf8f4a81b4856a3d131fe497', '19165643fab342038bbc855af1844f36', 'bd375d793ae24830891689038d0cf054', '2024-12-29 16:38:33', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
-INSERT INTO `t_user_role` VALUES ('3d00646ff6364687a19d4548a2c3b07d', '19165643fab342038bbc855af1844f36', '355e4d747e104801854d0a46f7ad73c3', '2024-12-29 16:00:57', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
 INSERT INTO `t_user_role` VALUES ('513021f34b994f73aa287f36b637425d', '23315a6badcb42e78d70ce6d9439d653', 'bd375d793ae24830891689038d0cf054', '2024-12-29 16:38:33', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
-INSERT INTO `t_user_role` VALUES ('62ad96d135d04852b34c495d531c09d6', '23315a6badcb42e78d70ce6d9439d653', '355e4d747e104801854d0a46f7ad73c3', '2024-12-29 16:00:57', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
-INSERT INTO `t_user_role` VALUES ('a88b59349ef14a4a889f89a116ca428d', 'f0403832bde34b7d904818a5362297b3', '355e4d747e104801854d0a46f7ad73c3', '2024-12-29 16:00:57', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_user_role` VALUES ('b03fba767a164bcfb34900c08650432e', '23315a6badcb42e78d70ce6d9439d653', '355e4d747e104801854d0a46f7ad73c3', '2025-01-11 22:08:04', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
 INSERT INTO `t_user_role` VALUES ('c258390e18764fcfb051446486b8cb54', '19165643fab342038bbc855af1844f36', '7d12fff3e576406ca5cec1840cc0d9f6', '2025-01-07 19:07:52', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
 INSERT INTO `t_user_role` VALUES ('ce5e90083e4f4322a3cd768d012858e5', 'f0403832bde34b7d904818a5362297b3', '7d12fff3e576406ca5cec1840cc0d9f6', '2025-01-07 19:07:52', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
 INSERT INTO `t_user_role` VALUES ('fcd5fc26bacc4ecfad0a0363ddeec8cb', '23315a6badcb42e78d70ce6d9439d653', '7d12fff3e576406ca5cec1840cc0d9f6', '2025-01-07 19:07:52', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
 INSERT INTO `t_user_role` VALUES ('fe2bc95f84ae4222a4bd6ce4a30ce985', 'de05cbb207ad4d9c9d531423d81221d7', '5d1f6eed770f40dd9916098fb17934bc', '2025-01-11 15:49:26', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
-INSERT INTO `t_user_role` VALUES ('fe2bc95f84ae4222a4bd6ce4a30cf983', 'cbf1901522b347fbbfef03a0756136a0', '355e4d747e104801854d0a46f7ad73c3', '2024-12-29 16:00:57', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc');
 
 SET FOREIGN_KEY_CHECKS = 1;

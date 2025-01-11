@@ -4,13 +4,16 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wangwen.gdfwzhxt.common_util.AuthContextUtil;
 import com.wangwen.gdfwzhxt.common_util.UUIDUtil;
+import com.wangwen.gdfwzhxt.manager.mapper.SysRoleAndMenuRelationMapper;
 import com.wangwen.gdfwzhxt.manager.mapper.SysRoleMapper;
 import com.wangwen.gdfwzhxt.manager.mapper.SysUserAndRoleRelationMapper;
 import com.wangwen.gdfwzhxt.manager.service.SysRoleService;
+import com.wangwen.gdfwzhxt.model.dto.system.DistributeMenuDto;
 import com.wangwen.gdfwzhxt.model.dto.system.SysRoleDto;
 import com.wangwen.gdfwzhxt.model.entity.system.SysRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +26,9 @@ public class SysRoleServiceImpl implements SysRoleService {
 
     @Autowired
     SysUserAndRoleRelationMapper sysUserAndRoleRelationMapper;
+
+    @Autowired
+    private SysRoleAndMenuRelationMapper sysRoleAndMenuRelationMapper;
 
     /**
      * 角色列表的方法
@@ -95,5 +101,27 @@ public class SysRoleServiceImpl implements SysRoleService {
         map.put("sysUserRoles", ids);
 
         return map;
+    }
+
+    /**
+     * 保存角色分配菜单数据
+     * @param distributeMenuDto
+     */
+    @Override
+    @Transactional
+    public void allocateMenus(DistributeMenuDto distributeMenuDto) {
+        //删除角色分配过的菜单数据
+        sysRoleAndMenuRelationMapper.deleteHaveAllocateMenuDataByRoleId(distributeMenuDto.getRoleId());
+
+        //保存分配数据
+        List<Map<String, Object>> menuIdList = distributeMenuDto.getMenuIdList();
+        for (int i = 0; i < menuIdList.size(); i++){
+            distributeMenuDto.getMenuIdList().get(i).put("zjId", UUIDUtil.getUUID());
+        }
+
+        distributeMenuDto.setCompany(AuthContextUtil.get().getLevel() == 1 ? AuthContextUtil.get().getId() : AuthContextUtil.get().getCompany());
+        if (menuIdList != null && menuIdList.size() > 0){
+            sysRoleAndMenuRelationMapper.addAllocateData(distributeMenuDto);
+        }
     }
 }

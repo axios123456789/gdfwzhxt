@@ -1,6 +1,7 @@
 package com.wangwen.gdfwzhxt.manager.service;
 
 import com.github.pagehelper.PageInfo;
+import com.wangwen.gdfwzhxt.model.dto.system.DistributeMenuDto;
 import com.wangwen.gdfwzhxt.model.dto.system.SysRoleDto;
 import com.wangwen.gdfwzhxt.model.entity.system.SysRole;
 
@@ -34,4 +35,10 @@ public interface SysRoleService {
      * @return
      */
     Map<String, Object> getAllRoles(String userId);
+
+    /**
+     * 保存角色分配菜单数据
+     * @param distributeMenuDto
+     */
+    void allocateMenus(DistributeMenuDto distributeMenuDto);
 }

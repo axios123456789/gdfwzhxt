@@ -35,3 +35,11 @@ export const deleteMenuById = (id) => {
         method: 'delete',
     })
 }
+
+//查询所有菜单和角色分配过的菜单
+export const getAllMenus = (roleId) => {
+    return request({
+        url: `${api_name}/findAllMenusWithRoleId/${roleId}`,
+        method: 'get',
+    })
+}
