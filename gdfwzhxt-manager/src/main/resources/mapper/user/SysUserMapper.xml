@@ -106,7 +106,7 @@
           from t_user t
         where t.login_account = #{loginAccount}
           and t.is_deleted = 0
-          and t.`status` = 1
+
           and (t.company = '-1' or (select count(1) from t_user t1 where t1.id = t.company and t1.is_deleted = 0) > 0)
     </select>
 

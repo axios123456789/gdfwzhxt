@@ -34,12 +34,13 @@ import lock from './modules/lock'
 import home from './modules/home'
 import test from './modules/test'
 import system from './modules/system'
+import line from './modules/line'
 
 /* 菜单栏的路由 */
 // 固定菜单
 export const fixedRoutes = [...home]
 // 动态菜单
-export const asyncRoutes = [...system]
+export const asyncRoutes = [...system, ...line]
 
 const router = createRouter({
   history: createWebHashHistory(),

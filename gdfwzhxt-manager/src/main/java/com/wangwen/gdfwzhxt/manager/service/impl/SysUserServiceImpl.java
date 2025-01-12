@@ -83,6 +83,11 @@ public class SysUserServiceImpl implements SysUserService {
             throw new ElectricityException(ResultCodeEnum.LOGIN_ERROR);
         }
 
+        //判断用户是否被锁定，锁定则抛出异常
+        if (sysUser.getStatus() == 0){
+            throw new ElectricityException(ResultCodeEnum.ACCOUNT_STOP);
+        }
+
         //5.如果密码一致，登录成功，密码不一致则登录失败
         //6.登录成功，生成用户唯一标识token
         String token = UUID.randomUUID().toString().replaceAll("-", "");

@@ -13,7 +13,7 @@ public enum ResultCodeEnum {
     SYSTEM_ERROR(9999 , "您的网络有问题请稍后重试"),
     NODE_ERROR( 217, "该节点下有子节点，不可以删除"),
     DATA_ERROR(204, "数据异常"),
-    ACCOUNT_STOP( 216, "账号已停用"),
+    ACCOUNT_STOP( 216, "账号已被锁"),
 
     STOCK_LESS( 219, "库存不足"),
 

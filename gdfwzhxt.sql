@@ -11,7 +11,7 @@
  Target Server Version : 80035
  File Encoding         : 65001
 
- Date: 11/01/2025 22:10:29
+ Date: 12/01/2025 19:30:12
 */
 
 SET NAMES utf8mb4;
@@ -75,8 +75,11 @@ CREATE TABLE `t_menu`  (
 INSERT INTO `t_menu` VALUES ('03dc8d35a8b24ac196f5abfe91693866', 'f75b896a53d84b19bf7d4e20030bc15e', '角色管理', 'sysRole', 2, 1, '2025-01-11 15:35:09', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc', '赣州供电局', NULL);
 INSERT INTO `t_menu` VALUES ('323bdcfbf0e243718bf71f828de04acb', '3c5da8df5abc4b7a9237a33018d866bd', '测试子节点', 'test1', 1, 0, '2025-01-11 16:14:17', NULL, 1, '5d1f6eed770f40dd9916098fb17934bc', '赣州供电局', NULL);
 INSERT INTO `t_menu` VALUES ('3c5da8df5abc4b7a9237a33018d866bd', '0', '测试', 'test', 2, 1, '2025-01-11 16:13:58', NULL, 1, '5d1f6eed770f40dd9916098fb17934bc', '赣州供电局', NULL);
+INSERT INTO `t_menu` VALUES ('ba9885cfab6040ad92ea536bff8f920b', 'cb5d56df80854e50bc6d7e5b6d1b457f', '线路停电事件', 'lineEvent', 2, 1, '2025-01-12 18:52:36', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc', '赣州供电局', NULL);
+INSERT INTO `t_menu` VALUES ('cb5d56df80854e50bc6d7e5b6d1b457f', '0', '线路管理', 'line', 2, 1, '2025-01-12 18:50:47', '2025-01-12 19:04:53', 0, '5d1f6eed770f40dd9916098fb17934bc', '赣州供电局', '赣州供电局');
 INSERT INTO `t_menu` VALUES ('d20c094cffb24cb5a41e6cb2b0bc3b7a', 'f75b896a53d84b19bf7d4e20030bc15e', '用户管理', 'sysUser', 1, 1, '2025-01-11 15:34:39', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc', '赣州供电局', NULL);
 INSERT INTO `t_menu` VALUES ('e2c56b46a6624ebf87e35c256a44af5d', 'f75b896a53d84b19bf7d4e20030bc15e', '菜单管理', 'sysMenu', 3, 1, '2025-01-11 15:35:16', '2025-01-11 15:36:27', 0, '5d1f6eed770f40dd9916098fb17934bc', '赣州供电局', '赣州供电局');
+INSERT INTO `t_menu` VALUES ('ea450ae6a98a4aebafd3b56e5b20dc5b', 'cb5d56df80854e50bc6d7e5b6d1b457f', '线路信息', 'lineInfo', 1, 1, '2025-01-12 18:51:43', NULL, 0, '5d1f6eed770f40dd9916098fb17934bc', '赣州供电局', NULL);
 INSERT INTO `t_menu` VALUES ('f75b896a53d84b19bf7d4e20030bc15e', '0', '系统管理', 'system', 1, 1, '2025-01-11 15:33:55', '2025-01-11 15:35:57', 0, '5d1f6eed770f40dd9916098fb17934bc', '赣州供电局', '赣州供电局');
 
 -- ----------------------------
@@ -128,12 +131,18 @@ CREATE TABLE `t_role_menu`  (
 -- ----------------------------
 -- Records of t_role_menu
 -- ----------------------------
-INSERT INTO `t_role_menu` VALUES ('295617cadc164e47bfd2b1f9e89115a1', 'de05cbb207ad4d9c9d531423d81221d7', '03dc8d35a8b24ac196f5abfe91693866', '2025-01-11 21:57:15', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
-INSERT INTO `t_role_menu` VALUES ('2a5eeade1cf94ea18d71ce91c6ee9ddf', 'de05cbb207ad4d9c9d531423d81221d7', 'e2c56b46a6624ebf87e35c256a44af5d', '2025-01-11 21:57:15', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
-INSERT INTO `t_role_menu` VALUES ('8429f4626dcf4bba89485507fb5b7651', 'de05cbb207ad4d9c9d531423d81221d7', 'f75b896a53d84b19bf7d4e20030bc15e', '2025-01-11 21:57:15', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
-INSERT INTO `t_role_menu` VALUES ('84bbb7a3352a481fae01215c4bba8fc1', 'de05cbb207ad4d9c9d531423d81221d7', 'd20c094cffb24cb5a41e6cb2b0bc3b7a', '2025-01-11 21:57:15', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
-INSERT INTO `t_role_menu` VALUES ('a4c169fa57104149a74620a11d84b521', '23315a6badcb42e78d70ce6d9439d653', 'd20c094cffb24cb5a41e6cb2b0bc3b7a', '2025-01-11 22:07:33', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
-INSERT INTO `t_role_menu` VALUES ('d0f67df0fca4493994647326461eaf9c', '23315a6badcb42e78d70ce6d9439d653', 'f75b896a53d84b19bf7d4e20030bc15e', '2025-01-11 22:07:33', NULL, 0, 1, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_role_menu` VALUES ('16448608b7fd47928f2b009b440ca19f', '23315a6badcb42e78d70ce6d9439d653', 'ea450ae6a98a4aebafd3b56e5b20dc5b', '2025-01-12 18:53:20', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_role_menu` VALUES ('16ed7566c0f849c78c64f9be58d997e4', 'de05cbb207ad4d9c9d531423d81221d7', '03dc8d35a8b24ac196f5abfe91693866', '2025-01-12 19:10:56', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_role_menu` VALUES ('202c355d3f6f43469e37f1f826e171ae', '23315a6badcb42e78d70ce6d9439d653', 'd20c094cffb24cb5a41e6cb2b0bc3b7a', '2025-01-12 18:53:20', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_role_menu` VALUES ('3e8a5f9cf2274760828cf6dc20972b4e', '23315a6badcb42e78d70ce6d9439d653', 'cb5d56df80854e50bc6d7e5b6d1b457f', '2025-01-12 18:53:20', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_role_menu` VALUES ('4e7a6ee91b1f42c7a2fd110232dfbfdc', '23315a6badcb42e78d70ce6d9439d653', 'ba9885cfab6040ad92ea536bff8f920b', '2025-01-12 18:53:20', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_role_menu` VALUES ('5237229130594bfeadb4b97f36cbcc30', 'de05cbb207ad4d9c9d531423d81221d7', 'ba9885cfab6040ad92ea536bff8f920b', '2025-01-12 19:10:56', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_role_menu` VALUES ('5a529958978d4c0a985d5052e059fd38', 'de05cbb207ad4d9c9d531423d81221d7', 'd20c094cffb24cb5a41e6cb2b0bc3b7a', '2025-01-12 19:10:56', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_role_menu` VALUES ('731a76cf8e964b5684cbfcd000550d35', 'de05cbb207ad4d9c9d531423d81221d7', 'cb5d56df80854e50bc6d7e5b6d1b457f', '2025-01-12 19:10:56', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_role_menu` VALUES ('80a29e8bd31e437d8f25343001e20301', 'de05cbb207ad4d9c9d531423d81221d7', 'e2c56b46a6624ebf87e35c256a44af5d', '2025-01-12 19:10:56', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_role_menu` VALUES ('cb6dabfedb25403fa13058e42fb63f86', 'de05cbb207ad4d9c9d531423d81221d7', 'f75b896a53d84b19bf7d4e20030bc15e', '2025-01-12 19:10:56', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_role_menu` VALUES ('dc7b51c24d5242c6ad701bf2599c44c6', '23315a6badcb42e78d70ce6d9439d653', 'f75b896a53d84b19bf7d4e20030bc15e', '2025-01-12 18:53:20', NULL, 0, 1, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_role_menu` VALUES ('f66f2d4049354e58a152a8b155ff60c8', 'de05cbb207ad4d9c9d531423d81221d7', 'ea450ae6a98a4aebafd3b56e5b20dc5b', '2025-01-12 19:10:56', NULL, 0, 0, '5d1f6eed770f40dd9916098fb17934bc');
 
 -- ----------------------------
 -- Table structure for t_user
@@ -165,7 +174,7 @@ CREATE TABLE `t_user`  (
 -- Records of t_user
 -- ----------------------------
 INSERT INTO `t_user` VALUES ('0ed453d14de143f58c6a54b0d6979a95', 'xk123', 'f379eaf3c831b04de153469d1bec345e', '肖大侠', 1, 3, '江西吉安', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241226/7a84d8082f924f9eb7c6fbce3ccaa47f33068c1ae01941d2b53a7efd2f806203_t1.png', NULL, '5d1f6eed770f40dd9916098fb17934bc', '2024-12-26 20:08:23', '2024-12-29 15:39:01', 0, 1, '13667961644', '系统开发者', '赣州供电局', '赣州供电局');
-INSERT INTO `t_user` VALUES ('355e4d747e104801854d0a46f7ad73c3', 'ww123', 'f379eaf3c831b04de153469d1bec345e', '王文', 1, 2, '赣州', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241226/4315ec15f7e34674a91f3e64c23fedaa01.png', NULL, '5d1f6eed770f40dd9916098fb17934bc', '2024-12-26 19:51:21', '2024-12-26 20:32:39', 0, 2, '18779867786', '聪明人', '赣州供电局', '赣州供电局');
+INSERT INTO `t_user` VALUES ('355e4d747e104801854d0a46f7ad73c3', 'ww123', 'f379eaf3c831b04de153469d1bec345e', '王文', 1, 2, '赣州', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241226/4315ec15f7e34674a91f3e64c23fedaa01.png', NULL, '5d1f6eed770f40dd9916098fb17934bc', '2024-12-26 19:51:21', '2025-01-12 18:46:32', 0, 2, '18779867786', '聪明人', '赣州供电局', '赣州供电局');
 INSERT INTO `t_user` VALUES ('5d1f6eed770f40dd9916098fb17934bc', 'wangwen', 'e10adc3949ba59abbe56e057f20f883e', '赣州供电局', 1, 1, '江西赣州', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241226/cdbda25360104e449eda7beef697ca14gdgs.jpg', NULL, '-1', '2024-10-04 17:37:50', '2024-12-26 20:01:22', 0, 3, '0791-95598', '该账户为供电公司账户，权限最大，可以操作所有菜单。', NULL, '赣州供电局');
 INSERT INTO `t_user` VALUES ('7d12fff3e576406ca5cec1840cc0d9f6', 'wanwen', '96e79218965eb72c92a549dd5a330112', '王德法', 1, 3, NULL, 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241229/da8a7ecd82b34412853719ffa396607fu=381243566,2034797184&fm=253&fmt=auto&app=120&f=JPEG.webp', NULL, '5d1f6eed770f40dd9916098fb17934bc', '2024-12-29 16:39:08', '2025-01-11 22:07:53', 0, 2, NULL, NULL, '赣州供电局', '赣州供电局');
 INSERT INTO `t_user` VALUES ('bd375d793ae24830891689038d0cf054', 'wx123', 'f379eaf3c831b04de153469d1bec345e', '王辛', 1, 3, '江西省上饶市广信区', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20241228/e5ee66fd0925407f96890769acd80bb794a1939c30a2495a9ed11747ff5c132c_p1.png', NULL, '5d1f6eed770f40dd9916098fb17934bc', '2024-12-28 17:02:24', NULL, 0, 1, '1582025202', '维修电路，及时排查', '王文', NULL);
