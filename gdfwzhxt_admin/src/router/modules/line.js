@@ -2,6 +2,7 @@
 const Layout = () => import('@/layout/index.vue')
 const lineInfo = () => import('@/views/line/lineInfo.vue')
 const lineEvent = () => import('@/views/line/lineEvent.vue')
+const lineEventReport = () => import('@/views/line/lineEventReport.vue')
 
 // 导出该组件
 export default([
@@ -31,7 +32,16 @@ export default([
                     title: '线路停电事件',
                 },
                 hidden: false
-            }
+            },
+            {
+                path: '/lineEventReport',
+                name: 'lineEventReport',
+                component: lineEventReport,
+                meta: {
+                    title: '线路停电事件报表',
+                },
+                hidden: false
+            },
         ]
     }
 ])

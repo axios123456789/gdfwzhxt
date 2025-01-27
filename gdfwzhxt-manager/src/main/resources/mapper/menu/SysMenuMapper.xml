@@ -96,6 +96,7 @@
         from t_menu m
         join t_role_menu rm on m.id = rm.menu_id
         join t_user_role ur on rm.role_id = ur.role_id
-        where ur.user_id = #{param1} and m.is_deleted = 0 and rm.is_deleted = 0 and ur.is_deleted = 0
+        where ur.user_id = #{param1} and m.is_deleted = 0 and rm.is_deleted = 0 and ur.is_deleted = 0 and m.status = 1
+        order by m.sort_value
     </select>
 </mapper>
