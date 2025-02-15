@@ -14,6 +14,47 @@
         description
     </sql>
 
+    <!--  添加数据字典  -->
+    <insert id="addDict">
+        insert into t_code(
+           id,
+           code,
+           value,
+           type,
+           create_time,
+           create_by,
+           description
+        )values (
+           #{id},
+           #{code},
+           #{value},
+           #{type},
+           now(),
+           #{createBy},
+           #{description}
+        )
+    </insert>
+
+    <!--  修改数据字典  -->
+    <update id="updateDict">
+        update t_code set
+        <if test="code != null">
+            code = #{code},
+        </if>
+        <if test="value != null and value != ''">
+            value = #{value},
+        </if>
+        <if test="type != null and type != ''">
+            type = #{type},
+        </if>
+        <if test="description != null and description != ''">
+            description = #{description},
+        </if>
+        update_time = now(),
+        update_by = #{updateBy}
+        where id = #{id}
+    </update>
+
     <!--  根据type查询所有  -->
     <select id="getCodesByType" resultType="com.wangwen.gdfwzhxt.model.entity.system.SysCode">
         select <include refid="columns"/> from t_code c
@@ -27,5 +68,20 @@
         where c.is_deleted = 0
           and c.type = #{param1}
           and c.code > #{param2}
+    </select>
+
+    <!--  条件查询数据字典列表  -->
+    <select id="getSysDictList" resultType="com.wangwen.gdfwzhxt.model.entity.system.SysDict">
+        select <include refid="columns"/> from t_code c
+        <where>
+            <if test="value != null and value != ''">
+                and c.value like concat('%', #{value}, '%')
+            </if>
+            <if test="type != null and type != ''">
+                and c.type like concat('%', #{type}, '%')
+            </if>
+            and c.is_deleted = 0
+        </where>
+        order by c.create_time desc
     </select>
 </mapper>

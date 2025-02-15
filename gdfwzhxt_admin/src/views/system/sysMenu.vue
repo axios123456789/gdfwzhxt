@@ -6,13 +6,13 @@
   <el-dialog v-model="dialogVisible" :title="dialogTitle" width="30%">
     <el-form label-width="120px">
       <el-form-item label="菜单标题">
-        <el-input v-model="sysMenu.title"/>
+        <el-input v-model="sysMenu.title" />
       </el-form-item>
       <el-form-item label="路由名称">
-        <el-input v-model="sysMenu.component"/>
+        <el-input v-model="sysMenu.component" />
       </el-form-item>
-      <el-form-item label="排序" >
-        <el-input v-model="sysMenu.sortValue"/>
+      <el-form-item label="排序">
+        <el-input v-model="sysMenu.sortValue" />
       </el-form-item>
       <el-form-item label="状态">
         <el-radio-group v-model="sysMenu.status">
@@ -27,13 +27,13 @@
     </el-form>
   </el-dialog>
   <el-table
-      :data="list"
-      style="width: 100%; margin-bottom: 20px"
-      row-key="id"
-      border
-      default-expand-all
+    :data="list"
+    style="width: 100%; margin-bottom: 20px"
+    row-key="id"
+    border
+    default-expand-all
   >
-    <el-table-column label="操作" align="center" width="280" #default="scope" >
+    <el-table-column label="操作" align="center" width="300" #default="scope">
       <el-button type="success" size="small" @click="addShow(scope.row)">
         添加下级节点
       </el-button>
@@ -56,9 +56,9 @@
 
 <script setup>
 //引入调用的方法
-import { ref , onMounted } from "vue"
+import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import {addMenu, deleteMenuById, findNodes, updateMenu} from "@/api/SysMenu";
+import { addMenu, deleteMenuById, findNodes, updateMenu } from '@/api/SysMenu'
 
 // 定义表格数据模型
 const list = ref([])
@@ -88,12 +88,12 @@ onMounted(() => {
 
 //=======================添加和修改功能====================
 //进入添加
-const addShow = (row) => {
+const addShow = row => {
   sysMenu.value = {}
   dialogVisible.value = true
-  if(!row.id) {
+  if (!row.id) {
     dialogTitle.value = '添加'
-  }else {
+  } else {
     dialogTitle.value = '添加下级节点'
     sysMenu.value.parentId = row.id
   }
@@ -108,36 +108,36 @@ const editShow = row => {
 //提交保存与修改
 const saveOrUpdate = () => {
   if (!sysMenu.value.id) {
-    if(!sysMenu.value.parentId) {
+    if (!sysMenu.value.parentId) {
       sysMenu.value.parentId = '0'
     }
     saveData()
-  }  else {
+  } else {
     updateData()
   }
 }
 
 // 修改
 const updateData = async () => {
-  const {code, message} = await updateMenu(sysMenu.value);
-  if (code === 200){
-    dialogVisible.value = false;
-    ElMessage.success(message);
-    fetchData();
-  }else {
-    ElMessage.error(message);
+  const { code, message } = await updateMenu(sysMenu.value)
+  if (code === 200) {
+    dialogVisible.value = false
+    ElMessage.success(message)
+    fetchData()
+  } else {
+    ElMessage.error(message)
   }
 }
 
 // 新增
 const saveData = async () => {
-  const {code, message} = await addMenu(sysMenu.value);
-  if (code === 200){
-    dialogVisible.value = false;
-    ElMessage.success(message);
-    fetchData();
-  }else {
-    ElMessage.error(message);
+  const { code, message } = await addMenu(sysMenu.value)
+  if (code === 200) {
+    dialogVisible.value = false
+    ElMessage.success(message)
+    fetchData()
+  } else {
+    ElMessage.error(message)
   }
 }
 
@@ -155,12 +155,12 @@ const remove = async id => {
     cancelButtonText: '取消',
     type: 'warning',
   }).then(async () => {
-    const { code , message } = await deleteMenuById(id)
-    console.log("code:"+code+"message"+message)
-    if(code === 200) {
+    const { code, message } = await deleteMenuById(id)
+    console.log('code:' + code + 'message' + message)
+    if (code === 200) {
       ElMessage.success('删除成功')
       fetchData()
-    }else {
+    } else {
       ElMessage.error(message)
     }
   })

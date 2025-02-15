@@ -14,7 +14,9 @@ public enum ResultCodeEnum {
     NODE_ERROR( 217, "该节点下有子节点，不可以删除"),
     DATA_ERROR(204, "数据异常"),
     ACCOUNT_STOP( 216, "账号已被锁"),
-
+    BYQJH_EXISTS(230, "该变压器局号已存在"),
+    CONS_EXISTS(231, "该用户编号已存在"),
+    DRONE_EXISTS(232, "该无人机编号已存在"),
     STOCK_LESS( 219, "库存不足"),
 
     ;

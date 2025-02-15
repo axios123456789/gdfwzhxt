@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.TransformerInfoMapper">
+    <sql id="columns">
+        id,
+        transformer_code as transformerCode,
+        transformer_name as transformerName,
+        model,
+        rated_capacity as ratedCapacity,
+        line_id as lineId,
+        line_name as lineName,
+        transformer_type as transformerType,
+        primary_voltage as primaryVoltage,
+        secondary_voltage as secondaryVoltage,
+        manufacturer,
+        install_date as installDate,
+        maintenance_records as maintenanceRecords,
+        address,
+        remark,
+        company,
+        create_time as createTime,
+        create_by as createBy,
+        update_time as updateTime,
+        update_by as updateBy,
+        is_deleted as isDeleted
+    </sql>
+
+    <!--  添加变压器信息  -->
+    <insert id="addTransformerInfo">
+        insert into t_transformerInfo(
+            id,
+            transformer_code,
+            transformer_name,
+            model,
+            rated_capacity,
+            line_id,
+            line_name,
+            transformer_type,
+            primary_voltage,
+            secondary_voltage,
+            manufacturer,
+            install_date,
+            maintenance_records,
+            address,
+            remark,
+            company,
+            create_time,
+            create_by
+        ) values (
+            #{id},
+            #{transformerCode},
+            #{transformerName},
+            #{model},
+            #{ratedCapacity},
+            #{lineId},
+            #{lineName},
+            #{transformerType},
+            #{primaryVoltage},
+            #{secondaryVoltage},
+            #{manufacturer},
+            #{installDate},
+            #{maintenanceRecords},
+            #{address},
+            #{remark},
+            #{company},
+            now(),
+            #{createBy}
+        )
+    </insert>
+
+    <!--  修改变压器信息  -->
+    <update id="updateTransformerInfo">
+        update t_transformerInfo set
+          <if test="transformerCode != null and transformerCode != ''">
+              transformer_code = #{transformerCode},
+          </if>
+          <if test="transformerName != null and transformerName != ''">
+              transformer_name = #{transformerName},
+          </if>
+          <if test="model != null and model != ''">
+              model = #{model},
+          </if>
+          <if test="ratedCapacity != null">
+              rated_capacity = #{ratedCapacity},
+          </if>
+          <if test="lineId != null and lineId != ''">
+              line_id = #{lineId},
+          </if>
+          <if test="lineName != null and lineName != ''">
+              line_name = #{lineName},
+          </if>
+          <if test="transformerType != null">
+              transformer_type = #{transformerType},
+          </if>
+          <if test="primaryVoltage != null">
+              primary_voltage = #{primaryVoltage},
+          </if>
+          <if test="secondaryVoltage != null">
+              secondary_voltage = #{secondaryVoltage},
+          </if>
+          <if test="manufacturer != null and manufacturer != ''">
+              manufacturer = #{manufacturer},
+          </if>
+          <if test="installDate != null">
+              install_date = #{installDate},
+          </if>
+          <if test="maintenanceRecords != null and maintenanceRecords != ''">
+              maintenance_records = #{maintenanceRecords},
+          </if>
+          <if test="address != null and address != ''">
+              address = #{address},
+          </if>
+          <if test="remark != null and remark != ''">
+              remark = #{remark},
+          </if>
+          update_time = now(),
+          update_by = #{updateBy}
+        where id = #{id}
+    </update>
+
+    <!--  条件查询所有变压器信息列表  -->
+    <select id="getTransformerInfoListByCondition"
+            resultType="com.wangwen.gdfwzhxt.model.entity.transformer.TransformerInfo">
+        select <include refid="columns"/>,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_transformer_type' and c.code = t.transformer_type limit 1) as transformerTypeName
+          from t_transformerInfo t
+        <where>
+            <if test="transformerName != null and transformerName != ''">
+                and t.transformer_name like concat('%', #{transformerName}, '%')
+            </if>
+            <if test="model != null and model != ''">
+                and t.model like concat('%', #{model}, '%')
+            </if>
+            <if test="ratedCapacity != null">
+                and t.rated_capacity &gt;= #{ratedCapacity}
+            </if>
+            <if test="lineId != null and lineId != ''">
+                and t.line_id = #{lineId}
+            </if>
+            <if test="transformerType != null">
+                and t.transformer_type = #{transformerType}
+            </if>
+            and t.is_deleted = 0
+            and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+        </where>
+        order by t.create_time desc
+    </select>
+
+    <!--  查询变压器的数量根据变压器局号  -->
+    <select id="getTransformerInfoCountByTransformerCode" resultType="java.lang.Integer">
+        select count(1)
+          from t_transformerInfo t
+        where t.is_deleted = 0
+          and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+          and t.transformer_code = #{param1}
+    </select>
+</mapper>

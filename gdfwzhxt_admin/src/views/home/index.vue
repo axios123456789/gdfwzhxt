@@ -10,5 +10,17 @@
  * @Donate: https://huzhushan.gitee.io/vue3-element-admin/donate/
 -->
 <template>
-  home
+  <a @click="tz">home</a>
 </template>
+
+<script setup>
+import { useRouter, useRoute } from 'vue-router'
+
+const router = useRouter()
+
+const tz = () => {
+  router.push('/lineSource')
+}
+</script>
+
+<style scoped></style>

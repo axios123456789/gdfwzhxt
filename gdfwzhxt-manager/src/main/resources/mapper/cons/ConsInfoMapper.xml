@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.ConsInfoMapper">
+    <sql id="columns">
+        id,
+        cons_no as consNo,
+        cons_name as consName,
+        cons_type as consType,
+        address,
+        tel,
+        transformer_code as transformerCode,
+        connection_date as connectionDate,
+        balance,
+        cons_status as consStatus,
+        total_consumption as totalConsumption,
+        remark,
+        company,
+        create_time as createTime,
+        create_by as createBy,
+        update_time as updateTime,
+        update_by as updateBy,
+        is_deleted as isDeleted,
+        emergency_transformer_code as emergencyTransformerCode
+    </sql>
+
+    <!--  添加用户  -->
+    <insert id="addConsInfo">
+        insert into t_cons_info (
+            id,
+            cons_no,
+            cons_name,
+            cons_type,
+            address,
+            tel,
+            transformer_code,
+            connection_date,
+            balance,
+            cons_status,
+            total_consumption,
+            remark,
+            company,
+            create_time,
+            create_by,
+            emergency_transformer_code
+        ) values (
+            #{id},
+            #{consNo},
+            #{consName},
+            #{consType},
+            #{address},
+            #{tel},
+            #{transformerCode},
+            #{connectionDate},
+            #{balance},
+            #{consStatus},
+            #{totalConsumption},
+            #{remark},
+            #{company},
+            now(),
+            #{createBy},
+            #{emergencyTransformerCode}
+        )
+    </insert>
+
+    <!--  修改用户  -->
+    <update id="updateConsInfo">
+        update t_cons_info set
+            cons_no = #{consNo},
+            cons_name = #{consName},
+            cons_type = #{consType},
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="tel != null and tel != ''">
+                tel = #{tel},
+            </if>
+            transformer_code = #{transformerCode},
+            <if test="connectionDate != null and connectionDate != ''">
+                connection_date = #{connectionDate},
+            </if>
+            <if test="balance != null">
+                balance = #{balance},
+            </if>
+            cons_status = #{consStatus},
+            <if test="totalConsumption != null">
+                total_consumption = #{totalConsumption},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            emergency_transformer_code = #{emergencyTransformerCode},
+            update_time = now(),
+            update_by = #{updateBy}
+        where id = #{id}
+    </update>
+
+    <!--  条件查询用户信息列表  -->
+    <select id="getConsInfoListByCondition" resultType="com.wangwen.gdfwzhxt.model.entity.cons.ConsInfo">
+        select t.id,
+               t.cons_no as consNo,
+               t.cons_name as consName,
+               t.cons_type as consType,
+               t.address,
+               t.tel,
+               t.transformer_code as transformerCode,
+               t.connection_date as connectionDate,
+               t.balance,
+               t.cons_status as consStatus,
+               t.total_consumption as totalConsumption,
+               t.remark,
+               t.company,
+               t.create_time as createTime,
+               t.create_by as createBy,
+               t.update_time as updateTime,
+               t.update_by as updateBy,
+               t.is_deleted as isDeleted,
+               t.emergency_transformer_code as emergencyTransformerCode,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_cons_consType' and c.code = t.cons_type limit 1) as consTypeName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_cons_consStatus' and c.code = t.cons_status limit 1) as consStatusName,
+               byq.transformer_name as transformerName,
+               (select b.transformer_name from t_transformerInfo b where b.is_deleted = 0
+                and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = b.company)
+                and b.transformer_code = t.emergency_transformer_code limit 1) as emergencyTransformerName
+          from t_cons_info t
+          left join t_transformerInfo byq
+           on t.transformer_code = byq.transformer_code
+           and byq.is_deleted = 0
+           and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = byq.company)
+        <where>
+            <if test="consNo != null and consNo != ''">
+                and t.cons_no like concat('%', #{consNo}, '%')
+            </if>
+            <if test="consName != null and consName != ''">
+                and t.cons_name like concat('%', #{consName}, '%')
+            </if>
+            <if test="consType != null and consType.size() > 0">
+                and t.cons_type in
+                <foreach collection="consType" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="transformerCode != null and transformerCode != ''">
+                and t.transformer_code = #{transformerCode}
+            </if>
+            <if test="balance != null">
+                and t.balance &gt;= #{balance}
+            </if>
+            <if test="consStatus != null">
+                and t.cons_status = #{consStatus}
+            </if>
+            <if test="totalConsumption != null">
+                and t.total_consumption &gt;= #{totalConsumption}
+            </if>
+            and t.is_deleted = 0
+            and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+        </where>
+        order by t.create_time desc
+    </select>
+
+    <!--  根据户号查询记录数  -->
+    <select id="getConsInfoCountByConsNo" resultType="java.lang.Integer">
+        select count(1)
+          from t_cons_info t
+        where t.is_deleted = 0
+          and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+          and t.cons_no = #{param1}
+    </select>
+</mapper>

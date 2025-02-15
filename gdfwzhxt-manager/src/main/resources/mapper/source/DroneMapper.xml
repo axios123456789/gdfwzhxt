@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.DroneMapper">
+    <sql id="columns">
+        id,
+        drone_no as droneNo,
+        drone_name as droneName,
+        drone_image as droneImage,
+        produce_date as produceDate,
+        run_date as runDate,
+        produce_company as produceCompany,
+        view_area as viewArea,
+        remark,
+        company,
+        create_time as createTime,
+        create_by as createBy,
+        update_time as updateTime,
+        update_by as updateBy,
+        is_deleted as isDeleted
+    </sql>
+
+    <!--  添加无人机信息  -->
+    <insert id="addDroneInfo">
+        insert into t_drone_info (
+            id,
+            drone_no,
+            drone_name,
+            drone_image,
+            produce_date,
+            run_date,
+            produce_company,
+            view_area,
+            remark,
+            company,
+            create_time,
+            create_by
+        ) values (
+            #{id},
+            #{droneNo},
+            #{droneName},
+            #{droneImage},
+            #{produceDate},
+            #{runDate},
+            #{produceCompany},
+            #{viewArea},
+            #{remark},
+            #{company},
+            now(),
+            #{createBy}
+        )
+    </insert>
+
+    <!--  修改无人机信息  -->
+    <update id="updateDroneInfo">
+        update t_drone_info set
+        <if test="droneNo != null and droneNo != ''">
+            drone_no = #{droneNo},
+        </if>
+        <if test="droneName != null and droneName != ''">
+            drone_name = #{droneName},
+        </if>
+        <if test="droneImage != null and droneImage != ''">
+            drone_image = #{droneImage},
+        </if>
+        <if test="produceDate != null and produceDate != ''">
+            produce_date = #{produceDate},
+        </if>
+        <if test="runDate != null and runDate != ''">
+            run_date = #{runDate},
+        </if>
+        <if test="produceCompany != null and produceCompany != ''">
+            produce_company = #{produceCompany},
+        </if>
+        <if test="viewArea != null and viewArea != ''">
+            view_area = #{viewArea},
+        </if>
+        <if test="remark != null and remark != ''">
+            remark = #{remark},
+        </if>
+        update_time = now(),
+        update_by = #{updateBy}
+        where id = #{id}
+    </update>
+
+    <!--  条件查询所有无人机信息  -->
+    <select id="getDroneInfoListByCondition" resultType="com.wangwen.gdfwzhxt.model.entity.drone.DroneInfo">
+        select <include refid="columns"/>
+          from t_drone_info t
+        <where>
+            <if test="droneNo != null and droneNo != ''">
+                and t.drone_no like concat('%', #{droneNo}, '%')
+            </if>
+            <if test="droneName != null and droneName != ''">
+                and t.drone_name like concat('%', #{droneName}, '%')
+            </if>
+            and t.is_deleted = 0
+            and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+        </where>
+        order by t.create_time desc
+    </select>
+</mapper>

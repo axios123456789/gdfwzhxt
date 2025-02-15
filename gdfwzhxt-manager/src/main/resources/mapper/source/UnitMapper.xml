@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.UnitMapper">
+    <sql id="columns">
+        id,
+        unit_id as unitId,
+        unit_name as unitName,
+        parent_unit_id as parentUnitId,
+        unit_level as unitLevel,
+        company,
+        create_time as createTime,
+        create_by as createBy,
+        update_time as updateTime,
+        update_by as updateBy,
+        is_deleted as isDeleted
+    </sql>
+
+    <!--  添加单位  -->
+    <insert id="addUnit">
+        insert into t_unit(
+            id,
+            unit_id,
+            unit_name,
+            parent_unit_id,
+            unit_level,
+            company,
+            create_time,
+            create_by
+        ) values (
+            #{id},
+            #{unitId},
+            #{unitName},
+            #{parentUnitId},
+            #{unitLevel},
+            #{company},
+            now(),
+            #{createBy}
+        )
+    </insert>
+
+    <!--  修改单位  -->
+    <update id="updateUnit">
+        update t_unit set
+        <if test="unitId != null and unitId != ''">
+            unit_id = #{unitId},
+        </if>
+        <if test="unitName != null and unitName != ''">
+            unit_name = #{unitName},
+        </if>
+        <if test="unitLevel != null">
+            unit_level = #{unitLevel},
+        </if>
+        update_time = now(),
+        update_by = #{updateBy}
+        where id = #{id}
+    </update>
+
+    <!-- 查询所有单位 -->
+    <select id="getAllUnit" resultType="com.wangwen.gdfwzhxt.model.entity.source.Unit">
+        select <include refid="columns"/>,
+               (select c.value from t_code c where c.type = 't_unit_level' and c.is_deleted = 0 and c.code = t.unit_level limit 1) as unitLevelName
+          from t_unit t
+        where t.is_deleted = 0
+          and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+        order by t.unit_id
+    </select>
+
+    <!--  根据unitId查询下级节点的数量  -->
+    <select id="getChildrenCountByUnitId" resultType="java.lang.Integer">
+        select count(1) from t_unit t
+        where t.is_deleted = 0
+          and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+          and t.parent_unit_id = #{param1}
+    </select>
+
+    <!--  条件查询所有单位  -->
+    <select id="getUnitListByCondition" resultType="com.wangwen.gdfwzhxt.model.entity.source.Unit">
+        select <include refid="columns"/>,
+        (select c.value from t_code c where c.type = 't_unit_level' and c.is_deleted = 0 and c.code = t.unit_level limit 1) as unitLevelName
+        from t_unit t
+        <where>
+            <if test="unitName != null and unitName != ''">
+                and t.unit_name like concat('%', #{unitName}, '%')
+            </if>
+            <if test="unitLevel != null and unitLevel != ''">
+                and t.unit_level = #{unitLevel}
+            </if>
+            and t.is_deleted = 0
+            and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+        </where>
+        order by t.unit_id
+    </select>
+</mapper>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.LineInfoMapper">
+    <sql id="columns">
+        id,
+        line_name as lineName,
+        company,
+        unit_id as unitId,
+        line_length as lineLength,
+        radius,
+        address,
+        voltage_level as voltageLevel,
+        rated_current as ratedCurrent,
+        line_type as lineType,
+        main_line as mainLine,
+        access_time as accessTime,
+        create_time as createTime,
+        create_by as createBy,
+        update_time as updateTime,
+        update_by as updateBy,
+        is_deleted as isDeleted,
+        line_status as lineStatus,
+        unit_name as unitName
+    </sql>
+
+    <!--  添加线路信息  -->
+    <insert id="addLineInfo">
+        insert into t_lineInfo(
+            id,
+            line_name,
+            company,
+            unit_id,
+            line_length,
+            radius,
+            address,
+            voltage_level,
+            rated_current,
+            line_type,
+            main_line,
+            access_time,
+            create_time,
+            create_by,
+            line_status,
+            unit_name
+        ) values(
+            #{id},
+            #{lineName},
+            #{company},
+            #{unitId},
+            #{lineLength},
+            #{radius},
+            #{address},
+            #{voltageLevel},
+            #{ratedCurrent},
+            #{lineType},
+            #{mainLine},
+            #{accessTime},
+            now(),
+            #{createBy},
+            #{lineStatus},
+            #{unitName}
+        )
+    </insert>
+
+    <!-- 修改线路信息  -->
+    <update id="updateLineInfo">
+        update t_lineInfo set
+        <if test="lineName != null and lineName != ''">
+            line_name = #{lineName},
+        </if>
+        <if test="unitId != null and unitId != ''">
+            unit_id = #{unitId},
+        </if>
+        <if test="lineLength != null">
+            line_length = #{lineLength},
+        </if>
+        <if test="radius != null">
+            radius = #{radius},
+        </if>
+        <if test="address != null and address != ''">
+            address = #{address},
+        </if>
+        <if test="voltageLevel != null and voltageLevel != ''">
+            voltage_level = #{voltageLevel},
+        </if>
+        <if test="ratedCurrent != null and ratedCurrent != ''">
+            rated_current = #{ratedCurrent},
+        </if>
+        <if test="lineType != null">
+            line_type = #{lineType},
+        </if>
+        <if test="accessTime != null">
+            access_time = #{accessTime},
+        </if>
+        <if test="lineStatus != null">
+            line_status = #{lineStatus},
+        </if>
+        <if test="unitName != null and unitName != ''">
+            unit_name = #{unitName},
+        </if>
+        update_time = now(),
+        update_by = #{updateBy}
+        where id = #{id}
+    </update>
+
+    <!--  查询所有线路  -->
+    <select id="getAllLine" resultType="com.wangwen.gdfwzhxt.model.entity.line.LineInfo">
+        select <include refid="columns"/>,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_line_type' and c.code = t.line_type limit 1) as lineTypeName,
+               (case when main_line = '0' then '无' else
+							 (select l.line_name from t_lineInfo l where l.id = t.main_line limit 1) end) as mainLineName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_line_status' and c.`code` =t.line_status limit 1) as lineStatusName
+        from t_lineInfo t
+        where t.is_deleted = 0
+          and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+        order by t.create_time desc
+    </select>
+
+    <!--  查询下级节点的数量  -->
+    <select id="getChildrenCountParentId" resultType="java.lang.Integer">
+        select count(1) from t_lineInfo t
+        where t.is_deleted = 0
+          and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+          and t.main_line = #{param1}
+    </select>
+
+    <!--  条件查询线路信息列表  -->
+    <select id="getLineInfoByCondition" resultType="com.wangwen.gdfwzhxt.model.entity.line.LineInfo">
+        select <include refid="columns"/>,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_line_type' and c.code = t.line_type limit 1) as lineTypeName,
+               (case when main_line = '0' then '无' else
+               (select l.line_name from t_lineInfo l where l.id = t.main_line limit 1) end) as mainLineName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_line_status' and c.`code` =t.line_status limit 1) as lineStatusName
+          from t_lineInfo t
+        <where>
+            <if test="lineName != null and lineName != ''">
+                and t.line_name like concat('%', #{lineName}, '%')
+            </if>
+            <if test="lineLength != null">
+                and t.line_length &gt;= #{lineLength}
+            </if>
+            <if test="radius != null">
+                and t.radius &gt;= #{radius}
+            </if>
+            <if test="lineType != null and lineType.size() > 0">
+                and t.line_type in
+                <foreach collection="lineType" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="lineStatus != null">
+                and t.line_status = #{lineStatus}
+            </if>
+            <if test="unitName != null and unitName != ''">
+                and t.unit_name like concat('%', #{unitName}, '%')
+            </if>
+            and t.is_deleted = 0
+            and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+        </where>
+        order by t.create_time desc
+    </select>
+</mapper>

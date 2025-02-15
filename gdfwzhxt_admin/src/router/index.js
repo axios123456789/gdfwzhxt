@@ -35,12 +35,21 @@ import home from './modules/home'
 import test from './modules/test'
 import system from './modules/system'
 import line from './modules/line'
+import source from '@/router/modules/source'
+import transformer from '@/router/modules/transformer'
+import cons from '@/router/modules/cons'
 
 /* 菜单栏的路由 */
 // 固定菜单
 export const fixedRoutes = [...home]
 // 动态菜单
-export const asyncRoutes = [...system, ...line]
+export const asyncRoutes = [
+  ...system,
+  ...line,
+  ...source,
+  ...transformer,
+  ...cons,
+]
 
 const router = createRouter({
   history: createWebHashHistory(),
