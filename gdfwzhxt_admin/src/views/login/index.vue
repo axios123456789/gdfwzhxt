@@ -4,41 +4,41 @@
       <h1 class="title">供电服务管理系统</h1>
       <el-form-item prop="userName">
         <el-input
-            class="text"
-            v-model="model.userName"
-            prefix-icon="User"
-            clearable
-            :placeholder="$t('login.username')"
+          class="text"
+          v-model="model.userName"
+          prefix-icon="User"
+          clearable
+          :placeholder="$t('login.username')"
         />
       </el-form-item>
       <el-form-item prop="password">
         <el-input
-            class="text"
-            v-model="model.password"
-            prefix-icon="Lock"
-            show-password
-            clearable
-            :placeholder="$t('login.password')"
+          class="text"
+          v-model="model.password"
+          prefix-icon="Lock"
+          show-password
+          clearable
+          :placeholder="$t('login.password')"
         />
       </el-form-item>
       <el-form-item prop="captcha">
         <div class="captcha">
           <el-input
-              class="text"
-              v-model="model.captcha"
-              prefix-icon="Picture"
-              placeholder="请输入验证码"
+            class="text"
+            v-model="model.captcha"
+            prefix-icon="Picture"
+            placeholder="请输入验证码"
           ></el-input>
           <img :src="captchaSrc" @click="refreshCaptcha" />
         </div>
       </el-form-item>
       <el-form-item>
         <el-button
-            :loading="loading"
-            type="primary"
-            class="btn"
-            size="large"
-            @click="submit"
+          :loading="loading"
+          type="primary"
+          class="btn"
+          size="large"
+          @click="submit"
         >
           {{ btnText }}
         </el-button>
@@ -51,22 +51,23 @@
       <h1 class="title">供电公司注册</h1>
       <el-form-item label="公司账号">
         <el-input
-            v-model="form.loginAccount"
-            placeholder="公司账号"
-            clearable
+          v-model="form.loginAccount"
+          placeholder="公司账号"
+          clearable
         ></el-input>
       </el-form-item>
       <el-form-item label="密码">
-        <el-input placeholder="请输入密码"
-                  v-model="form.loginPassword"
-                  show-password>
-        </el-input>
+        <el-input
+          placeholder="请输入密码"
+          v-model="form.loginPassword"
+          show-password
+        ></el-input>
       </el-form-item>
       <el-form-item label="公司名称">
         <el-input
-            v-model="form.name"
-            placeholder="公司名称"
-            clearable
+          v-model="form.name"
+          placeholder="公司名称"
+          clearable
         ></el-input>
       </el-form-item>
     </el-form>
@@ -136,90 +137,92 @@ export default defineComponent({
     })
 
     // 定义登录和注册模块的显示
-    const isLoginVisible = ref(false);
-    const isRegisterVisible = ref(false);
+    const isLoginVisible = ref(false)
+    const isRegisterVisible = ref(false)
 
     // onMounted钩子函数
-    onMounted( () => {
-      isRegister();
+    onMounted(() => {
+      isRegister()
     })
 
     //判断系统是否注册了公司
     const isRegister = async () => {
-      const { data } = await IsRegister();
-      if (data) { // 注册了公司
-        isLoginVisible.value = true;
-        isRegisterVisible.value = false;
-        state.refreshCaptcha();
-      } else { // 没注册公司
-        isLoginVisible.value = false;
-        isRegisterVisible.value = true;
+      const { data } = await IsRegister()
+      if (data) {
+        // 注册了公司
+        isLoginVisible.value = true
+        isRegisterVisible.value = false
+        state.refreshCaptcha()
+      } else {
+        // 没注册公司
+        isLoginVisible.value = false
+        isRegisterVisible.value = true
       }
     }
 
-    const form = ref({});
+    const form = ref({})
 
     const state = reactive({
       model: {
         userName: 'wangwen',
         password: '123456',
-        captcha: '',      // 用户输入的验证码
-        codeKey: ''       // 后端返回的验证码key
+        captcha: '', // 用户输入的验证码
+        codeKey: '', // 后端返回的验证码key
       },
       rules: getRules(),
       loading: false,
-      captchaSrc: "",
+      captchaSrc: '',
       refreshCaptcha: async () => {
-        const { data } = await GetValidateCode();
-        state.model.codeKey = data.codeKey;
-        state.captchaSrc = data.codeValue;
+        const { data } = await GetValidateCode()
+        state.model.codeKey = data.codeKey
+        state.captchaSrc = data.codeValue
       },
       btnText: computed(() =>
-          state.loading ? ctx.$t('login.logging') : ctx.$t('login.login')
+        state.loading ? ctx.$t('login.logging') : ctx.$t('login.login')
       ),
       loginForm: ref(null),
       submit: () => {
         if (state.loading) {
-          return;
+          return
         }
         state.loginForm.validate(async valid => {
           if (valid) {
-            state.loading = true;
-            const { code, data, message } = await Login(state.model);
+            state.loading = true
+            const { code, data, message } = await Login(state.model)
             if (+code === 200) {
               ctx.$message.success({
                 message: ctx.$t('login.loginsuccess'),
                 duration: 1000,
-              });
+              })
 
-              const targetPath = decodeURIComponent(route.query.redirect);
+              const targetPath = decodeURIComponent(route.query.redirect)
               if (targetPath.startsWith('http')) {
                 // 如果是一个url地址
-                window.location.href = targetPath;
+                window.location.href = targetPath
               } else if (targetPath.startsWith('/')) {
                 // 如果是内部路由地址
-                router.push(targetPath);
+                router.push(targetPath)
               } else {
-                router.push('/home');    // 请求成功后，进入到首页
+                router.push('/home') // 请求成功后，进入到首页
               }
-              useApp().initToken(data);
+              useApp().initToken(data)
             } else {
-              ctx.$message.error(message);
+              ctx.$message.error(message)
             }
-            state.loading = false;
+            state.loading = false
           }
-        });
+        })
       },
-    });
+    })
 
     return {
       ...toRefs(state),
       isLoginVisible,
       isRegisterVisible,
-      form
-    };
+      form,
+    }
   },
-});
+})
 </script>
 
 <style lang="scss" scoped>
@@ -310,7 +313,7 @@ export default defineComponent({
   overflow: hidden;
   background: #2d3a4b;
 }
-.rform{
+.rform {
   width: 600px;
   height: 100%;
   padding: 30px;
@@ -324,5 +327,4 @@ export default defineComponent({
     margin: 0 0 24px;
   }
 }
-
 </style>

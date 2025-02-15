@@ -5,43 +5,43 @@ const lineEvent = () => import('@/views/line/lineEvent.vue')
 const lineEventReport = () => import('@/views/line/lineEventReport.vue')
 
 // 导出该组件
-export default([
-    {
-        path: "/line",
-        component: Layout,
-        name: 'line',
+export default [
+  {
+    path: '/line',
+    component: Layout,
+    name: 'line',
+    meta: {
+      title: '线路管理',
+    },
+    icon: 'remove',
+    children: [
+      {
+        path: '/lineInfo',
+        name: 'lineInfo',
+        component: lineInfo,
         meta: {
-            title: '线路管理',
+          title: '线路信息',
         },
-        icon: 'remove',
-        children: [
-            {
-                path: '/lineInfo',
-                name: 'lineInfo',
-                component: lineInfo,
-                meta: {
-                    title: '线路信息',
-                },
-                hidden: false
-            },
-            {
-                path: '/lineEvent',
-                name: 'lineEvent',
-                component: lineEvent,
-                meta: {
-                    title: '线路停电事件',
-                },
-                hidden: false
-            },
-            {
-                path: '/lineEventReport',
-                name: 'lineEventReport',
-                component: lineEventReport,
-                meta: {
-                    title: '线路停电事件报表',
-                },
-                hidden: false
-            },
-        ]
-    }
-])
+        hidden: false,
+      },
+      {
+        path: '/lineEvent',
+        name: 'lineEvent',
+        component: lineEvent,
+        meta: {
+          title: '线路停电事件',
+        },
+        hidden: false,
+      },
+      {
+        path: '/lineEventReport',
+        name: 'lineEventReport',
+        component: lineEventReport,
+        meta: {
+          title: '线路停电事件报表',
+        },
+        hidden: false,
+      },
+    ],
+  },
+]

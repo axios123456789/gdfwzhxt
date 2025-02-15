@@ -24,7 +24,7 @@ export const Login = data => {
 export const GetValidateCode = () => {
   return request({
     url: '/electricity/system/index/generateValidateCode',
-    method: 'get'
+    method: 'get',
   })
 }
 
@@ -48,6 +48,6 @@ export const Logout = () => {
 export const IsRegister = () => {
   return request({
     url: '/electricity/system/index/companyIsExists',
-    method: 'get'
+    method: 'get',
   })
 }

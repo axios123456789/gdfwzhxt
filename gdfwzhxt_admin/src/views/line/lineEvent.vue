@@ -1,11 +1,7 @@
 <template>
-线路停电事件
+  线路停电事件
 </template>
 
-<script setup>
+<script setup></script>
 
-</script>
-
-<style scoped>
-
-</style>
+<style scoped></style>
