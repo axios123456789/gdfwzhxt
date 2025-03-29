@@ -2,6 +2,7 @@ package com.wangwen.gdfwzhxt.manager.mapper;
 
 import com.wangwen.gdfwzhxt.model.dto.cons.ConsInfoDto;
 import com.wangwen.gdfwzhxt.model.entity.cons.ConsInfo;
+import com.wangwen.gdfwzhxt.model.entity.cons.RechargeRecord;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Update;
 
@@ -27,4 +28,7 @@ public interface ConsInfoMapper {
 
     //根据用户编号查询用户信息
     ConsInfo getConsInfoByConsNo(String consNo);
+
+    //修改用户电费
+    void updateRecharge(RechargeRecord rechargeRecord);
 }

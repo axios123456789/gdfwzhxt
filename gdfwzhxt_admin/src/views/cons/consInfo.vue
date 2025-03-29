@@ -443,8 +443,117 @@
       />
     </el-dialog>
 
+    <!--  点击充值电费打开该模态窗口  -->
+    <el-dialog v-model="rechargeDialogVisible" title="电费充值表单" width="60%">
+      <el-form label-width="140px">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="用户编号">
+              <el-input
+                v-model="rechargeRecord.consNo"
+                style="width: 100%"
+                disabled="true"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="用户名称">
+              <el-input
+                v-model="rechargeRecord.consName"
+                style="width: 100%"
+                disabled="true"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="充值人*">
+              <el-input
+                v-model="rechargeRecord.rechargeBy"
+                style="width: 100%"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="充值时间*">
+              <el-date-picker
+                v-model="rechargeRecord.rechargeTime"
+                type="date"
+                style="width: 100%"
+                placeholder="选择日期时间"
+                :editable="false"
+                :value-format="'YYYY-MM-DD'"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="充值金额（元）*">
+              <el-input-number
+                v-model="rechargeRecord.rechargeAmount"
+                :precision="2"
+                :step="0.1"
+                :max="100000"
+                style="width: 100%"
+              ></el-input-number>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="充值人与用户关系*">
+              <el-input
+                v-model="rechargeRecord.relation"
+                style="width: 100%"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="备注">
+              <el-input
+                type="textarea"
+                style="width: 100%"
+                :rows="3"
+                placeholder="请输入内容"
+                v-model="rechargeRecord.remark"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item>
+              <el-button type="primary" @click="saveRechargeRecord">
+                提交
+              </el-button>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item>
+              <el-button @click="rechargeDialogVisible = false">取消</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-dialog>
+
     <!--  用电户信息列表展示  -->
     <el-table :data="list" style="width: 100%; margin-bottom: 20px;">
+      <el-table-column label="操作" align="center" width="160" #default="scope">
+        <el-button
+          type="primary"
+          size="small"
+          @click="rechargeElectricity(scope.row)"
+        >
+          电费充值
+        </el-button>
+      </el-table-column>
       <el-table-column prop="consNo" label="用户编号" width="120" />
       <el-table-column prop="consName" label="用户名称" width="120" />
       <el-table-column prop="consTypeName" label="用户类型" width="100" />
@@ -491,7 +600,11 @@ import { GetKeyAndValueByType } from '@/api/sysDict'
 import { GetTransformerInfoListByConditionAndPage } from '@/api/transformerInfo'
 import { GetLineInfoListByConditionAndPage } from '@/api/lineInfo'
 import { GetUnitListByConditionAndPage } from '@/api/unit'
-import { GetConsInfoListByConditionAndPage } from '@/api/consInfo'
+import {
+  GetConsInfoListByConditionAndPage,
+  RechargeElectricity,
+} from '@/api/consInfo'
+import { ElMessage } from 'element-plus'
 
 //------------------------------------------------------------列表-------------------------------------------------------
 // 定义表格数据模型
@@ -773,6 +886,56 @@ const unitHandleCellClick = row => {
   queryLineDto.value.unitId = row.unitId
   queryLineDto.value.unitName = row.unitName
   dialogVisibleUnitSelect.value = false
+}
+
+//----------------------------------------------电费充值功能----------------------------------------
+//封装电费充值数据
+const rechargeRecord = ref({
+  rechargeBy: '',
+  rechargeTime: '',
+  consNo: '',
+  consName: '',
+  rechargeAmount: '',
+  remark: '',
+  relation: '',
+})
+const rechargeDialogVisible = ref(false) //控制充值模态窗口开闭
+//点击充值按钮触发
+const rechargeElectricity = row => {
+  rechargeRecord.value = {}
+  rechargeRecord.value.consNo = row.consNo
+  rechargeRecord.value.consName = row.consName
+
+  //打开模态窗口
+  rechargeDialogVisible.value = true
+}
+//点击电费充值模态窗口中的提交按钮后触发
+const saveRechargeRecord = async () => {
+  if (rechargeRecord.value.rechargeBy == undefined) {
+    ElMessage.warning('【充值人】不能为空！')
+    return
+  }
+  if (rechargeRecord.value.rechargeTime == undefined) {
+    ElMessage.warning('【充值时间】不能为空！')
+    return
+  }
+  if (rechargeRecord.value.rechargeAmount == undefined) {
+    ElMessage.warning('【充值金额】不能为空！')
+    return
+  }
+  if (rechargeRecord.value.relation == undefined) {
+    ElMessage.warning('【充值人与用户关系】不能为空！')
+    return
+  }
+
+  const { code, message } = await RechargeElectricity(rechargeRecord.value)
+  if (code === 200) {
+    rechargeDialogVisible.value = false
+    ElMessage.success(message)
+    fetchData()
+  } else {
+    ElMessage.error(message)
+  }
 }
 </script>
 

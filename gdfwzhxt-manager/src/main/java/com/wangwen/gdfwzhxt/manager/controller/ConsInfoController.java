@@ -3,7 +3,9 @@ package com.wangwen.gdfwzhxt.manager.controller;
 import com.github.pagehelper.PageInfo;
 import com.wangwen.gdfwzhxt.manager.service.ConsInfoService;
 import com.wangwen.gdfwzhxt.model.dto.cons.ConsInfoDto;
+import com.wangwen.gdfwzhxt.model.dto.cons.RechargeRecordDto;
 import com.wangwen.gdfwzhxt.model.entity.cons.ConsInfo;
+import com.wangwen.gdfwzhxt.model.entity.cons.RechargeRecord;
 import com.wangwen.gdfwzhxt.model.vo.common.Result;
 import com.wangwen.gdfwzhxt.model.vo.common.ResultCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,5 +71,35 @@ public class ConsInfoController {
     public Result getConsInfoByConsNo(@PathVariable("consNo") String consNo){
         ConsInfo consInfo = consInfoService.getConsInfoByConsNo(consNo);
         return Result.build(consInfo, ResultCodeEnum.SUCCESS);
+    }
+
+    /**
+     * 条件分页查询用户电费充值记录
+     * @param current
+     * @param limit
+     * @param rechargeRecordDto
+     * @return
+     */
+    @PostMapping("/getRechargeRecordByConditionAndPage/{current}/{limit}")
+    public Result getRechargeRecordByConditionAndPage(@PathVariable("current") Integer current,
+                                                      @PathVariable("limit") Integer limit,
+                                                      @RequestBody RechargeRecordDto rechargeRecordDto){
+        PageInfo<RechargeRecord> pageInfo = consInfoService.getRechargeRecordByConditionAndPage(current, limit, rechargeRecordDto);
+        return Result.build(pageInfo, ResultCodeEnum.SUCCESS);
+    }
+
+    /**
+     * 用户电费充值
+     * @param rechargeRecord
+     * @return
+     */
+    @PostMapping("/rechargeElectricity")
+    public Result rechargeElectricity(@RequestBody RechargeRecord rechargeRecord){
+        try {
+            consInfoService.rechargeElectricity(rechargeRecord);
+            return Result.build(null, ResultCodeEnum.SUCCESS);
+        } catch (Exception e) {
+            return Result.build(null, 500, "电费充值失败，请联系管理员！");
+        }
     }
 }

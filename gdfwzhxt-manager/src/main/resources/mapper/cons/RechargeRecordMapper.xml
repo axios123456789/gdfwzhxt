@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.RechargeRecordMapper">
+    <sql id="columns">
+        recharge_by as rechargeBy,
+        recharge_time as rechargeTime,
+        cons_no as consNo,
+        cons_name as consName,
+        recharge_amount as rechargeAmount,
+        remark,
+        company,
+        operator,
+        operate_time as operateTime,
+        relation,
+        id
+    </sql>
+
+    <!-- 形成电费充值记录   -->
+    <insert id="addRechargeRecord">
+        insert into t_recharge_record (
+            id,
+            recharge_by,
+            recharge_time,
+            cons_no,
+            cons_name,
+            recharge_amount,
+            remark,
+            company,
+            operator,
+            operate_time,
+            relation
+        ) values (
+            #{id},
+            #{rechargeBy},
+            #{rechargeTime},
+            #{consNo},
+            #{consName},
+            #{rechargeAmount},
+            #{remark},
+            #{company},
+            #{operator},
+            now(),
+            #{relation}
+        )
+    </insert>
+
+    <!--  条件查询所有电费充值记录  -->
+    <select id="getRechargeRecordByCondition"
+            resultType="com.wangwen.gdfwzhxt.model.entity.cons.RechargeRecord">
+        select <include refid="columns"/>
+          from t_recharge_record t
+        <where>
+            <if test="consNo != null and consNo != ''">
+                and t.cons_no like concat('%', #{consNo}, '%')
+            </if>
+            <if test="consName != null and consName != ''">
+                and t.cons_name like concat('%', #{consName}, '%')
+            </if>
+            <if test="rechargeBeginTime != null and rechargeBeginTime != ''">
+                and t.recharge_time &gt;= #{rechargeBeginTime}
+            </if>
+            <if test="rechargeEndTime != null and rechargeEndTime != ''">
+                and t.recharge_time &lt;= #{rechargeEndTime}
+            </if>
+            <if test="rechargeAmount != null">
+                and t.recharge_amount &gt;= #{rechargeAmount}
+            </if>
+            and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+        </where>
+        order by t.recharge_time desc
+    </select>
+</mapper>

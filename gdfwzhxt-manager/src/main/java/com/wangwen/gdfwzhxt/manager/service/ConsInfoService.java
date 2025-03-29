@@ -2,7 +2,9 @@ package com.wangwen.gdfwzhxt.manager.service;
 
 import com.github.pagehelper.PageInfo;
 import com.wangwen.gdfwzhxt.model.dto.cons.ConsInfoDto;
+import com.wangwen.gdfwzhxt.model.dto.cons.RechargeRecordDto;
 import com.wangwen.gdfwzhxt.model.entity.cons.ConsInfo;
+import com.wangwen.gdfwzhxt.model.entity.cons.RechargeRecord;
 
 public interface ConsInfoService {
     //条件分页查询用户信息列表
@@ -16,4 +18,10 @@ public interface ConsInfoService {
 
     //根据用户编号查询用户信息
     ConsInfo getConsInfoByConsNo(String consNo);
+
+    //条件分页查询用户电费充值记录
+    PageInfo<RechargeRecord> getRechargeRecordByConditionAndPage(Integer current, Integer limit, RechargeRecordDto rechargeRecordDto);
+
+    //用户电费充值
+    void rechargeElectricity(RechargeRecord rechargeRecord);
 }

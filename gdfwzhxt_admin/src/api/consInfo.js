@@ -39,3 +39,25 @@ export const GetConsInfoByConsNo = consNo => {
     method: 'get',
   })
 }
+
+//条件分页查询电费充值记录
+export const GetRechargeRecordByConditionAndPage = (
+  current,
+  limit,
+  rechargeRecordQueryDto
+) => {
+  return request({
+    url: `${base_api}/getRechargeRecordByConditionAndPage/${current}/${limit}`,
+    method: 'post',
+    data: rechargeRecordQueryDto,
+  })
+}
+
+//用户电费充值
+export const RechargeElectricity = rechargeRecord => {
+  return request({
+    url: `${base_api}/rechargeElectricity`,
+    method: 'post',
+    data: rechargeRecord,
+  })
+}

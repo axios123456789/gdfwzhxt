@@ -94,6 +94,13 @@
         where id = #{id}
     </update>
 
+    <!--  修改用户电费  -->
+    <update id="updateRecharge">
+        update t_cons_info t set
+            t.balance = t.balance + #{rechargeAmount}
+        where t.cons_no = #{consNo}
+    </update>
+
     <!--  条件查询用户信息列表  -->
     <select id="getConsInfoListByCondition" resultType="com.wangwen.gdfwzhxt.model.entity.cons.ConsInfo">
         select t.id,
