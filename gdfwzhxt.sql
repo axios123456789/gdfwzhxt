@@ -11,7 +11,7 @@
  Target Server Version : 80035
  File Encoding         : 65001
 
- Date: 29/03/2025 16:18:25
+ Date: 29/03/2025 23:31:46
 */
 
 SET NAMES utf8mb4;
@@ -184,12 +184,12 @@ CREATE TABLE `t_cons_info`  (
 -- Records of t_cons_info
 -- ----------------------------
 INSERT INTO `t_cons_info` VALUES ('9a763ab1b498432abd50124865811ef8', '334142142', 'X', 1, NULL, NULL, '00136400', NULL, 0.00, 2, 0.00, '是否', '5d1f6eed770f40dd9916098fb17934bc', '2025-02-07 17:07:48', '上饶广信供电局', '2025-02-07 17:11:44', '上饶广信供电局', 1, NULL);
-INSERT INTO `t_cons_info` VALUES ('9bec2e8196254f879c29a08e46ab4810', '01120250222', '王小条', 1, NULL, '15478895421', '00036400', '2025-02-20', 30.21, 1, 354.00, NULL, '5d1f6eed770f40dd9916098fb17934bc', '2025-02-21 23:16:30', '上饶广信供电局', '2025-02-22 12:03:51', '上饶广信供电局', 0, NULL);
-INSERT INTO `t_cons_info` VALUES ('bfe0771b9ad1433fb2fbc8a0635a2a0b', '00220250208', '广信一中', 4, '广信区中心高中一中', '911-9854-8754', '00036400', '2020-05-30', 10000.00, 1, 10000.00, '民生用户，随时做好保电措施', '5d1f6eed770f40dd9916098fb17934bc', '2025-02-08 11:26:17', '上饶广信供电局', NULL, NULL, 0, '10036400');
-INSERT INTO `t_cons_info` VALUES ('c14c3f6b575540f7961b2c8abc501f54', '01220250222', '王文', 1, '上饶广信区县中心小学对面', '12545521457', '00136400', '2025-02-22', 1.30, 1, 5642.00, '正常用户，但是用电量还挺大！', '5d1f6eed770f40dd9916098fb17934bc', '2025-02-22 12:05:49', '上饶广信供电局', NULL, NULL, 0, NULL);
+INSERT INTO `t_cons_info` VALUES ('9bec2e8196254f879c29a08e46ab4810', '01120250222', '王小条', 1, NULL, '15478895421', '00036400', '2025-02-20', 29.13, 1, 352.18, NULL, '5d1f6eed770f40dd9916098fb17934bc', '2025-02-21 23:16:30', '上饶广信供电局', '2025-02-22 12:03:51', '上饶广信供电局', 0, NULL);
+INSERT INTO `t_cons_info` VALUES ('bfe0771b9ad1433fb2fbc8a0635a2a0b', '00220250208', '广信一中', 4, '广信区中心高中一中', '911-9854-8754', '00036400', '2020-05-30', 9999.05, 1, 9998.41, '民生用户，随时做好保电措施', '5d1f6eed770f40dd9916098fb17934bc', '2025-02-08 11:26:17', '上饶广信供电局', NULL, NULL, 0, '10036400');
+INSERT INTO `t_cons_info` VALUES ('c14c3f6b575540f7961b2c8abc501f54', '01220250222', '王文', 1, '上饶广信区县中心小学对面', '12545521457', '00136400', '2025-02-22', 0.39, 1, 5640.48, '正常用户，但是用电量还挺大！', '5d1f6eed770f40dd9916098fb17934bc', '2025-02-22 12:05:49', '上饶广信供电局', NULL, NULL, 0, NULL);
 INSERT INTO `t_cons_info` VALUES ('cddfae83219840c385757275f6dcebee', '33414214', '测试', 4, '413', '12312', '00136400', '2025-02-14', 0.00, 2, 43.00, '134复电', '5d1f6eed770f40dd9916098fb17934bc', '2025-02-07 16:45:40', '上饶广信供电局', '2025-02-07 17:07:55', '上饶广信供电局', 1, NULL);
-INSERT INTO `t_cons_info` VALUES ('e74bcfb504a54ec29a5bac77a0c1a745', '01020250208', '胡为', 1, '广信区中心', '17872451245', '00036400', '2025-02-06', 200.35, 1, 1562.51, NULL, '5d1f6eed770f40dd9916098fb17934bc', '2025-02-08 11:38:41', '上饶广信供电局', NULL, NULL, 0, NULL);
-INSERT INTO `t_cons_info` VALUES ('eacd8ac751ba4998a29e6bf71a2c24de', '00120250207', '广信人民医院', 4, '广信中心区人民医院', '120', '00036400', '2020-01-02', 10000.00, 1, 10000.00, '该用户为民生用户，不能停电，要随时做好保电措施！', '5d1f6eed770f40dd9916098fb17934bc', '2025-02-07 17:18:34', '上饶广信供电局', '2025-02-08 11:26:46', '上饶广信供电局', 0, '10136400');
+INSERT INTO `t_cons_info` VALUES ('e74bcfb504a54ec29a5bac77a0c1a745', '01020250208', '胡为', 1, '广信区中心', '17872451245', '00036400', '2025-02-06', 399.69, 1, 1561.40, NULL, '5d1f6eed770f40dd9916098fb17934bc', '2025-02-08 11:38:41', '上饶广信供电局', NULL, NULL, 0, NULL);
+INSERT INTO `t_cons_info` VALUES ('eacd8ac751ba4998a29e6bf71a2c24de', '00120250207', '广信人民医院', 4, '广信中心区人民医院', '120', '00036400', '2020-01-02', 9999.27, 1, 9998.78, '该用户为民生用户，不能停电，要随时做好保电措施！', '5d1f6eed770f40dd9916098fb17934bc', '2025-02-07 17:18:34', '上饶广信供电局', '2025-02-08 11:26:46', '上饶广信供电局', 0, '10136400');
 
 -- ----------------------------
 -- Table structure for t_drone_info
@@ -221,6 +221,40 @@ CREATE TABLE `t_drone_info`  (
 INSERT INTO `t_drone_info` VALUES ('1b8cbc2322f84ec2803e269011185b67', 'TM2344512', '歼11号', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20250329/6b1e075e5f3c45e4a88fd41d84649d7efj.webp', '2025-02-05', '2025-02-24', '上饶无人机专造厂', '广信区核心2区', '暂无', '5d1f6eed770f40dd9916098fb17934bc', '2025-02-15 10:54:11', '上饶广信供电局', '2025-03-29 13:54:48', '上饶广信供电局', 0);
 INSERT INTO `t_drone_info` VALUES ('1de17c43f0d94836ae165ce5fbd60e0a', 'csa21345312223', '测试123', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20250214/f049eaa172004d70bb6558485258323d94a1939c30a2495a9ed11747ff5c132c_p1.png', '2025-02-04', '2025-02-27', '撒旦方法', '的撒v得到', '打发大水', '5d1f6eed770f40dd9916098fb17934bc', '2025-02-14 22:12:21', '上饶广信供电局', '2025-02-14 22:12:53', '上饶广信供电局', 1);
 INSERT INTO `t_drone_info` VALUES ('58441a77431445eb9e28aeb701201a80', 'J10T3454', '歼10号', 'http://127.0.0.1:9000/gdfwzhxt-bucket/20250329/c34b06eb323244a1b5e94e20d1646e85fj.webp', '2025-02-01', '2025-02-26', '上饶无人机专造厂', '上饶广信区县中心区域线路和变压器', '暂无', '5d1f6eed770f40dd9916098fb17934bc', '2025-02-14 22:18:05', '上饶广信供电局', '2025-03-29 13:55:01', '上饶广信供电局', 0);
+
+-- ----------------------------
+-- Table structure for t_electricity_usage
+-- ----------------------------
+DROP TABLE IF EXISTS `t_electricity_usage`;
+CREATE TABLE `t_electricity_usage`  (
+                                        `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+                                        `cons_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                        `cons_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                        `record_time` timestamp(0) NULL DEFAULT NULL,
+                                        `used_energy` decimal(10, 2) NULL DEFAULT NULL,
+                                        `remaining_balance` decimal(10, 2) NULL DEFAULT NULL,
+                                        `company` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+                                        PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of t_electricity_usage
+-- ----------------------------
+INSERT INTO `t_electricity_usage` VALUES ('3b90af919552484bb2e022f9d88b92fc', '01120250222', '王小条', '2025-03-29 23:27:00', 352.50, 29.32, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_electricity_usage` VALUES ('472bbf819cd34553af2cb058c5aa3e7c', '00220250208', '广信一中', '2025-03-29 23:30:00', 9998.41, 9999.05, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_electricity_usage` VALUES ('597662b346a54e57b5dda75bfdf22a0e', '01020250208', '胡为', '2025-03-29 23:30:00', 1561.40, 399.69, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_electricity_usage` VALUES ('5b55ec2bcc9c495ba91e9992f0a0f38d', '01120250222', '王小条', '2025-03-29 23:21:00', 352.84, 29.52, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_electricity_usage` VALUES ('5cdb20d6bfa24ac999bd71fd07c22b51', '00120250207', '广信人民医院', '2025-03-29 23:21:00', 9999.11, 9999.47, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_electricity_usage` VALUES ('62a73c87baef48c6a9117535f8c5b43b', '00220250208', '广信一中', '2025-03-29 23:27:00', 9998.86, 9999.32, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_electricity_usage` VALUES ('665371ca67da40c3817220ffbe2e450b', '00220250208', '广信一中', '2025-03-29 23:21:00', 9999.05, 9999.43, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_electricity_usage` VALUES ('81f766d5098e4e018fb84c1060998b0f', '01220250222', '王文', '2025-03-29 23:21:00', 5641.15, 0.80, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_electricity_usage` VALUES ('8326addf3f794b0b9054e55980b171df', '00120250207', '广信人民医院', '2025-03-29 23:30:00', 9998.78, 9999.27, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_electricity_usage` VALUES ('9c670192e39f407cb46a5949ae6fc549', '01020250208', '胡为', '2025-03-29 23:21:00', 1561.93, 400.00, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_electricity_usage` VALUES ('c8047b0b85f744529c4074910103bec4', '00120250207', '广信人民医院', '2025-03-29 23:27:00', 9998.98, 9999.39, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_electricity_usage` VALUES ('c993cd663b40480ea7f3f66e17f136b4', '01120250222', '王小条', '2025-03-29 23:30:00', 352.18, 29.13, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_electricity_usage` VALUES ('d81d85d0a18747bb8214d871ec88b1f4', '01220250222', '王文', '2025-03-29 23:27:00', 5640.74, 0.55, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_electricity_usage` VALUES ('db31b93260c048469a6dfe7ff0e8c6f4', '01220250222', '王文', '2025-03-29 23:30:00', 5640.48, 0.39, '5d1f6eed770f40dd9916098fb17934bc');
+INSERT INTO `t_electricity_usage` VALUES ('e0450fa5fea64206ac9628e1d9c22fe7', '01020250208', '胡为', '2025-03-29 23:27:00', 1561.72, 399.88, '5d1f6eed770f40dd9916098fb17934bc');
 
 -- ----------------------------
 -- Table structure for t_line_event
@@ -435,6 +469,7 @@ CREATE TABLE `t_recharge_record`  (
 INSERT INTO `t_recharge_record` VALUES ('王嘉尔', NULL, '01220250222', '王文', 0.30, '无', '5d1f6eed770f40dd9916098fb17934bc', '上饶广信供电局', '2025-03-29 16:11:31', '父子', 'd6fe9a3671b84bad9e4c841e753e0d54');
 INSERT INTO `t_recharge_record` VALUES ('流项', '2025-03-29', '01220250222', '王文', 0.30, '冲几毛！', '5d1f6eed770f40dd9916098fb17934bc', '上饶广信供电局', '2025-03-29 16:15:00', '母子', '1bfd1be2f5eb4323b7e767513ea9e82b');
 INSERT INTO `t_recharge_record` VALUES ('王加加', '2025-03-28', '01120250222', '王小条', 20.00, '', '5d1f6eed770f40dd9916098fb17934bc', '上饶广信供电局', '2025-03-29 16:16:46', '父子', '104e608a9bd245f2a963261800dfc1d4');
+INSERT INTO `t_recharge_record` VALUES ('胡小倩', '2025-03-29', '01020250208', '胡为', 200.00, NULL, '5d1f6eed770f40dd9916098fb17934bc', '上饶广信供电局', '2025-03-29 16:27:05', '父女', '8b6c4886fca34f9d8f0fe706e1f4e37f');
 
 -- ----------------------------
 -- Table structure for t_role

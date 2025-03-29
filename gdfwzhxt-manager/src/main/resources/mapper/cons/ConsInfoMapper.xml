@@ -101,6 +101,14 @@
         where t.cons_no = #{consNo}
     </update>
 
+    <!--  修改用户电能使用情况和电费余额  -->
+    <update id="updateConsChargeAndElectricity">
+        update t_cons_info t set
+            t.total_consumption = #{totalConsumption},
+            t.balance = #{balance}
+        where t.cons_no = #{consNo}
+    </update>
+
     <!--  条件查询用户信息列表  -->
     <select id="getConsInfoListByCondition" resultType="com.wangwen.gdfwzhxt.model.entity.cons.ConsInfo">
         select t.id,
@@ -207,5 +215,41 @@
             and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = byq.company)
         where t.cons_no = #{param1}
         limit 1
+    </select>
+
+    <!--  查询所有用户信息  -->
+    <select id="getAllConsInfo" resultType="com.wangwen.gdfwzhxt.model.entity.cons.ConsInfo">
+        select t.id,
+               t.cons_no as consNo,
+               t.cons_name as consName,
+               t.cons_type as consType,
+               t.address,
+               t.tel,
+               t.transformer_code as transformerCode,
+               t.connection_date as connectionDate,
+               t.balance,
+               t.cons_status as consStatus,
+               t.total_consumption as totalConsumption,
+               t.remark,
+               t.company,
+               t.create_time as createTime,
+               t.create_by as createBy,
+               t.update_time as updateTime,
+               t.update_by as updateBy,
+               t.is_deleted as isDeleted,
+               t.emergency_transformer_code as emergencyTransformerCode,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_cons_consType' and c.code = t.cons_type limit 1) as consTypeName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_cons_consStatus' and c.code = t.cons_status limit 1) as consStatusName,
+               byq.transformer_name as transformerName,
+               (select b.transformer_name from t_transformerInfo b where b.is_deleted = 0
+                and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = b.company)
+                and b.transformer_code = t.emergency_transformer_code limit 1) as emergencyTransformerName
+        from t_cons_info t
+            left join t_transformerInfo byq
+        on t.transformer_code = byq.transformer_code
+            and byq.is_deleted = 0
+            and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = byq.company)
+        where t.is_deleted = 0
+          and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
     </select>
 </mapper>

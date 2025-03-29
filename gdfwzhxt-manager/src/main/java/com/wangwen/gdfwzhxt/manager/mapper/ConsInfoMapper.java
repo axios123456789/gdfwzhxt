@@ -31,4 +31,10 @@ public interface ConsInfoMapper {
 
     //修改用户电费
     void updateRecharge(RechargeRecord rechargeRecord);
+
+    //查询所有用户信息
+    List<ConsInfo> getAllConsInfo();
+
+    //修改用户电能使用情况和电费余额
+    void updateConsChargeAndElectricity(ConsInfo consInfo);
 }
