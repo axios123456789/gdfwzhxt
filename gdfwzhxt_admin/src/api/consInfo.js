@@ -31,3 +31,11 @@ export const DeleteConsInfoById = id => {
     method: 'delete',
   })
 }
+
+//根据用户编号查询用户信息
+export const GetConsInfoByConsNo = consNo => {
+  return request({
+    url: `${base_api}/getConsInfoByConsNo/${consNo}`,
+    method: 'get',
+  })
+}

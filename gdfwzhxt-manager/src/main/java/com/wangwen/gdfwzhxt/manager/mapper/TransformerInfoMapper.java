@@ -24,4 +24,7 @@ public interface TransformerInfoMapper {
     //根据id删除变压器信息
     @Update("update t_transformerInfo set is_deleted = 1 where id = #{param1}")
     void deleteTransformerInfoById(String id);
+
+    //根据变压器局号查询变压器
+    TransformerInfo getTransformerInfoByTransformerCode(String transformerCode);
 }

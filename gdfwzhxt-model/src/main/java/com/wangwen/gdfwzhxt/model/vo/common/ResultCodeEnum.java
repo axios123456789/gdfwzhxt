@@ -17,7 +17,9 @@ public enum ResultCodeEnum {
     BYQJH_EXISTS(230, "该变压器局号已存在"),
     CONS_EXISTS(231, "该用户编号已存在"),
     DRONE_EXISTS(232, "该无人机编号已存在"),
+    URGE_FREQUENT(233, "人与人之间需要互相谅解，催的太紧师父也是有压力的哟~~"),
     STOCK_LESS( 219, "库存不足"),
+    NOIMOORT_DATA(234, "无导出数据！");
 
     ;
 

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.LineEventMapper">
+    <sql id="columns">
+        Mid,
+        line_id as lineId,
+        line_name as lineName,
+        power_outage_time as powerOutageTime,
+        power_outage_duration as powerOutageDuration,
+        power_supply_time as powerSupplyTime,
+        power_outage_type as powerOutageType,
+        status,
+        reason,
+        company,
+        create_time as createTime,
+        create_by as createBy,
+        update_time as updateTime,
+        update_by as updateBy,
+        effect_transformer_number as effectTransformerNumber,
+        effect_cons_number as effectConsNumber,
+        is_generate_work_order as isGenerateWorkOrder
+    </sql>
+
+    <!--  添加线路停运事件  -->
+    <insert id="addLineEvent">
+        insert into t_line_event (
+            Mid,
+            line_id,
+            line_name,
+            power_outage_time,
+            power_outage_duration,
+            power_supply_time,
+            power_outage_type,
+            status,
+            reason,
+            company,
+            create_time,
+            create_by,
+            effect_transformer_number,
+            effect_cons_number
+        )
+        values (
+            #{Mid},
+            #{lineId},
+            #{lineName},
+            #{powerOutageTime},
+            #{powerOutageDuration},
+            #{powerSupplyTime},
+            #{powerOutageType},
+            #{status},
+            #{reason},
+            #{company},
+            now(),
+            #{createBy},
+            #{effectTransformerNumber},
+            #{effectConsNumber}
+        )
+    </insert>
+
+    <!--  修改线路停运事件  -->
+    <update id="updateLineEvent">
+        update t_line_event set
+            line_id = #{lineId},
+            line_name = #{lineName},
+            power_outage_time = #{powerOutageTime},
+            power_outage_duration = #{powerOutageDuration},
+            power_supply_time = #{powerSupplyTime},
+            power_outage_type = #{powerOutageType},
+            status = #{status},
+            reason = #{reason},
+            update_time = now(),
+            update_by = #{updateBy}
+        where Mid = #{Mid}
+    </update>
+
+    <!--  通过mid修改线路停运事件(已完成工单)  -->
+    <update id="updateLineEventByMid">
+        update t_line_event t set
+              t.status = 2,
+              t.power_supply_time = STR_TO_DATE(#{param2}, '%Y-%m-%d %H:%i:%s'),
+              t.power_outage_duration =
+              timediff(STR_TO_DATE(#{param2}, '%Y-%m-%d %H:%i:%s'),t.power_outage_time) / 60 / 60
+        where t.Mid = #{param1}
+    </update>
+
+    <!--  条件查询所有线路事件  -->
+    <select id="getLineEventByCondition" resultType="com.wangwen.gdfwzhxt.model.entity.line.LineEvent">
+        select <include refid="columns"/>,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_line_event_type' and c.code = t.power_outage_type limit 1) as powerOutageTypeName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_line_event_status' and c.code = t.status limit 1) as statusName
+          from t_line_event t
+        <where>
+            <if test="lineName != null and lineName != ''">
+                and t.line_name like concat('%', #{lineName}, '%')
+            </if>
+            <if test="powerOutageBeginTime != null and powerOutageBeginTime != ''">
+                and t.power_outage_time &gt;= #{powerOutageBeginTime}
+            </if>
+            <if test="powerOutageEndTime != null and powerOutageEndTime != ''">
+                and t.power_outage_time &lt;= #{powerOutageEndTime}
+            </if>
+            <if test="powerOutageType != null">
+                and t.power_outage_type = #{powerOutageType}
+            </if>
+            <if test="status != null">
+                and t.status = #{status}
+            </if>
+            and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+        </where>
+        order by t.power_outage_time desc
+    </select>
+
+    <!--  根据lineId查询影响配变数  -->
+    <select id="getEffectTransformerByLineId" resultType="java.lang.Integer">
+        select count(1) from t_transformerinfo t
+        where t.line_id = #{param1}
+          and t.is_deleted = 0
+          and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+    </select>
+
+    <!--  根据lineId查询影响用户数并设置影响用户数  -->
+    <select id="getEffectConsCountByLineId" resultType="java.lang.Integer">
+        select count(1)
+          from t_cons_info t
+          join t_transformerinfo byq on t.transformer_code = byq.transformer_code
+                                    and byq.is_deleted = 0
+                                    and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = byq.company)
+        where t.is_deleted = 0
+          and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+          and byq.line_id = #{param1}
+    </select>
+
+    <!--  根据事件id查询事件信息  -->
+    <select id="getLineEventById" resultType="com.wangwen.gdfwzhxt.model.entity.line.LineEvent">
+        select <include refid="columns"/>,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_line_event_type' and c.code = t.power_outage_type limit 1) as powerOutageTypeName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_line_event_status' and c.code = t.status limit 1) as statusName
+          from t_line_event t
+        where t.Mid = #{param1}
+        limit 1
+    </select>
+</mapper>

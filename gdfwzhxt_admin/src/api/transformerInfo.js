@@ -31,3 +31,11 @@ export const DeleteTransformerInfoById = id => {
     method: 'delete',
   })
 }
+
+//根据变压器局号查询变压器信息
+export const GetTransformerInfoByTransformerCode = transformerCode => {
+  return request({
+    url: `${base_api}/getTransformerInfoByTransformerCode/${transformerCode}`,
+    method: 'get',
+  })
+}

@@ -21,4 +21,7 @@ public interface LineInfoService {
 
     //条件分页查询线路信息
     PageInfo<LineInfo> getLineInfoListByConditionAndPage(Integer current, Integer limit, LineInfoDto lineInfoDto);
+
+    //根据lineId查询线路信息
+    LineInfo getLineInfoByLineId(String lineId);
 }

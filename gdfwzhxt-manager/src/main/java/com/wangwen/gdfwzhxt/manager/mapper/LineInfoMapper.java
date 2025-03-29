@@ -27,4 +27,7 @@ public interface LineInfoMapper {
 
     //条件查询线路信息列表
     List<LineInfo> getLineInfoByCondition(LineInfoDto lineInfoDto);
+
+    //根据lineId查询线路信息
+    LineInfo getLineInfoByLineId(String lineId);
 }

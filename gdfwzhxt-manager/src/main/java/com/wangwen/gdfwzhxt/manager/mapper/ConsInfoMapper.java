@@ -24,4 +24,7 @@ public interface ConsInfoMapper {
     //根据id删除用户
     @Update("update t_cons_info set is_deleted = 1 where id = #{param1}")
     void deleteConsInfoById(String id);
+
+    //根据用户编号查询用户信息
+    ConsInfo getConsInfoByConsNo(String consNo);
 }

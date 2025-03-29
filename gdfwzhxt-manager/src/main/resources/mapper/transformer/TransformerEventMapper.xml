@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.TransformerEventMapper">
+    <sql id="columns">
+        data_id as dataId,
+        transformer_code as transformerCode,
+        transformer_name as transformerName,
+        terminal_outage_time as terminalOutageTime,
+        outage_duration as outageDuration,
+        terminal_supply_time as terminalSupplyTime,
+        power_outage_type as powerOutageType,
+        status,
+        reason,
+        company,
+        create_time as createTime,
+        create_by as createBy,
+        update_time as updateTime,
+        update_by as updateBy,
+        effect_cons_number as effectConsNumber,
+        line_event_id as lineEventId,
+        is_generate_work_order as isGenerateWorkOrder
+    </sql>
+
+    <!--  添加配变事件  -->
+    <insert id="addTransformerEvent">
+        insert into t_transformer_event (
+            data_id,
+            transformer_code,
+            transformer_name,
+            terminal_outage_time,
+            outage_duration,
+            terminal_supply_time,
+            power_outage_type,
+            status,
+            reason,
+            company,
+            create_time,
+            create_by,
+            effect_cons_number
+        )
+        values (
+            #{dataId},
+            #{transformerCode},
+            #{transformerName},
+            #{terminalOutageTime},
+            #{outageDuration},
+            #{terminalSupplyTime},
+            #{powerOutageType},
+            #{status},
+            #{reason},
+            #{company},
+            now(),
+            #{createBy},
+            #{effectConsNumber}
+        )
+    </insert>
+
+    <!--  根据线路事件添加配变停运事件  -->
+    <insert id="addTransformerEventByLineEvent">
+        insert into t_transformer_event (
+            data_id,
+            transformer_code,
+            transformer_name,
+            terminal_outage_time,
+            outage_duration,
+            terminal_supply_time,
+            power_outage_type,
+            status,
+            reason,
+            company,
+            create_time,
+            create_by,
+            effect_cons_number,
+            line_event_id
+        )
+        select UUID() as data_id,
+               t.transformer_code,
+               t.transformer_name,
+               #{powerOutageTime} as terminal_outage_time,
+               #{powerOutageDuration} as outage_duration,
+               #{powerSupplyTime} as terminal_supply_time,
+               (case when #{powerOutageType} = 1 then 3
+                     else 5 end) as power_outage_type,
+               #{status} as status,
+               <choose>
+                   <when test="reason != null">
+                       concat(#{lineName}, '在', #{powerOutageTime}, '发生',
+                       (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_line_event_type' and c.code = #{powerOutageType} limit 1),
+                       '。线路发生该类型停电的具体原因是', #{reason}, '！')
+                   </when>
+                   <otherwise>
+                       concat(#{lineName}, '在', #{powerOutageTime}, '发生',
+                       (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_line_event_type' and c.code = #{powerOutageType} limit 1), '！')
+                   </otherwise>
+               </choose> as reason,
+               #{company} as company,
+               now() as create_time,
+               #{createBy} as create_by,
+               (select count(1) from t_cons_info c
+                where c.is_deleted = 0
+                  and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = c.company)
+                  and c.transformer_code = t.transformer_code) as effect_cons_number,
+               #{Mid} as line_event_id
+        from t_transformerinfo t
+        where t.is_deleted = 0
+          and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+          and t.line_id = #{lineId}
+    </insert>
+
+    <!--  修改配变事件  -->
+    <update id="updateTransformerEvent">
+        update t_transformer_event set
+            transformer_code = #{transformerCode},
+            transformer_name = #{transformerName},
+            <if test="terminalOutageTime != null">
+                terminal_outage_time = #{terminalOutageTime},
+            </if>
+            outage_duration = #{outageDuration},
+            terminal_supply_time = #{terminalSupplyTime},
+            power_outage_type = #{powerOutageType},
+            status = #{status},
+            reason = #{reason},
+            update_time = now(),
+            update_by = #{updateBy}
+        where data_id = #{dataId}
+    </update>
+
+    <!--  同步修改线路下配变停运事件  -->
+    <update id="updateTransformerEventByLineEvent">
+        update t_transformer_event set
+            terminal_outage_time = #{powerOutageTime},
+            outage_duration = #{powerOutageDuration},
+            terminal_supply_time = #{powerSupplyTime},
+            power_outage_type =
+            <choose>
+                <when test="powerOutageType = 1">
+                    3
+                </when>
+                <otherwise>
+                    5
+                </otherwise>
+            </choose>,
+            status = #{status},
+            reason =
+            <choose>
+                <when test="reason != null">
+                    concat(#{lineName}, '在', #{powerOutageTime}, '发生',
+                    (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_line_event_type' and c.code = #{powerOutageType} limit 1),
+                    '。线路发生该类型停电的具体原因是', #{reason}, '！')
+                </when>
+                <otherwise>
+                    concat(#{lineName}, '在', #{powerOutageTime}, '发生',
+                    (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_line_event_type' and c.code = #{powerOutageType} limit 1), '！')
+                </otherwise>
+            </choose>,
+            update_time = now(),
+            update_by = #{updateBy}
+        where line_event_id = #{Mid}
+    </update>
+
+    <!--  根据配变事件id修改配变事件（工单已完成）  -->
+    <update id="updateTransformerEventByDataId">
+        update t_transformer_event t set
+           t.status = 2,
+           t.terminal_supply_time = STR_TO_DATE(#{param2}, '%Y-%m-%d %H:%i:%s'),
+           t.outage_duration =
+           timediff(STR_TO_DATE(#{param2}, '%Y-%m-%d %H:%i:%s'),t.terminal_outage_time) / 60 / 60
+        where t.data_id = #{param1}
+    </update>
+
+    <!--  根据线路事件id修改配变事件（工单完成）  -->
+    <update id="updateTransformerEventByMid">
+        update t_transformer_event t set
+            t.status = 2,
+            t.terminal_supply_time = STR_TO_DATE(#{param2}, '%Y-%m-%d %H:%i:%s'),
+            t.outage_duration =
+            timediff(STR_TO_DATE(#{param2}, '%Y-%m-%d %H:%i:%s'),t.terminal_outage_time) / 60 / 60
+        where t.line_event_id = #{param1}
+    </update>
+
+    <!--  条件查询配变停运事件  -->
+    <select id="getTransformerEventByCondition"
+            resultType="com.wangwen.gdfwzhxt.model.entity.transformer.TransformerEvent">
+        select <include refid="columns"/>,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_transformer_event_type' and c.code = t.power_outage_type limit 1) as powerOutageTypeName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_transformer_event_status' and c.code = t.status limit 1) as statusName
+          from t_transformer_event t
+        <where>
+            <if test="transformerCode != null and transformerCode != ''">
+                and t.transformer_code like concat('%', #{transformerCode}, '%')
+            </if>
+            <if test="transformerName != null and transformerName != ''">
+                and t.transformer_name like concat('%', #{transformerName}, '%')
+            </if>
+            <if test="terminalOutageBeingTime != null and terminalOutageBeingTime != ''">
+                and t.terminal_outage_time &gt;= #{terminalOutageBeingTime}
+            </if>
+            <if test="terminalOutageEndTime != null and terminalOutageEndTime != ''">
+                and t.terminal_outage_time &lt;= #{terminalOutageEndTime}
+            </if>
+            <if test="powerOutageType != null and powerOutageType.size() > 0">
+                and t.power_outage_type in
+                <foreach collection="powerOutageType" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="status != null">
+                and t.status = #{status}
+            </if>
+            and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+        </where>
+        order by t.terminal_outage_time desc
+    </select>
+
+    <!--  根据变压器局号查询用户数  -->
+    <select id="getConsNumberByTransformerCode" resultType="java.lang.Integer">
+        select count(1) from t_cons_info t
+        where t.transformer_code = #{param1}
+          and t.is_deleted = 0
+          and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+    </select>
+
+    <!--  根据配变事件id查看配变事件信息  -->
+    <select id="getTransformerEventById"
+            resultType="com.wangwen.gdfwzhxt.model.entity.transformer.TransformerEvent">
+        select <include refid="columns"/>,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_transformer_event_type' and c.code = t.power_outage_type limit 1) as powerOutageTypeName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_transformer_event_status' and c.code = t.status limit 1) as statusName
+          from t_transformer_event t
+        where data_id = #{param1}
+        limit 1
+    </select>
+</mapper>

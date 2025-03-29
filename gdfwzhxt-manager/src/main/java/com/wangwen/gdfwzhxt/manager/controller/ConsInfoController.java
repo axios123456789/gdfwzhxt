@@ -59,4 +59,15 @@ public class ConsInfoController {
             return Result.build(null, 500, "删除用户信息失败！");
         }
     }
+
+    /**
+     * 根据用户编号查询用户信息
+     * @param consNo
+     * @return
+     */
+    @GetMapping("/getConsInfoByConsNo/{consNo}")
+    public Result getConsInfoByConsNo(@PathVariable("consNo") String consNo){
+        ConsInfo consInfo = consInfoService.getConsInfoByConsNo(consNo);
+        return Result.build(consInfo, ResultCodeEnum.SUCCESS);
+    }
 }

@@ -74,4 +74,15 @@ public class TransformerInfoServiceImpl implements TransformerInfoService {
     public void deleteTransformerInfoById(String id) {
         transformerInfoMapper.deleteTransformerInfoById(id);
     }
+
+    /**
+     * 根据变压器局号查询变压器
+     * @param transformerCode
+     * @return
+     */
+    @Override
+    public TransformerInfo getTransformerInfoByTransformerCode(String transformerCode) {
+        TransformerInfo transformerInfo = transformerInfoMapper.getTransformerInfoByTransformerCode(transformerCode);
+        return transformerInfo;
+    }
 }

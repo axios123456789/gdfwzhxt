@@ -48,3 +48,11 @@ export const GetLineInfoListByConditionAndPage = (
     data: queryLineDto,
   })
 }
+
+//根据线路id查询线路信息数据
+export const GetLineInfoByLineId = lineId => {
+  return request({
+    url: `${base_api}/getLineInfoByLineId/${lineId}`,
+    method: 'get',
+  })
+}

@@ -85,4 +85,15 @@ public class LineInfoController {
         PageInfo<LineInfo> pageInfo = lineInfoService.getLineInfoListByConditionAndPage(current, limit, lineInfoDto);
         return Result.build(pageInfo, ResultCodeEnum.SUCCESS);
     }
+
+    /**
+     * 根据lineId查询线路信息
+     * @param lineId
+     * @return
+     */
+    @GetMapping("/getLineInfoByLineId/{lineId}")
+    public Result getLineInfoByLineId(@PathVariable("lineId") String lineId){
+        LineInfo lineInfo = lineInfoService.getLineInfoByLineId(lineId);
+        return Result.build(lineInfo, ResultCodeEnum.SUCCESS);
+    }
 }

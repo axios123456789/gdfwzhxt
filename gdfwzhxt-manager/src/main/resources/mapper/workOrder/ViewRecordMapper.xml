@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.ViewRecordMapper">
+    <sql id="columns">
+        id,
+        equip_type as equipType,
+        equip_no as equipNo,
+        equip_name as equipName,
+        equip_fault_type as equipFaultType,
+        drone_no as droneNo,
+        drone_name as droneName,
+        view_time as viewTime,
+        view_by as viewBy,
+        description,
+        handle_flag as handleFlag,
+        update_time as updateTime,
+        update_by as updateBy,
+        is_deleted as isDeleted,
+        company,
+        equip_address as equipAddress
+    </sql>
+
+    <!-- 添加巡视记录   -->
+    <insert id="addViewRecord">
+        insert into t_view_record (
+            id,
+            equip_type,
+            equip_no,
+            equip_name,
+            equip_fault_type,
+            drone_no,
+            drone_name,
+            view_time,
+            view_by,
+            description,
+            handle_flag,
+            company,
+            equip_address
+        ) values (
+            #{id},
+            #{equipType},
+            #{equipNo},
+            #{equipName},
+            #{equipFaultType},
+            #{droneNo},
+            #{droneName},
+            #{viewTime},
+            #{viewBy},
+            #{description},
+            #{handleFlag},
+            #{company},
+            #{equipAddress}
+        )
+    </insert>
+
+    <!--  修改巡视记录  -->
+    <update id="updateViewRecord">
+        update t_view_record set
+            equip_type = #{equipType},
+            equip_no = #{equipNo},
+            equip_name = #{equipName},
+            equip_fault_type = #{equipFaultType},
+            drone_no = #{droneNo},
+            drone_name = #{droneName},
+            view_time = #{viewTime},
+            description = #{description},
+            handle_flag = #{handleFlag},
+            update_time = now(),
+            update_by = #{updateBy},
+            equip_address = #{equipAddress}
+        where id = #{id}
+    </update>
+
+    <!--  条件查询所有无人机巡视记录数据  -->
+    <select id="getViewRecordByCondition" resultType="com.wangwen.gdfwzhxt.model.entity.drone.ViewRecord">
+        select <include refid="columns"/>,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_view_record_equip_type' and c.code = t.equip_type limit 1) as equipTypeName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_view_record_handle_flag' and c.code = t.handle_flag limit 1) as handleFlagName,
+               (case when t.equip_type = 1 then (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_line_event_type' and c.code = t.equip_fault_type limit 1)
+                     when t.equip_type = 2 then (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_transformer_event_type' and c.code = t.equip_fault_type limit 1)
+                     end) as equipFaultTypeName
+          from t_view_record t
+        <where>
+            <if test="equipType != null">
+                and t.equip_type = #{equipType}
+            </if>
+            <if test="equipName != null and equipName != ''">
+                and t.equip_name like concat('%', #{equipName}, '%')
+            </if>
+            <if test="viewBeginTime != null and viewBeginTime != ''">
+                and t.view_time &gt;= #{viewBeginTime}
+            </if>
+            <if test="viewEndTime != null and viewEndTime != ''">
+                and t.view_time &lt;= #{viewEndTime}
+            </if>
+            <if test="equipFaultType != null and equipFaultType.size() > 0">
+                and t.equip_fault_type in
+                <foreach collection="equipFaultType" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="handleFlag != null and handleFlag.size() > 0">
+                and t.handle_flag in
+                <foreach collection="handleFlag" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            and t.is_deleted = 0
+            and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+        </where>
+        order by t.view_time desc
+    </select>
+</mapper>

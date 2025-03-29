@@ -13,4 +13,7 @@ public interface TransformerInfoService {
 
     //根据id删除变压器信息
     void deleteTransformerInfoById(String id);
+
+    //根据变压器局号查询变压器
+    TransformerInfo getTransformerInfoByTransformerCode(String transformerCode);
 }

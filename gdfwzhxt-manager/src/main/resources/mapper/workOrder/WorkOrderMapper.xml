@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.WorkOrderMapper">
+    <sql id="columns">
+        id,
+        work_order_no as workOrderNo,
+        work_order_type as workOrderType,
+        event_id as eventId,
+        work_order_content as workOrderContent,
+        work_order_source as workOrderSource,
+        work_order_status as workOrderStatus,
+        accept_address as acceptAddress,
+        urge_to_process_count as urgeToProcessCount,
+        last_urge_to_process_time as lastUrgeToProcessTime,
+        urge_to_accept_count as urgeToAcceptCount,
+        last_urge_to_accept_time as lastUrgeToAcceptTime,
+        urge_to_handle_count as urgeToHandleCount,
+        last_urge_to_handle_time as lastUrgeToHandleTime,
+        handle_time as handleTime,
+        handle_by as handleBy,
+        accept_order_time as acceptOrderTime,
+        accept_order_by as acceptOrderBy,
+        finish_time as finishTime,
+        finish_by as finishBy,
+        create_time as createTime,
+        create_by as createBy,
+        company,
+        update_time as updateTime,
+        update_by as updateBy,
+        is_deleted as isDeleted,
+        event_type as eventType,
+        source_no as sourceNo
+    </sql>
+
+    <!--  添加工单   -->
+    <insert id="addWorkOrder">
+        insert into t_work_order (
+                id,
+                work_order_no,
+                work_order_type,
+                event_id,
+                work_order_content,
+                work_order_source,
+                work_order_status,
+                accept_address,
+                urge_to_process_count,
+                last_urge_to_process_time,
+                urge_to_accept_count,
+                last_urge_to_accept_time,
+                urge_to_handle_count,
+                last_urge_to_handle_time,
+                handle_time,
+                handle_by,
+                accept_order_time,
+                accept_order_by,
+                finish_time,
+                finish_by,
+                create_time,
+                create_by,
+                company,
+                event_type
+        ) values (
+                #{id},
+                #{workOrderNo},
+                #{workOrderType},
+                #{eventId},
+                #{workOrderContent},
+                #{workOrderSource},
+                #{workOrderStatus},
+                #{acceptAddress},
+                #{urgeToProcessCount},
+                #{lastUrgeToProcessTime},
+                #{urgeToAcceptCount},
+                #{lastUrgeToAcceptTime},
+                #{urgeToHandleCount},
+                #{lastUrgeToHandleTime},
+                #{handleTime},
+                #{handleBy},
+                #{acceptOrderTime},
+                #{acceptOrderBy},
+                #{finishTime},
+                #{finishBy},
+                now(),
+                #{createBy},
+                #{company},
+                #{eventType}
+        )
+    </insert>
+
+    <!--  修改工单(仅核心信息部分)  -->
+    <update id="updateWorkOrder">
+        update t_work_order set
+            work_order_no = #{workOrderNo},
+            work_order_type = #{workOrderType},
+            event_id = #{eventId},
+            work_order_content = #{workOrderContent},
+            work_order_source = #{workOrderSource},
+            work_order_status = #{workOrderStatus},
+            accept_address = #{acceptAddress},
+            urge_to_process_count = #{urgeToProcessCount},
+            last_urge_to_process_time = #{lastUrgeToProcessTime},
+            urge_to_accept_count = #{urgeToAcceptCount},
+            last_urge_to_accept_time = #{lastUrgeToAcceptTime},
+            urge_to_handle_count = #{urgeToHandleCount},
+            last_urge_to_handle_time = #{lastUrgeToHandleTime},
+            handle_time = #{handleTime},
+            handle_by = #{handleBy},
+            accept_order_time = #{acceptOrderTime},
+            accept_order_by = #{acceptOrderBy},
+            finish_time = #{finishTime},
+            finish_by = #{finishBy},
+            event_type = #{eventType},
+            source_no = #{sourceNo},
+            update_time = now(),
+            update_by = #{updateBy}
+        where id = #{id}
+    </update>
+
+    <!--  修改工单表的工单状态(已督办)  -->
+    <update id="handleAchieve">
+        update t_work_order g set
+        g.work_order_status = 5
+        where exists (select 1 from t_person_accept t where t.id = #{param1} and t.work_order_no = g.work_order_no)
+    </update>
+
+    <!--  将工单状态回滚到已接单4  -->
+    <update id="returnWorkOrderStatus">
+        update t_work_order g set
+            g.work_order_status = 4
+        where exists (select 1 from t_person_accept t where t.id = #{param1} and t.work_order_no = g.work_order_no)
+    </update>
+
+    <!--  修改工单状态为已完成6且设置材料编号和完成时间完成人  -->
+    <update id="reviewSuccess">
+        update t_work_order t set
+            finish_time = now(),
+            finish_by = #{name},
+            work_order_status = 6,
+            source_no = (select s.source_no from t_work_source s where s.accept_id = #{id} limit 1)
+        where t.work_order_no = #{workOrderNo}
+    </update>
+
+    <!--  条件查询所有工单  -->
+    <select id="getWorkOrderByCondition" resultType="com.wangwen.gdfwzhxt.model.entity.workOrder.WorkOrder">
+        select <include refid="columns"/>,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_type' and c.code = t.work_order_type limit 1) as workOrderTypeName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_source' and c.code = t.work_order_source limit 1) as workOrderSourceName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_status' and c.code = t.work_order_status limit 1) as workOrderStatusName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_event_type' and c.code = t.event_type limit 1) as eventTypeName
+        from t_work_order t
+        <where>
+            <if test="workOrderNo != null and workOrderNo != ''">
+                and t.work_order_no like concat('%', #{workOrderNo}, '%')
+            </if>
+            <if test="workOrderType != null and workOrderType.size() > 0">
+                and t.work_order_type in
+                <foreach collection="workOrderType" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="workOrderSource != null and workOrderSource.size() > 0">
+                and t.work_order_source in
+                <foreach collection="workOrderSource" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="workOrderStatus != null and workOrderStatus.size() > 0">
+                and t.work_order_status in
+                <foreach collection="workOrderStatus" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="eventType != null and eventType.size() > 0">
+                and t.event_type in
+                <foreach collection="eventType" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="handleBeginTime != null and handleBeginTime != ''">
+                and t.handle_time &gt;= #{handleBeginTime}
+            </if>
+            <if test="handleEndTime != null and handleEndTime != ''">
+                and t.handle_time &lt;= #{handleEndTime}
+            </if>
+            <if test="createBeginTime != null and createBeginTime != ''">
+                and t.create_time &gt;= #{createBeginTime}
+            </if>
+            <if test="createEndTime != null and createEndTime != ''">
+                and t.create_time &lt;= #{createEndTime}
+            </if>
+            <if test="acceptOrderBy != null and acceptOrderBy != ''">
+                and t.accept_order_by like concat('%', #{acceptOrderBy}, '%')
+            </if>
+            and t.is_deleted = 0
+            and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+        </where>
+        order by t.work_order_type asc, t.work_order_status asc, t.handle_time desc
+    </select>
+
+    <!--  根据工单编号查询工单信息列表  -->
+    <select id="getworkOrderByWorkOrderNo" resultType="com.wangwen.gdfwzhxt.model.entity.workOrder.WorkOrder">
+        select <include refid="columns"/>,
+              (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_type' and c.code = t.work_order_type limit 1) as workOrderTypeName,
+              (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_source' and c.code = t.work_order_source limit 1) as workOrderSourceName,
+              (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_status' and c.code = t.work_order_status limit 1) as workOrderStatusName,
+              (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_event_type' and c.code = t.event_type limit 1) as eventTypeName
+        from t_work_order t
+        where t.work_order_no = #{param1}
+        and t.is_deleted = 0
+        and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+    </select>
+
+    <!-- 根据id查询工单   -->
+    <select id="getWorkOrderById" resultType="com.wangwen.gdfwzhxt.model.entity.workOrder.WorkOrder">
+        select <include refid="columns"/>,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_type' and c.code = t.work_order_type limit 1) as workOrderTypeName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_source' and c.code = t.work_order_source limit 1) as workOrderSourceName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_event_type' and c.code = t.event_type limit 1) as eventTypeName
+        from t_work_order t
+        where t.id = #{param1}
+        and t.is_deleted = 0
+        and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+    </select>
+</mapper>

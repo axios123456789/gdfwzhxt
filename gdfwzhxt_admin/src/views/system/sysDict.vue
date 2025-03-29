@@ -1,99 +1,105 @@
 <template>
-  <!---搜索表单-->
-  <div class="search-div">
-    <el-form label-width="70px" size="small">
-      <el-row>
-        <el-col :span="12">
-          <el-form-item label="字典值">
-            <el-input
-              v-model="queryDto.value"
-              style="width: 100%"
-              clearable
-            ></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="字典类型">
-            <el-input
-              v-model="queryDto.type"
-              style="width: 100%"
-              clearable
-            ></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row style="display:flex">
-        <el-button type="primary" size="small" @click="searchSysDict">
-          搜索
+  <div class="dict">
+    <!---搜索表单-->
+    <div class="search-div">
+      <el-form label-width="70px" size="small">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="字典值">
+              <el-input
+                v-model="queryDto.value"
+                style="width: 100%"
+                clearable
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="字典类型">
+              <el-input
+                v-model="queryDto.type"
+                style="width: 100%"
+                clearable
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row style="display:flex">
+          <el-button type="primary" size="small" @click="searchSysDict">
+            搜索
+          </el-button>
+          <el-button size="small" @click="resetData">重置</el-button>
+        </el-row>
+      </el-form>
+    </div>
+
+    <!--添加按钮-->
+    <div class="tools-div">
+      <el-button type="success" size="small" @click="addDict">添 加</el-button>
+    </div>
+
+    <!-- 添加或修改数据字典表单对话框 -->
+    <el-dialog v-model="dialogVisible" title="添加或修改数据字典" width="30%">
+      <el-form label-width="80px">
+        <el-form-item label="字典类型">
+          <el-input v-model="sysDict.type" placeholder="" />
+        </el-form-item>
+        <el-form-item label="字典码值">
+          <el-input v-model="sysDict.code" placeholder="" />
+        </el-form-item>
+        <el-form-item label="字典值">
+          <el-input v-model="sysDict.value" placeholder="" />
+        </el-form-item>
+        <el-form-item label="描述">
+          <el-input
+            type="textarea"
+            :rows="3"
+            placeholder="请输入内容"
+            v-model="sysDict.description"
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submit">提交</el-button>
+          <el-button @click="dialogVisible = false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <!---数据表格-->
+    <el-table :data="list" style="width: 100%">
+      <el-table-column label="操作" align="center" width="200" #default="scope">
+        <el-button type="primary" size="small" @click="editDict(scope.row)">
+          修改
         </el-button>
-        <el-button size="small" @click="resetData">重置</el-button>
-      </el-row>
-    </el-form>
+        <el-button
+          type="danger"
+          size="small"
+          @click="deleteDictById(scope.row)"
+        >
+          删除
+        </el-button>
+      </el-table-column>
+      <el-table-column prop="type" label="字典类型" width="100" />
+      <el-table-column prop="code" label="字典码值" width="120" />
+      <el-table-column prop="value" label="字典值" width="120" />
+      <el-table-column prop="description" label="描述" width="200" />
+      <el-table-column prop="createTime" label="创建时间" width="180" />
+      <el-table-column prop="createBy" label="创建者" width="120" />
+      <el-table-column prop="updateTime" label="修改时间" width="180" />
+      <el-table-column prop="updateBy" label="修改者" width="120" />
+    </el-table>
+
+    <!--分页条-->
+    <el-pagination
+      style="margin-top: 30px"
+      v-model:current-page="pageParams.page"
+      v-model:page-size="pageParams.limit"
+      :page-sizes="[10, 20, 50, 100]"
+      @size-change="fetchData"
+      @current-change="fetchData"
+      layout="total, sizes, prev, pager, next"
+      :total="total"
+    />
   </div>
-
-  <!--添加按钮-->
-  <div class="tools-div">
-    <el-button type="success" size="small" @click="addDict">添 加</el-button>
-  </div>
-
-  <!-- 添加或修改数据字典表单对话框 -->
-  <el-dialog v-model="dialogVisible" title="添加或修改数据字典" width="30%">
-    <el-form label-width="80px">
-      <el-form-item label="字典类型">
-        <el-input v-model="sysDict.type" placeholder="" />
-      </el-form-item>
-      <el-form-item label="字典码值">
-        <el-input v-model="sysDict.code" placeholder="" />
-      </el-form-item>
-      <el-form-item label="字典值">
-        <el-input v-model="sysDict.value" placeholder="" />
-      </el-form-item>
-      <el-form-item label="描述">
-        <el-input
-          type="textarea"
-          :rows="3"
-          placeholder="请输入内容"
-          v-model="sysDict.description"
-        ></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submit">提交</el-button>
-        <el-button @click="dialogVisible = false">取消</el-button>
-      </el-form-item>
-    </el-form>
-  </el-dialog>
-
-  <!---数据表格-->
-  <el-table :data="list" style="width: 100%">
-    <el-table-column label="操作" align="center" width="200" #default="scope">
-      <el-button type="primary" size="small" @click="editDict(scope.row)">
-        修改
-      </el-button>
-      <el-button type="danger" size="small" @click="deleteDictById(scope.row)">
-        删除
-      </el-button>
-    </el-table-column>
-    <el-table-column prop="type" label="字典类型" width="100" />
-    <el-table-column prop="code" label="字典码值" width="120" />
-    <el-table-column prop="value" label="字典值" width="120" />
-    <el-table-column prop="description" label="描述" width="200" />
-    <el-table-column prop="createTime" label="创建时间" width="180" />
-    <el-table-column prop="createBy" label="创建者" width="120" />
-    <el-table-column prop="updateTime" label="修改时间" width="180" />
-    <el-table-column prop="updateBy" label="修改者" width="120" />
-  </el-table>
-
-  <!--分页条-->
-  <el-pagination
-    style="margin-top: 30px"
-    v-model:current-page="pageParams.page"
-    v-model:page-size="pageParams.limit"
-    :page-sizes="[10, 20, 50, 100]"
-    @size-change="fetchData"
-    @current-change="fetchData"
-    layout="total, sizes, prev, pager, next"
-    :total="total"
-  />
 </template>
 
 <script setup>
@@ -220,18 +226,60 @@ const deleteDictById = row => {
 </script>
 
 <style scoped>
+.dict {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+}
+
+.dict::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('src/assets/qwdt.gif');
+  background-size: cover;
+  background-attachment: fixed;
+  opacity: 0.5; /* 设置背景图片的透明度为50% */
+  /*z-index: -1; !* 确保伪元素在内容下方 *!*/
+}
+.dict > * {
+  position: relative;
+  z-index: 1; /* 确保内容在伪元素上方 */
+}
+
+.tools-div {
+  margin: 10px 0;
+  padding: 10px;
+  /*border: 1px solid #ebeef5;*/
+  border-radius: 3px;
+  background-color: transparent;
+}
+
+/deep/ .el-table,
+/deep/ .el-table__expanded-cell {
+  background-color: transparent;
+  color: #001528;
+  border: 1px solid;
+}
+/deep/ .el-table th,
+/deep/ .el-table tr,
+/deep/ .el-table td {
+  background-color: transparent;
+  color: #001528;
+  border: 1px solid;
+}
+
 .search-div {
   margin-bottom: 10px;
   padding: 10px;
   border: 1px solid #ebeef5;
   border-radius: 3px;
-  background-color: #fff;
-}
-.tools-div {
-  margin: 10px 0;
-  padding: 10px;
-  border: 1px solid #ebeef5;
-  border-radius: 3px;
-  background-color: #fff;
+  background-color: transparent;
 }
 </style>

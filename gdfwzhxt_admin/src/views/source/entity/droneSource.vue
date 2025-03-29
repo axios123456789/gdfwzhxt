@@ -126,7 +126,7 @@
       </el-form>
     </el-dialog>
 
-    <!-- 变压器资源展示表格   -->
+    <!-- 无人机资源展示表格   -->
     <el-table :data="list" style="width: 100%; margin-bottom: 20px;">
       <el-table-column label="操作" align="center" width="200" #default="scope">
         <el-button

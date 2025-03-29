@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.PersonAcceptMapper">
+    <sql id="columns">
+        id,
+        `name`,
+        accept_time as acceptTime,
+        work_order_no as workOrderNo,
+        handle_status as handleStatus,
+        company,
+        process_begin_time as processBeginTime,
+        supervise_begin_time as superviseBeginTime,
+        supervise_end_time as superviseEndTime,
+        work_order_content as workOrderContent,
+        event_id as eventId,
+        event_type as eventType,
+        work_order_source as workOrderSource,
+        work_order_type as workOrderType,
+        urge_to_handle_count as urgeToHandleCount,
+        last_urge_to_handle_time as lastUrgeToHandleTime,
+        user_id as userId
+    </sql>
+
+    <!--  新增个人接单数据  -->
+    <insert id="insertPersonAccept">
+        insert into t_person_accept (
+            id,
+            name,
+            accept_time,
+            work_order_no,
+            handle_status,
+            company,
+            work_order_content,
+            event_id,
+            event_type,
+            work_order_source,
+            work_order_type,
+            urge_to_handle_count,
+            last_urge_to_handle_time,
+            user_id
+        ) values (
+            #{id},
+            #{name},
+            #{acceptTime},
+            #{workOrderNo},
+            #{handleStatus},
+            #{company},
+            #{workOrderContent},
+            #{eventId},
+            #{eventType},
+            #{workOrderSource},
+            #{workOrderType},
+            #{urgeToHandleCount},
+            #{lastUrgeToHandleTime},
+            #{userId}
+        )
+    </insert>
+
+    <!--  条件查询个人接单列表  -->
+    <select id="getPersonAcceptByCondition"
+            resultType="com.wangwen.gdfwzhxt.model.entity.workOrder.PersonAccept">
+        select <include refid="columns"/>,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_type' and c.code = t.work_order_type limit 1) as workOrderTypeName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_source' and c.code = t.work_order_source limit 1) as workOrderSourceName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_person_accept_status' and c.code = t.handle_status limit 1) as handleStatusName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_event_type' and c.code = t.event_type limit 1) as eventTypeName
+          from t_person_accept t
+        <where>
+            and t.handle_status = #{param1}
+            and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+            and t.user_id = #{param2}
+        </where>
+        order by t.accept_time asc
+    </select>
+
+    <!--  根据工单编号查询个人接单信息  -->
+    <select id="getPersonAcceptByWorkOrderNo"
+            resultType="com.wangwen.gdfwzhxt.model.entity.workOrder.PersonAccept">
+        select <include refid="columns"/>,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_type' and c.code = t.work_order_type limit 1) as workOrderTypeName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_source' and c.code = t.work_order_source limit 1) as workOrderSourceName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_person_accept_status' and c.code = t.handle_status limit 1) as handleStatusName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_event_type' and c.code = t.event_type limit 1) as eventTypeName
+        from t_person_accept t
+        where t.work_order_no = #{param1}
+          and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+    </select>
+
+    <!--  根据个人id查询个人接单信息  -->
+    <select id="getPersonAcceptById" resultType="com.wangwen.gdfwzhxt.model.entity.workOrder.PersonAccept">
+        select <include refid="columns"/>,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_type' and c.code = t.work_order_type limit 1) as workOrderTypeName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_source' and c.code = t.work_order_source limit 1) as workOrderSourceName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_person_accept_status' and c.code = t.handle_status limit 1) as handleStatusName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_work_order_event_type' and c.code = t.event_type limit 1) as eventTypeName
+        from t_person_accept t
+        where t.id = #{param1}
+        and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+    </select>
+</mapper>

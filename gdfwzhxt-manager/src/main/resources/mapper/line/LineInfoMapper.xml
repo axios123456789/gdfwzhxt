@@ -159,4 +159,16 @@
         </where>
         order by t.create_time desc
     </select>
+
+    <!--  根据lineId查询线路信息  -->
+    <select id="getLineInfoByLineId" resultType="com.wangwen.gdfwzhxt.model.entity.line.LineInfo">
+        select <include refid="columns"/>,
+              (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_line_type' and c.code = t.line_type limit 1) as lineTypeName,
+              (case when main_line = '0' then '无' else
+              (select l.line_name from t_lineInfo l where l.id = t.main_line limit 1) end) as mainLineName,
+              (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_line_status' and c.`code` =t.line_status limit 1) as lineStatusName
+          from t_lineInfo t
+        where t.id = #{param1}
+        limit 1
+    </select>
 </mapper>

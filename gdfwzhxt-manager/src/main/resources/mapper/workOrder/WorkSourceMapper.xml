@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.WorkSourceMapper">
+    <sql id="columns">
+        accept_id as acceptId,
+        source_no as sourceNo,
+        submit_by as submitBy,
+        handle_object as handleObject,
+        handle_reason as handleReason,
+        really_reason as reallyReason,
+        fault_record_image as faultRecordImage,
+        handle_result as handleResult,
+        handle_image as handleImage,
+        accept_flag as acceptFlag,
+        submit_time as submitTime,
+        refuse_reason as refuseReason,
+        refuse_by as refuseBy,
+        company,
+        refuse_time as refuseTime
+    </sql>
+
+    <!--  在提交工单材料表中添加数据  -->
+    <insert id="addWorkSource">
+        insert into t_work_source (
+            accept_id,
+            source_no,
+            submit_by,
+            handle_object,
+            handle_reason,
+            really_reason,
+            fault_record_image,
+            handle_result,
+            handle_image,
+            submit_time,
+            company
+        )
+        select t.id as accept_id,
+               #{sourceNo} as source_no,
+               t.name as submit_by,
+               (case when gd.event_type = 1 then (select xl.line_name from t_line_event xl where xl.Mid = gd.event_id limit 1)
+                     when gd.event_type = 2 then (select pb.transformer_name from t_transformer_event pb where pb.data_id = gd.event_id limit 1)
+					when gd.event_type = 3 then (select c.cons_name from t_cons_event c where c.event_id = gd.event_id limit 1) end) as handle_object,
+		       (case when gd.event_type = 1 then (select xl.reason from t_line_event xl where xl.Mid = gd.event_id limit 1)
+					 when gd.event_type = 2 then (select pb.reason from t_transformer_event pb where pb.data_id = gd.event_id limit 1)
+					 when gd.event_type = 3 then (select c.reason from t_cons_event c where c.event_id = gd.event_id limit 1) end) as handle_reason,
+               #{reallyReason} as really_reason,
+               #{faultRecordImage} as fault_record_image,
+               #{handleResult} as handle_result,
+               #{handleImage} as handle_image,
+               now() as submit_time,
+               t.company
+          from t_person_accept t
+          join t_work_order gd on t.work_order_no = gd.work_order_no
+                              and gd.is_deleted = 0
+                              and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = gd.company)
+        where t.id = #{acceptId}
+          and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+    </insert>
+
+    <!--  修改提交工单材料信息  -->
+    <update id="updateWorkSource">
+        update t_work_source set
+        <if test="reallyReason != null and reallyReason != ''">
+            really_reason = #{reallyReason},
+        </if>
+        <if test="faultRecordImage != null and faultRecordImage != ''">
+            fault_record_image = #{faultRecordImage},
+        </if>
+        <if test="handleResult != null and handleResult != ''">
+            handle_result = #{handleResult},
+        </if>
+        <if test="handleImage != null and handleImage != ''">
+            handle_image = #{handleImage},
+        </if>
+        accept_flag = #{acceptFlag}
+        where accept_id = #{acceptId}
+    </update>
+
+    <!--  同步驳回原因，驳回人到材料表中  -->
+    <update id="updateWorkSourceToRefuse">
+        update t_work_source set
+        refuse_reason = #{refuseReason},
+        refuse_by = #{refuseBy},
+        refuse_time = now(),
+        accept_flag = #{acceptFlag}
+        where accept_id = #{acceptId}
+    </update>
+
+    <!--  根据工单编号删除个人工单材料提交表中的数据  -->
+    <delete id="deleteByWorkOrderNo">
+        delete from t_work_source t
+        where exists (select 1 from t_person_accept p where p.work_order_no = #{param1} and p.id = t.accept_id)
+    </delete>
+
+    <!--  根据个人接单id查询个人提交材料信息  -->
+    <select id="getWorkSourceByAcceptId" resultType="com.wangwen.gdfwzhxt.model.entity.workOrder.WorkSource">
+        select <include refid="columns"/> from
+        t_work_source t
+        where t.accept_id = #{param1}
+    </select>
+    <select id="getWorkSourceByWorkSourceNo"
+            resultType="com.wangwen.gdfwzhxt.model.entity.workOrder.WorkSource">
+        select <include refid="columns"/> from
+            t_work_source t
+        where t.source_no = #{param1}
+    </select>
+</mapper>

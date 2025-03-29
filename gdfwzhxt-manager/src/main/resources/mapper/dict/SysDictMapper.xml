@@ -60,6 +60,7 @@
         select <include refid="columns"/> from t_code c
         where c.is_deleted = 0
           and c.type = #{param1}
+        order by c.code asc
     </select>
 
     <!-- 根据type查询对应权限的账号等级(只能是自己的下级权限)  -->

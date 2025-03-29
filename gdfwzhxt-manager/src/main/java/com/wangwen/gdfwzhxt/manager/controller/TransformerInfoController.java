@@ -62,4 +62,15 @@ public class TransformerInfoController {
             return Result.build(null, 500, "删除变压器信息失败！");
         }
     }
+
+    /**
+     * 根据变压器局号查询变压器
+     * @param transformerCode
+     * @return
+     */
+    @GetMapping("/getTransformerInfoByTransformerCode/{transformerCode}")
+    public Result getTransformerInfoByTransformerCode(@PathVariable("transformerCode") String transformerCode){
+        TransformerInfo transformerInfo = transformerInfoService.getTransformerInfoByTransformerCode(transformerCode);
+        return Result.build(transformerInfo, ResultCodeEnum.SUCCESS);
+    }
 }

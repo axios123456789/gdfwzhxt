@@ -38,6 +38,8 @@ import line from './modules/line'
 import source from '@/router/modules/source'
 import transformer from '@/router/modules/transformer'
 import cons from '@/router/modules/cons'
+import droneInspection from '@/router/modules/droneInspection'
+import workOrderControl from '@/router/modules/workOrderControl'
 
 /* 菜单栏的路由 */
 // 固定菜单
@@ -49,6 +51,8 @@ export const asyncRoutes = [
   ...source,
   ...transformer,
   ...cons,
+  ...droneInspection,
+  ...workOrderControl,
 ]
 
 const router = createRouter({

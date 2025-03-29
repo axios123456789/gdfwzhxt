@@ -154,4 +154,14 @@
           and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
           and t.transformer_code = #{param1}
     </select>
+
+    <!--  根据变压器局号查询变压器  -->
+    <select id="getTransformerInfoByTransformerCode"
+            resultType="com.wangwen.gdfwzhxt.model.entity.transformer.TransformerInfo">
+        select <include refid="columns"/>,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_transformer_type' and c.code = t.transformer_type limit 1) as transformerTypeName
+          from t_transformerInfo t
+        where t.transformer_code = #{param1}
+        limit 1
+    </select>
 </mapper>

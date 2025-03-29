@@ -1,258 +1,272 @@
 <template>
-  <!---搜索表单-->
-  <div class="search-div">
-    <el-form label-width="70px" size="small">
-      <el-row>
-        <el-col :span="6">
-          <el-form-item label="账号">
-            <el-input
-              v-model="queryDto.account"
-              style="width: 100%"
-              placeholder="账号"
-              clearable
-            ></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="用户名称">
-            <el-input
-              v-model="queryDto.name"
-              style="width: 100%"
-              clearable
-            ></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="创建时间">
-            <el-date-picker
-              v-model="createTimes"
-              type="daterange"
-              range-separator="To"
-              start-placeholder="开始时间"
-              end-placeholder="结束时间"
-              format="YYYY-MM-DD"
-              value-format="YYYY-MM-DD"
-              :editable="false"
-              clearable
-            />
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="6">
-          <el-form-item label="账号等级">
-            <el-select
-              v-model="queryDto.level"
-              multiple
-              placeholder="请选择"
-              style="width: 100%"
-              clearable
-            >
-              <el-option
-                v-for="item in levelItem"
-                :key="item.value"
-                :label="item.text"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="账号状态">
-            <el-select
-              v-model="queryDto.status"
-              placeholder="请选择"
-              style="width: 100%"
-              clearable
-            >
-              <el-option
-                v-for="item in StatusItem"
-                :key="item.value"
-                :label="item.text"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row style="display:flex">
-        <el-button type="primary" size="small" @click="searchSysUser">
-          搜索
-        </el-button>
-        <el-button size="small" @click="resetData">重置</el-button>
-      </el-row>
-    </el-form>
-  </div>
+  <div class="sysUserZbj">
+    <!---搜索表单-->
+    <div class="search-div">
+      <el-form label-width="70px" size="small">
+        <el-row>
+          <el-col :span="6">
+            <el-form-item label="账号">
+              <el-input
+                v-model="queryDto.account"
+                style="width: 100%"
+                placeholder="账号"
+                clearable
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="用户名称">
+              <el-input
+                v-model="queryDto.name"
+                style="width: 100%"
+                clearable
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="创建时间">
+              <el-date-picker
+                v-model="createTimes"
+                type="daterange"
+                range-separator="To"
+                start-placeholder="开始时间"
+                end-placeholder="结束时间"
+                format="YYYY-MM-DD"
+                value-format="YYYY-MM-DD"
+                :editable="false"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="6">
+            <el-form-item label="账号等级">
+              <el-select
+                v-model="queryDto.level"
+                multiple
+                placeholder="请选择"
+                style="width: 100%"
+                clearable
+              >
+                <el-option
+                  v-for="item in levelItem"
+                  :key="item.value"
+                  :label="item.text"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="账号状态">
+              <el-select
+                v-model="queryDto.status"
+                placeholder="请选择"
+                style="width: 100%"
+                clearable
+              >
+                <el-option
+                  v-for="item in StatusItem"
+                  :key="item.value"
+                  :label="item.text"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row style="display:flex">
+          <el-button type="primary" size="small" @click="searchSysUser">
+            搜索
+          </el-button>
+          <el-button size="small" @click="resetData">重置</el-button>
+        </el-row>
+      </el-form>
+    </div>
 
-  <!--添加按钮-->
-  <div class="tools-div">
-    <el-button type="success" size="small" @click="addUser">添 加</el-button>
-  </div>
+    <!--添加按钮-->
+    <div class="tools-div">
+      <el-button type="success" size="small" @click="addUser">添 加</el-button>
+    </div>
 
-  <!-- 添加修改用户模态窗口 -->
-  <el-dialog v-model="dialogVisible" title="添加修改用户" width="40%">
-    <el-form label-width="120px">
-      <el-form-item label="用户账号">
-        <el-input v-model="sysUser.loginAccount" />
-      </el-form-item>
-      <el-form-item v-if="sysUser.id == null" label="密码">
-        <el-input
-          type="password"
-          show-password
-          v-model="sysUser.loginPassword"
-        />
-      </el-form-item>
-      <el-form-item v-if="sysUser.id != null" label="状态">
-        <el-select
-          v-model="sysUser.status"
-          placeholder="请选择"
-          style="width: 100%"
-          clearable
-        >
-          <el-option
-            v-for="item in StatusItem"
-            :key="item.value"
-            :label="item.text"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="账号等级">
-        <el-select
-          v-model="sysUser.level"
-          placeholder="请选择"
-          style="width: 100%"
-          clearable
-        >
-          <el-option
-            v-for="item in levelItemByPower"
-            :key="item.value"
-            :label="item.text"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="用户姓名">
-        <el-input v-model="sysUser.name" />
-      </el-form-item>
-      <el-form-item label="性别">
-        <el-radio-group v-model="sysUser.sex">
-          <el-radio
-            v-for="(item, index) in sexItem"
-            :key="index"
-            :label="item.value"
+    <!-- 添加修改用户模态窗口 -->
+    <el-dialog v-model="dialogVisible" title="添加修改用户" width="40%">
+      <el-form label-width="120px">
+        <el-form-item label="用户账号">
+          <el-input v-model="sysUser.loginAccount" />
+        </el-form-item>
+        <el-form-item v-if="sysUser.id == null" label="密码">
+          <el-input
+            type="password"
+            show-password
+            v-model="sysUser.loginPassword"
+          />
+        </el-form-item>
+        <el-form-item v-if="sysUser.id != null" label="状态">
+          <el-select
+            v-model="sysUser.status"
+            placeholder="请选择"
+            style="width: 100%"
+            clearable
           >
-            {{ item.text }}
-          </el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="手机">
-        <el-input v-model="sysUser.phone" />
-      </el-form-item>
-      <el-form-item label="头像">
-        <el-upload
-          class="avatar-uploader"
-          action="http://localhost:8501/electricity/system/fileUpload"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-          :headers="headers"
+            <el-option
+              v-for="item in StatusItem"
+              :key="item.value"
+              :label="item.text"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="账号等级">
+          <el-select
+            v-model="sysUser.level"
+            placeholder="请选择"
+            style="width: 100%"
+            clearable
+          >
+            <el-option
+              v-for="item in levelItemByPower"
+              :key="item.value"
+              :label="item.text"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="用户姓名">
+          <el-input v-model="sysUser.name" />
+        </el-form-item>
+        <el-form-item label="性别">
+          <el-radio-group v-model="sysUser.sex">
+            <el-radio
+              v-for="(item, index) in sexItem"
+              :key="index"
+              :label="item.value"
+            >
+              {{ item.text }}
+            </el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="手机">
+          <el-input v-model="sysUser.phone" />
+        </el-form-item>
+        <el-form-item label="头像">
+          <el-upload
+            class="avatar-uploader"
+            action="http://localhost:8501/electricity/system/fileUpload"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :headers="headers"
+          >
+            <img v-if="sysUser.avatar" :src="sysUser.avatar" class="avatar" />
+            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="用户地址">
+          <el-input v-model="sysUser.address" />
+        </el-form-item>
+        <el-form-item label="描述">
+          <el-input v-model="sysUser.description" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submit">提交</el-button>
+          <el-button @click="dialogVisible = false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <!---数据表格-->
+    <el-table :data="list" style="width: 100%">
+      <el-table-column label="操作" align="center" width="280" #default="scope">
+        <el-button type="primary" size="small" @click="editUser(scope.row)">
+          修改
+        </el-button>
+        <el-button
+          type="danger"
+          size="small"
+          @click="deleteUserById(scope.row)"
         >
-          <img v-if="sysUser.avatar" :src="sysUser.avatar" class="avatar" />
-          <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-        </el-upload>
-      </el-form-item>
-      <el-form-item label="用户地址">
-        <el-input v-model="sysUser.address" />
-      </el-form-item>
-      <el-form-item label="描述">
-        <el-input v-model="sysUser.description" />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submit">提交</el-button>
-        <el-button @click="dialogVisible = false">取消</el-button>
-      </el-form-item>
-    </el-form>
-  </el-dialog>
-
-  <!---数据表格-->
-  <el-table :data="list" style="width: 100%">
-    <el-table-column label="操作" align="center" width="280" #default="scope">
-      <el-button type="primary" size="small" @click="editUser(scope.row)">
-        修改
-      </el-button>
-      <el-button type="danger" size="small" @click="deleteUserById(scope.row)">
-        删除
-      </el-button>
-      <el-button type="warning" size="small" @click="showAssignRole(scope.row)">
-        分配角色
-      </el-button>
-    </el-table-column>
-    <el-table-column prop="loginAccount" label="账号" width="100" />
-    <el-table-column prop="name" label="用户姓名" width="120" />
-    <el-table-column prop="sex" label="性别" #default="scope" width="100">
-      {{ scope.row.sex == 1 ? '男' : scope.row.sex == 2 ? '女' : '无' }}
-    </el-table-column>
-    <el-table-column prop="phone" label="手机" width="120" />
-    <el-table-column prop="levelName" label="账号等级" width="80" />
-    <el-table-column prop="avatar" label="头像" #default="scope">
-      <img :src="scope.row.avatar" width="50" />
-    </el-table-column>
-    <el-table-column prop="description" label="描述" width="200" />
-    <el-table-column prop="address" label="地址" width="200" />
-    <el-table-column prop="company" label="所属公司" width="120" />
-    <el-table-column prop="status" label="状态" #default="scope" width="100">
-      {{ scope.row.status == 1 ? '正常' : '停用' }}
-    </el-table-column>
-    <el-table-column prop="createTime" label="创建时间" width="180" />
-    <el-table-column prop="createBy" label="创建者" width="120" />
-    <el-table-column prop="updateTime" label="修改时间" width="180" />
-    <el-table-column prop="updateBy" label="修改者" width="120" />
-  </el-table>
-
-  <!--分页条-->
-  <el-pagination
-    style="margin-top: 30px"
-    v-model:current-page="pageParams.page"
-    v-model:page-size="pageParams.limit"
-    :page-sizes="[10, 20, 50, 100]"
-    @size-change="fetchData"
-    @current-change="fetchData"
-    layout="total, sizes, prev, pager, next"
-    :total="total"
-  />
-
-  <!-- 分配角色的模态窗口 -->
-  <el-dialog v-model="dialogRoleVisible" title="分配角色" width="40%">
-    <el-form label-width="80px">
-      <el-form-item label="用户名">
-        <el-input disabled :value="sysUser.name"></el-input>
-      </el-form-item>
-
-      <el-form-item label="角色列表">
-        <el-checkbox
-          :indeterminate="isIndeterminate"
-          v-model="checkAll"
-          @change="handleCheckAllChange"
+          删除
+        </el-button>
+        <el-button
+          type="warning"
+          size="small"
+          @click="showAssignRole(scope.row)"
         >
-          全选
-        </el-checkbox>
-        <div style="margin: 15px 0;"></div>
-        <el-checkbox-group
-          v-model="userRoleIds"
-          @change="handleCheckedCitiesChange"
-        >
-          <el-checkbox v-for="role in allRoles" :label="role.id" :key="role.id">
-            {{ role.roleName }}
+          分配角色
+        </el-button>
+      </el-table-column>
+      <el-table-column prop="loginAccount" label="账号" width="100" />
+      <el-table-column prop="name" label="用户姓名" width="120" />
+      <el-table-column prop="sex" label="性别" #default="scope" width="100">
+        {{ scope.row.sex == 1 ? '男' : scope.row.sex == 2 ? '女' : '无' }}
+      </el-table-column>
+      <el-table-column prop="phone" label="手机" width="120" />
+      <el-table-column prop="levelName" label="账号等级" width="80" />
+      <el-table-column prop="avatar" label="头像" #default="scope">
+        <img :src="scope.row.avatar" width="50" />
+      </el-table-column>
+      <el-table-column prop="description" label="描述" width="200" />
+      <el-table-column prop="address" label="地址" width="200" />
+      <el-table-column prop="company" label="所属公司" width="120" />
+      <el-table-column prop="status" label="状态" #default="scope" width="100">
+        {{ scope.row.status == 1 ? '正常' : '停用' }}
+      </el-table-column>
+      <el-table-column prop="createTime" label="创建时间" width="180" />
+      <el-table-column prop="createBy" label="创建者" width="120" />
+      <el-table-column prop="updateTime" label="修改时间" width="180" />
+      <el-table-column prop="updateBy" label="修改者" width="120" />
+    </el-table>
+
+    <!--分页条-->
+    <el-pagination
+      style="margin-top: 30px"
+      v-model:current-page="pageParams.page"
+      v-model:page-size="pageParams.limit"
+      :page-sizes="[10, 20, 50, 100]"
+      @size-change="fetchData"
+      @current-change="fetchData"
+      layout="total, sizes, prev, pager, next"
+      :total="total"
+    />
+
+    <!-- 分配角色的模态窗口 -->
+    <el-dialog v-model="dialogRoleVisible" title="分配角色" width="40%">
+      <el-form label-width="80px">
+        <el-form-item label="用户名">
+          <el-input disabled :value="sysUser.name"></el-input>
+        </el-form-item>
+
+        <el-form-item label="角色列表">
+          <el-checkbox
+            :indeterminate="isIndeterminate"
+            v-model="checkAll"
+            @change="handleCheckAllChange"
+          >
+            全选
           </el-checkbox>
-        </el-checkbox-group>
-      </el-form-item>
+          <div style="margin: 15px 0;"></div>
+          <el-checkbox-group
+            v-model="userRoleIds"
+            @change="handleCheckedCitiesChange"
+          >
+            <el-checkbox
+              v-for="role in allRoles"
+              :label="role.id"
+              :key="role.id"
+            >
+              {{ role.roleName }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
 
-      <el-form-item>
-        <el-button type="primary" @click="doAssign">提交</el-button>
-        <el-button @click="dialogRoleVisible = false">取消</el-button>
-      </el-form-item>
-    </el-form>
-  </el-dialog>
+        <el-form-item>
+          <el-button type="primary" @click="doAssign">提交</el-button>
+          <el-button @click="dialogRoleVisible = false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+  </div>
 </template>
 
 <script setup>
@@ -340,6 +354,7 @@ const searchSysUser = () => {
 
 //重置方法
 const resetData = () => {
+  createTimes.value = []
   queryDto.value = {}
   fetchData()
 }
@@ -538,19 +553,61 @@ const doAssign = async () => {
 </script>
 
 <style scoped>
+.sysUserZbj {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+}
+
+.sysUserZbj::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('src/assets/qwdt7.gif');
+  background-size: cover;
+  background-attachment: fixed;
+  opacity: 0.5; /* 设置背景图片的透明度为50% */
+  /*z-index: -1; !* 确保伪元素在内容下方 *!*/
+}
+.sysUserZbj > * {
+  position: relative;
+  z-index: 1; /* 确保内容在伪元素上方 */
+}
+
+.tools-div {
+  margin: 10px 0;
+  padding: 10px;
+  /*border: 1px solid #ebeef5;*/
+  border-radius: 3px;
+  background-color: transparent;
+}
+
+/deep/ .el-table,
+/deep/ .el-table__expanded-cell {
+  background-color: transparent;
+  color: #001528;
+  border: 1px solid;
+}
+/deep/ .el-table th,
+/deep/ .el-table tr,
+/deep/ .el-table td {
+  background-color: transparent;
+  color: #001528;
+  border: 1px solid;
+}
+
 .search-div {
   margin-bottom: 10px;
   padding: 10px;
   border: 1px solid #ebeef5;
   border-radius: 3px;
-  background-color: #fff;
-}
-.tools-div {
-  margin: 10px 0;
-  padding: 10px;
-  border: 1px solid #ebeef5;
-  border-radius: 3px;
-  background-color: #fff;
+  background-color: transparent;
 }
 .avatar-uploader .avatar {
   width: 178px;

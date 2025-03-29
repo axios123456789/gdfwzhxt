@@ -103,4 +103,15 @@ public class LineInfoServiceImpl implements LineInfoService {
         PageInfo<LineInfo> pageInfo = new PageInfo<>(lineInfos);
         return pageInfo;
     }
+
+    /**
+     * 根据lineId查询线路信息
+     * @param lineId
+     * @return
+     */
+    @Override
+    public LineInfo getLineInfoByLineId(String lineId) {
+        LineInfo lineInfo = lineInfoMapper.getLineInfoByLineId(lineId);
+        return lineInfo;
+    }
 }

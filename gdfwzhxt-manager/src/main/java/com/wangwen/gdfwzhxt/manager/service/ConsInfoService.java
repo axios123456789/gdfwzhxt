@@ -13,4 +13,7 @@ public interface ConsInfoService {
 
     //根据id删除用户
     void deleteConsInfoById(String id);
+
+    //根据用户编号查询用户信息
+    ConsInfo getConsInfoByConsNo(String consNo);
 }

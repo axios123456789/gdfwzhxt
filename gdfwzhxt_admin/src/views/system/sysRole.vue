@@ -1,113 +1,122 @@
 <template>
-  <div class="search-div">
-    <!-- 搜索表单 -->
-    <el-form label-width="70px" size="small">
-      <el-form-item label="角色名称">
-        <el-input
-          v-model="queryDto.roleName"
-          style="width: 100%"
-          placeholder="角色名称"
-        ></el-input>
-      </el-form-item>
-      <el-row style="display:flex">
-        <el-button type="primary" size="small" @click="searchSysRole">
-          搜索
-        </el-button>
-        <el-button size="small" @click="resetData">重置</el-button>
-      </el-row>
-    </el-form>
-
-    <!-- 添加按钮 -->
-    <div class="tools-div">
-      <el-button type="success" size="small" @click="addRole">添 加</el-button>
-    </div>
-
-    <!-- 添加或修改角色表单对话框 -->
-    <el-dialog v-model="dialogVisible" title="添加或修改角色" width="30%">
-      <el-form label-width="80px">
+  <div class="sysRoleDT">
+    <div class="search-div">
+      <!-- 搜索表单 -->
+      <el-form label-width="70px" size="small">
         <el-form-item label="角色名称">
-          <el-input v-model="sysRole.roleName" placeholder="" />
-        </el-form-item>
-        <el-form-item label="角色Code">
-          <el-input v-model="sysRole.roleCode" placeholder="" />
-        </el-form-item>
-        <el-form-item label="角色描述">
           <el-input
-            type="textarea"
-            :rows="3"
-            placeholder="请输入内容"
-            v-model="sysRole.description"
+            v-model="queryDto.roleName"
+            style="width: 100%"
+            placeholder="角色名称"
           ></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="submit">提交</el-button>
-          <el-button @click="dialogVisible = false">取消</el-button>
-        </el-form-item>
+        <el-row style="display:flex">
+          <el-button type="primary" size="small" @click="searchSysRole">
+            搜索
+          </el-button>
+          <el-button size="small" @click="resetData">重置</el-button>
+        </el-row>
       </el-form>
-    </el-dialog>
 
-    <!--- 角色表格数据 -->
-    <el-table :data="list" style="width: 100%">
-      <el-table-column label="操作" align="center" width="280" #default="scope">
-        <el-button type="primary" size="small" @click="editRole(scope.row)">
-          修改
+      <!-- 添加按钮 -->
+      <div class="tools-div">
+        <el-button type="success" size="small" @click="addRole">
+          添 加
         </el-button>
-        <el-button
-          type="danger"
-          size="small"
-          @click="deleteRoleById(scope.row)"
-        >
-          删除
-        </el-button>
-        <el-button
-          type="warning"
-          size="small"
-          @click="showAssignMenu(scope.row)"
-        >
-          分配菜单
-        </el-button>
-      </el-table-column>
-      <el-table-column prop="roleName" label="角色名称" width="180" />
-      <el-table-column prop="roleCode" label="角色code" width="180" />
-      <el-table-column prop="createTime" label="创建时间" width="200" />
-      <el-table-column prop="createBy" label="创建者" width="120" />
-      <el-table-column prop="updateTime" label="修改时间" width="200" />
-      <el-table-column prop="updateBy" label="修改者" width="120" />
-      <el-table-column prop="description" label="描述" width="300" />
-    </el-table>
+      </div>
 
-    <!-- 分配菜单的对话框
+      <!-- 添加或修改角色表单对话框 -->
+      <el-dialog v-model="dialogVisible" title="添加或修改角色" width="30%">
+        <el-form label-width="80px">
+          <el-form-item label="角色名称">
+            <el-input v-model="sysRole.roleName" placeholder="" />
+          </el-form-item>
+          <el-form-item label="角色Code">
+            <el-input v-model="sysRole.roleCode" placeholder="" />
+          </el-form-item>
+          <el-form-item label="角色描述">
+            <el-input
+              type="textarea"
+              :rows="3"
+              placeholder="请输入内容"
+              v-model="sysRole.description"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="submit">提交</el-button>
+            <el-button @click="dialogVisible = false">取消</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
+
+      <!--- 角色表格数据 -->
+      <el-table :data="list" style="width: 100%">
+        <el-table-column
+          label="操作"
+          align="center"
+          width="280"
+          #default="scope"
+        >
+          <el-button type="primary" size="small" @click="editRole(scope.row)">
+            修改
+          </el-button>
+          <el-button
+            type="danger"
+            size="small"
+            @click="deleteRoleById(scope.row)"
+          >
+            删除
+          </el-button>
+          <el-button
+            type="warning"
+            size="small"
+            @click="showAssignMenu(scope.row)"
+          >
+            分配菜单
+          </el-button>
+        </el-table-column>
+        <el-table-column prop="roleName" label="角色名称" width="180" />
+        <el-table-column prop="roleCode" label="角色code" width="180" />
+        <el-table-column prop="createTime" label="创建时间" width="200" />
+        <el-table-column prop="createBy" label="创建者" width="120" />
+        <el-table-column prop="updateTime" label="修改时间" width="200" />
+        <el-table-column prop="updateBy" label="修改者" width="120" />
+        <el-table-column prop="description" label="描述" width="300" />
+      </el-table>
+
+      <!-- 分配菜单的对话框
         // tree组件添加ref属性，后期方便进行tree组件对象的获取
         -->
-    <el-dialog v-model="dialogMenuVisible" title="分配菜单" width="40%">
-      <el-form label-width="80px">
-        <el-tree
-          :data="sysMenuTreeList"
-          ref="tree"
-          show-checkbox
-          default-expand-all
-          :check-on-click-node="true"
-          node-key="id"
-          :props="defaultProps"
-        />
-        <el-form-item>
-          <el-button type="primary" @click="doAssign">提交</el-button>
-          <el-button @click="dialogMenuVisible = false">取消</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
+      <el-dialog v-model="dialogMenuVisible" title="分配菜单" width="40%">
+        <el-form label-width="80px">
+          <el-tree
+            :data="sysMenuTreeList"
+            ref="tree"
+            show-checkbox
+            default-expand-all
+            :check-on-click-node="true"
+            node-key="id"
+            :props="defaultProps"
+          />
+          <el-form-item>
+            <el-button type="primary" @click="doAssign">提交</el-button>
+            <el-button @click="dialogMenuVisible = false">取消</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
 
-    <!--分页条-->
-    <el-pagination
-      style="margin-top: 30px"
-      v-model:current-page="pageParams.page"
-      v-model:page-size="pageParams.limit"
-      :page-sizes="[10, 20, 50, 100]"
-      @size-change="fetchData"
-      @current-change="fetchData"
-      layout="total, sizes, prev, pager, next"
-      :total="total"
-    />
+      <!--分页条-->
+      <el-pagination
+        style="margin-top: 30px"
+        v-model:current-page="pageParams.page"
+        v-model:page-size="pageParams.limit"
+        :page-sizes="[10, 20, 50, 100]"
+        @size-change="fetchData"
+        @current-change="fetchData"
+        layout="total, sizes, prev, pager, next"
+        :total="total"
+      />
+    </div>
   </div>
 </template>
 
@@ -289,19 +298,60 @@ const deleteRoleById = row => {
 </script>
 
 <style scoped>
-.search-div {
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #ebeef5;
-  border-radius: 3px;
-  background-color: #fff;
+.sysRoleDT {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+}
+
+.sysRoleDT::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('src/assets/jntm3.gif');
+  background-size: cover;
+  background-attachment: fixed;
+  opacity: 0.5; /* 设置背景图片的透明度为50% */
+  /*z-index: -1; !* 确保伪元素在内容下方 *!*/
+}
+.sysRoleDT > * {
+  position: relative;
+  z-index: 1; /* 确保内容在伪元素上方 */
 }
 
 .tools-div {
   margin: 10px 0;
   padding: 10px;
+  /*border: 1px solid #ebeef5;*/
+  border-radius: 3px;
+  background-color: transparent;
+}
+
+/deep/ .el-table,
+/deep/ .el-table__expanded-cell {
+  background-color: transparent;
+  color: #001528;
+  border: 1px solid;
+}
+/deep/ .el-table th,
+/deep/ .el-table tr,
+/deep/ .el-table td {
+  background-color: transparent;
+  color: #001528;
+  border: 1px solid;
+}
+
+.search-div {
+  margin-bottom: 10px;
+  padding: 10px;
   border: 1px solid #ebeef5;
   border-radius: 3px;
-  background-color: #fff;
+  background-color: transparent;
 }
 </style>

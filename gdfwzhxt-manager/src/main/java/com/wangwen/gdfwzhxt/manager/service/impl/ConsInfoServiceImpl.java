@@ -78,4 +78,15 @@ public class ConsInfoServiceImpl implements ConsInfoService {
     public void deleteConsInfoById(String id) {
         consInfoMapper.deleteConsInfoById(id);
     }
+
+    /**
+     * 根据用户编号查询用户信息
+     * @param consNo
+     * @return
+     */
+    @Override
+    public ConsInfo getConsInfoByConsNo(String consNo) {
+        ConsInfo consInfo = consInfoMapper.getConsInfoByConsNo(consNo);
+        return consInfo;
+    }
 }
