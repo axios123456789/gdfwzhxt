@@ -77,14 +77,14 @@ public class ElectricityUsageServiceImpl implements ElectricityUsageService {
         //1.虚拟生成0.1~0.5的电能损耗及计算使用电费
         Random random = new Random();
         double value = 0.1 + (0.5 - 0.1) * random.nextDouble();
-        double value2 = value * 0.6;
+        double value2 = value * 0.6; //默认0.6元/度电
         BigDecimal bd = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP);
         BigDecimal bd2 = new BigDecimal(value2).setScale(2, RoundingMode.HALF_UP);
         double electricityUsed = bd.doubleValue(); //损耗电能
         double chargeUsed = bd2.doubleValue(); //使用电费
 
         //设置使用电能和电费
-        consInfo.setTotalConsumption(consInfo.getTotalConsumption() - electricityUsed);
+        consInfo.setTotalConsumption(consInfo.getTotalConsumption() + electricityUsed);
         consInfo.setBalance(consInfo.getBalance() - chargeUsed);
 
         //2.修改用户电能使用情况和电费余额
