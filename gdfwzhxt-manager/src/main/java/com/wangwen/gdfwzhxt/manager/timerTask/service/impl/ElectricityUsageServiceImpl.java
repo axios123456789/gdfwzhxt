@@ -93,8 +93,10 @@ public class ElectricityUsageServiceImpl implements ElectricityUsageService {
         // 获取当前日期
         Date currentDate = new Date();
 
-        //3.电费如果小于-10元生成用户停电事件
-        if (consInfo.getBalance() <= -10){
+        //3.电费如果小于-10元生成用户停电事件且不重复生成
+        //查询用户是否存在停电事件
+        int eventCountByConsNo = consEventMapper.getEventCountByConsNo(consInfo.getConsNo());
+        if (consInfo.getBalance() <= -10 && eventCountByConsNo == 0){
             ConsEvent consEvent = new ConsEvent();
             consEvent.setEventId(UUIDUtil.getUUID());
             consEvent.setConsNo(consInfo.getConsNo());
@@ -119,6 +121,8 @@ public class ElectricityUsageServiceImpl implements ElectricityUsageService {
         electricityUsage.setUsedEnergy(consInfo.getTotalConsumption());
         electricityUsage.setRemainingBalance(consInfo.getBalance());
         electricityUsage.setCompany(consInfo.getCompany());
+        electricityUsage.setLastRecordToNowUsedEnergy(electricityUsed);
+        electricityUsage.setLastRecordToNowUsedBalance(chargeUsed);
         //生成记录
         electricityUsageMapper.addElectricityUsage(electricityUsage);
     }

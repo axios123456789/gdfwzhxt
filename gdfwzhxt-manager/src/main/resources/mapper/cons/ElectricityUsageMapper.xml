@@ -8,7 +8,9 @@
         record_time as recordTime,
         used_energy as usedEnergy,
         remaining_balance as remainingBalance,
-        company
+        company,
+        last_record_to_now_used_energy as lastRecordToNowUsedEnergy,
+        last_record_to_now_used_balance as lastRecordToNowUsedBalance
     </sql>
 
     <!--  生成记录  -->
@@ -20,7 +22,9 @@
             record_time,
             used_energy,
             remaining_balance,
-            company
+            company,
+            last_record_to_now_used_energy,
+            last_record_to_now_used_balance
         ) values (
             #{id},
             #{consNo},
@@ -28,7 +32,92 @@
             #{recordTime},
             #{usedEnergy},
             #{remainingBalance},
-            #{company}
+            #{company},
+            #{lastRecordToNowUsedEnergy},
+            #{lastRecordToNowUsedBalance}
         )
     </insert>
+
+    <!--  条件查询所有电能使用情况  -->
+    <select id="getElectricityUsedByCondition"
+            resultType="com.wangwen.gdfwzhxt.model.vo.cons.ElectricityUsedVo">
+        select t.cons_no as consNo, t.cons_name as consName,
+               sum(t.last_record_to_now_used_energy) as electricityUsed,
+               sum(t.last_record_to_now_used_balance) as chargeUsed
+          from t_electricity_usage t
+        <where>
+            <if test="consNo != null and consNo != ''">
+                and t.cons_no like concat('%', #{consNo}, '%')
+            </if>
+            <if test="consName != null and consName != ''">
+                and t.cons_name like concat('%', #{consName}, '%')
+            </if>
+            <if test="recordBeginTime != null and recordBeginTime != ''">
+                and t.record_time &gt;= #{recordBeginTime}
+            </if>
+            <if test="recordEndTime != null and recordEndTime != ''">
+                and t.record_time &lt;= #{recordEndTime}
+            </if>
+            and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+        </where>
+        group by t.cons_no, t.cons_name
+    </select>
+
+    <!--  条件查询电能使用情况明细  -->
+    <select id="getElectricityUsedDetailByCondition"
+            resultType="com.wangwen.gdfwzhxt.model.entity.cons.ElectricityUsage">
+        select <include refid="columns"/>
+          from t_electricity_usage t
+        <where>
+            <if test="consNo != null and consNo != ''">
+                and t.cons_no like concat('%', #{consNo}, '%')
+            </if>
+            <if test="consName != null and consName != ''">
+                and t.cons_name like concat('%', #{consName}, '%')
+            </if>
+            <if test="recordBeginTime != null and recordBeginTime != ''">
+                and t.record_time &gt;= #{recordBeginTime}
+            </if>
+            <if test="recordEndTime != null and recordEndTime != ''">
+                and t.record_time &lt;= #{recordEndTime}
+            </if>
+            and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+        </where>
+        order by t.record_time desc
+    </select>
+
+    <!--  条件查询每条电能电费使用情况数据  -->
+    <select id="getEveryDayElectricityUsedByCondition"
+            resultType="com.wangwen.gdfwzhxt.model.vo.cons.ElectricityUsedGroupByDayVo">
+        select date_format(t.dayDate, '%Y-%m-%d') as dayDate,
+               t.totalEnergyUsed,
+               t.totalBalanceUsed,
+               t.dayUsedEnergy,
+               t.dayMinBalance
+        from (
+            select date(t.record_time) as dayDate,
+                 sum(t.last_record_to_now_used_energy) as totalEnergyUsed,
+                 sum(t.last_record_to_now_used_balance) as totalBalanceUsed,
+                 max(t.used_energy) as dayUsedEnergy,
+                 min(t.remaining_balance) as dayMinBalance
+                from t_electricity_usage t
+            <where>
+                <if test="consNo != null and consNo != ''">
+                    and t.cons_no like concat('%', #{consNo}, '%')
+                </if>
+                <if test="consName != null and consName != ''">
+                    and t.cons_name like concat('%', #{consName}, '%')
+                </if>
+                <if test="recordBeginTime != null and recordBeginTime != ''">
+                    and t.record_time &gt;= #{recordBeginTime}
+                </if>
+                <if test="recordEndTime != null and recordEndTime != ''">
+                    and t.record_time &lt;= #{recordEndTime}
+                </if>
+                and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+            </where>
+            group by date(t.record_time)
+            order by date(t.record_time) asc
+        ) t
+    </select>
 </mapper>

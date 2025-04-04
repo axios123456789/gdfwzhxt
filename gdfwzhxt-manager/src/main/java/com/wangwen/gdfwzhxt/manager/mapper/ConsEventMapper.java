@@ -6,6 +6,7 @@ import com.wangwen.gdfwzhxt.model.entity.line.LineEvent;
 import com.wangwen.gdfwzhxt.model.entity.transformer.TransformerEvent;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -55,4 +56,9 @@ public interface ConsEventMapper {
 
     //通过线路事件id修改用户事件（工单完成）
     void updateConsEventByMid(String eventId, String supplyTime);
+
+    //根据用户编号查询是否存在停电事件
+    @Select("select count(1) from t_cons_event t where t.status = 1 and t.power_outage_type = 4 and t.cons_no = #{param1} " +
+            "and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)")
+    int getEventCountByConsNo(String consNo);
 }

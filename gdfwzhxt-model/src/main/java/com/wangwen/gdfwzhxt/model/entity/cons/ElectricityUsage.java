@@ -28,4 +28,10 @@ public class ElectricityUsage {
     private double remainingBalance;
 
     private String company;
+
+    @Schema(description = "距离上次记录到现在使用电能")
+    private double lastRecordToNowUsedEnergy;
+
+    @Schema(description = "距离上传记录到现在使用电费")
+    private double lastRecordToNowUsedBalance;
 }

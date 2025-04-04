@@ -61,3 +61,38 @@ export const RechargeElectricity = rechargeRecord => {
     data: rechargeRecord,
   })
 }
+
+//条件分页查询电能使用情况
+export const GetElectricityUsedByConditionAndPage = (
+  current,
+  limit,
+  electricityUsedQueryDto
+) => {
+  return request({
+    url: `${base_api}/getElectricityUsedByConditionAndPage/${current}/${limit}`,
+    method: 'get',
+    params: electricityUsedQueryDto,
+  })
+}
+
+//条件分页查询电能使用情况明细
+export const GetElectricityUsedDetailByConditionAndPage = (
+  current,
+  limit,
+  electricityUsedQueryDto
+) => {
+  return request({
+    url: `${base_api}/getElectricityUsedDetailByConditionAndPage/${current}/${limit}`,
+    method: 'get',
+    params: electricityUsedQueryDto,
+  })
+}
+
+//条件查询每条电能电费使用情况数据-用于可视化
+export const GetEveryDayElectricityUsedByCondition = electricityUsedQueryDto => {
+  return request({
+    url: `${base_api}/getEveryDayElectricityUsedByCondition`,
+    method: 'get',
+    params: electricityUsedQueryDto,
+  })
+}
