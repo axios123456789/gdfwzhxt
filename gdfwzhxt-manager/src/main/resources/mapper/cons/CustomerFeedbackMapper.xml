@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.CustomerFeedbackMapper">
+    <sql id="columns">
+        id,
+        cons_no as consNo,
+        feedback_content as feedbackContent,
+        handle_flag as handleFlag,
+        feedback_level as feedbackLevel,
+        feedback_equip as feedbackEquip,
+        generate_work_order_content as generateWorkOrderContent,
+        company,
+        create_time as createTime,
+        create_by as createBy,
+        update_time as updateTime,
+        update_by as updateBy,
+        is_deleted as isDeleted,
+        customer_opinion as customerOpinion,
+        feedback_equip_type as feedbackEquipType,
+        handle_time as handleTime,
+        cons_name as consName,
+        feedback_equip_name as feedbackEquipName
+    </sql>
+
+    <!--  添加客户反馈记录  -->
+    <insert id="addCustomerFeedback">
+        insert into t_customer_feedback (
+            id,
+            cons_no,
+            feedback_content,
+            handle_flag,
+            feedback_level,
+            feedback_equip,
+            generate_work_order_content,
+            company,
+            create_time,
+            create_by,
+            customer_opinion,
+            feedback_equip_type,
+            handle_time,
+            cons_name,
+            feedback_equip_name
+        ) values (
+            #{id},
+            #{consNo},
+            #{feedbackContent},
+            #{handleFlag},
+            #{feedbackLevel},
+            #{feedbackEquip},
+            concat('根据', #{consName}, '反馈的内容：', #{feedbackContent}, '！希望进行以下督办：', #{generateWorkOrderContent}),
+            #{company},
+            now(),
+            #{createBy},
+            #{customerOpinion},
+            #{feedbackEquipType},
+            #{handleTime},
+            #{consName},
+            #{feedbackEquipName}
+        )
+    </insert>
+
+    <!--  修改客户反馈记录  -->
+    <update id="updateCustomerFeedback">
+        update t_customer_feedback set
+            cons_no = #{consNo},
+            feedback_content = #{feedbackContent},
+            handle_flag = #{handleFlag},
+            feedback_level = #{feedbackLevel},
+            feedback_equip = #{feedbackEquip},
+            generate_work_order_content = #{generateWorkOrderContent},
+            update_time = now(),
+            update_by = #{updateBy},
+            customer_opinion = #{customerOpinion},
+            feedback_equip_type = #{feedbackEquipType},
+            handle_time = #{handleTime},
+            cons_name = #{consName},
+            feedback_equip_name = #{feedbackEquipName}
+        where id = #{id}
+    </update>
+
+    <!-- 条件查询所有反馈记录  -->
+    <select id="getCustomerFeedbackByCondition"
+            resultType="com.wangwen.gdfwzhxt.model.entity.cons.CustomerFeedback">
+        select <include refid="columns"/>,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_customer_feedback_handle_flag' and c.code = t.handle_flag limit 1) as handleFlagName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_customer_feedback_level' and c.code = t.feedback_level limit 1) as feedbackLevelName,
+               (select c.`value` from t_code c where c.is_deleted = 0 and c.type = 't_view_record_equip_type' and c.code = t.feedback_equip_type limit 1) as feedbackEquipTypeName
+        from t_customer_feedback t
+        <where>
+            <if test="consNo != null and consNo != ''">
+                and t.cons_no like concat('%', #{consNo}, '%')
+            </if>
+            <if test="consName != null and consName != ''">
+                and t.cons_name like concat('%', #{consName}, '%')
+            </if>
+            <if test="handleBeginTime != null and handleBeginTime != ''">
+                and t.handle_time &gt;= #{handleBeginTime}
+            </if>
+            <if test="handleEndTime != null and handleEndTime != ''">
+                and t.handle_time &lt;= #{handleEndTime}
+            </if>
+            <if test="handleFlag != null">
+                and t.handle_flag = #{handleFlag}
+            </if>
+            <if test="feedbackLevel != null and feedbackLevel.size() > 0">
+                and t.feedback_level in
+                <foreach collection="feedbackLevel" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="feedbackEquip != null and feedbackEquip != ''">
+                and t.feedback_equip = #{feedbackEquip}
+            </if>
+            <if test="feedbackEquipType != null">
+                and t.feedback_equip_type = #{feedbackEquipType}
+            </if>
+            and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+            and t.is_deleted = 0
+        </where>
+        order by t.create_time desc
+    </select>
+</mapper>

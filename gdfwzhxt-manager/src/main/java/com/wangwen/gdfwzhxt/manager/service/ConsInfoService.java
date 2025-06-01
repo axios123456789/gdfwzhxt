@@ -2,9 +2,11 @@ package com.wangwen.gdfwzhxt.manager.service;
 
 import com.github.pagehelper.PageInfo;
 import com.wangwen.gdfwzhxt.model.dto.cons.ConsInfoDto;
+import com.wangwen.gdfwzhxt.model.dto.cons.CustomerFeedbackDto;
 import com.wangwen.gdfwzhxt.model.dto.cons.ElectricityUsedDto;
 import com.wangwen.gdfwzhxt.model.dto.cons.RechargeRecordDto;
 import com.wangwen.gdfwzhxt.model.entity.cons.ConsInfo;
+import com.wangwen.gdfwzhxt.model.entity.cons.CustomerFeedback;
 import com.wangwen.gdfwzhxt.model.entity.cons.ElectricityUsage;
 import com.wangwen.gdfwzhxt.model.entity.cons.RechargeRecord;
 import com.wangwen.gdfwzhxt.model.vo.cons.ElectricityUsedVo;
@@ -39,4 +41,16 @@ public interface ConsInfoService {
 
     //条件查询每条电能电费使用情况数据-用于可视化
     Map<String, Object> getEveryDayElectricityUsedByCondition(ElectricityUsedDto electricityUsedDto);
+
+    //条件分页查询客户反馈记录列表
+    PageInfo<CustomerFeedback> getCustomerFeedbackByConditionAndPage(Integer current, Integer limit, CustomerFeedbackDto customerFeedbackDto);
+
+    //保存客户反馈记录
+    void saveCustomerFeedback(CustomerFeedback customerFeedback);
+
+    //根据id删除客户反馈记录
+    void deleteCustomerFeedbackById(String id);
+
+    //根据反馈记录生成工单和事件
+    void generateWorkOrderByFeedback(CustomerFeedback customerFeedback);
 }

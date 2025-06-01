@@ -309,4 +309,14 @@
           from t_cons_event t
         where event_id = #{param1}
     </select>
+
+    <!--    -->
+    <select id="getConsEventByConsNo" resultType="com.wangwen.gdfwzhxt.model.entity.cons.ConsEvent">
+        select <include refid="columns"/>
+          from t_cons_event t
+        where t.status = 1
+          and t.power_outage_type = 4
+          and t.cons_no = #{param1}
+          and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)
+    </select>
 </mapper>

@@ -96,3 +96,42 @@ export const GetEveryDayElectricityUsedByCondition = electricityUsedQueryDto => 
     params: electricityUsedQueryDto,
   })
 }
+
+//条件分页查询客户反馈记录列表
+export const GetCustomerFeedbackByConditionAndPage = (
+  current,
+  limit,
+  customerFeedbackQueryDto
+) => {
+  return request({
+    url: `${base_api}/getCustomerFeedbackByConditionAndPage/${current}/${limit}`,
+    method: 'post',
+    data: customerFeedbackQueryDto,
+  })
+}
+
+//保存客户反馈记录
+export const SaveCustomerFeedback = customerFeedback => {
+  return request({
+    url: `${base_api}/saveCustomerFeedback`,
+    method: 'post',
+    data: customerFeedback,
+  })
+}
+
+//删除客户反馈记录
+export const DeleteCustomerFeedbackById = id => {
+  return request({
+    url: `${base_api}/deleteCustomerFeedbackById/${id}`,
+    method: 'delete',
+  })
+}
+
+//生成工单和事件
+export const GenerateWorkOrderByFeedback = customerFeedback => {
+  return request({
+    url: `${base_api}/generateWorkOrderByFeedback`,
+    method: 'post',
+    data: customerFeedback,
+  })
+}

@@ -61,4 +61,7 @@ public interface ConsEventMapper {
     @Select("select count(1) from t_cons_event t where t.status = 1 and t.power_outage_type = 4 and t.cons_no = #{param1} " +
             "and exists (select 1 from t_user u where u.is_deleted = 0 and u.id = t.company)")
     int getEventCountByConsNo(String consNo);
+
+    //根据用户编号查询停电类型为用户欠费，停电状态为未复电的停电事件
+    ConsEvent getConsEventByConsNo(String consNo);
 }

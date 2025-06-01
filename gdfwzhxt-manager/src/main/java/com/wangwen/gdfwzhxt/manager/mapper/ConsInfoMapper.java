@@ -4,6 +4,7 @@ import com.wangwen.gdfwzhxt.model.dto.cons.ConsInfoDto;
 import com.wangwen.gdfwzhxt.model.entity.cons.ConsInfo;
 import com.wangwen.gdfwzhxt.model.entity.cons.RechargeRecord;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
@@ -37,4 +38,8 @@ public interface ConsInfoMapper {
 
     //修改用户电能使用情况和电费余额
     void updateConsChargeAndElectricity(ConsInfo consInfo);
+
+    //根据用户编号查询用户账户余额
+    @Select("select balance from t_cons_info where cons_no = #{param1}")
+    double getPriChargeByConsNo(String consNo);
 }

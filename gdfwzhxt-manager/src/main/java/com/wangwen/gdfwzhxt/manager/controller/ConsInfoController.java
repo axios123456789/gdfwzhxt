@@ -3,9 +3,11 @@ package com.wangwen.gdfwzhxt.manager.controller;
 import com.github.pagehelper.PageInfo;
 import com.wangwen.gdfwzhxt.manager.service.ConsInfoService;
 import com.wangwen.gdfwzhxt.model.dto.cons.ConsInfoDto;
+import com.wangwen.gdfwzhxt.model.dto.cons.CustomerFeedbackDto;
 import com.wangwen.gdfwzhxt.model.dto.cons.ElectricityUsedDto;
 import com.wangwen.gdfwzhxt.model.dto.cons.RechargeRecordDto;
 import com.wangwen.gdfwzhxt.model.entity.cons.ConsInfo;
+import com.wangwen.gdfwzhxt.model.entity.cons.CustomerFeedback;
 import com.wangwen.gdfwzhxt.model.entity.cons.ElectricityUsage;
 import com.wangwen.gdfwzhxt.model.entity.cons.RechargeRecord;
 import com.wangwen.gdfwzhxt.model.vo.common.Result;
@@ -149,5 +151,65 @@ public class ConsInfoController {
     public Result getEveryDayElectricityUsedByCondition(ElectricityUsedDto electricityUsedDto){
         Map<String, Object> map = consInfoService.getEveryDayElectricityUsedByCondition(electricityUsedDto);
         return Result.build(map, ResultCodeEnum.SUCCESS);
+    }
+
+    /**
+     * 条件分页查询客户反馈记录列表
+     * @param current
+     * @param limit
+     * @param customerFeedbackDto
+     * @return
+     */
+    @PostMapping("/getCustomerFeedbackByConditionAndPage/{current}/{limit}")
+    public Result getCustomerFeedbackByConditionAndPage(@PathVariable("current") Integer current,
+                                                        @PathVariable("limit") Integer limit,
+                                                        @RequestBody CustomerFeedbackDto customerFeedbackDto){
+        PageInfo<CustomerFeedback> pageInfo = consInfoService.getCustomerFeedbackByConditionAndPage(current, limit, customerFeedbackDto);
+        return Result.build(pageInfo, ResultCodeEnum.SUCCESS);
+    }
+
+    /**
+     * 保存客户反馈记录
+     * @param customerFeedback
+     * @return
+     */
+    @PostMapping("/saveCustomerFeedback")
+    public Result saveCustomerFeedback(@RequestBody CustomerFeedback customerFeedback){
+        try {
+            consInfoService.saveCustomerFeedback(customerFeedback);
+            return Result.build(null, ResultCodeEnum.SUCCESS);
+        } catch (Exception e) {
+            return Result.build(null, 500, "保存失败，请联系管理员！");
+        }
+    }
+
+    /**
+     * 根据id删除客户反馈记录
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/deleteCustomerFeedbackById/{id}")
+    public Result deleteCustomerFeedbackById(@PathVariable("id") String id){
+        try {
+            consInfoService.deleteCustomerFeedbackById(id);
+            return Result.build(null, ResultCodeEnum.SUCCESS);
+        } catch (Exception e) {
+            return Result.build(null, 500, "删除客户反馈记录失败，请联系管理员！");
+        }
+    }
+
+    /**
+     * 根据反馈记录生成工单和事件
+     * @param customerFeedback
+     * @return
+     */
+    @PostMapping("/generateWorkOrderByFeedback")
+    public Result generateWorkOrderByFeedback(@RequestBody CustomerFeedback customerFeedback){
+        try {
+            consInfoService.generateWorkOrderByFeedback(customerFeedback);
+            return Result.build(null, ResultCodeEnum.SUCCESS);
+        } catch (Exception e) {
+            return Result.build(null, 500, "生成工单失败，请联系管理员！");
+        }
     }
 }
