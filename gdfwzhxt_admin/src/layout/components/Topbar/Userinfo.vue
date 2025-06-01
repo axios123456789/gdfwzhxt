@@ -58,7 +58,10 @@
     </div>
     <template #dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item>{{ $t('topbar.center') }}</el-dropdown-item>
+        <el-dropdown-item @click="center">
+          {{ $t('topbar.center') }}
+        </el-dropdown-item>
+        <!--        <el-dropdown-item>{{ $t('topbar.center') }}</el-dropdown-item>-->
         <el-dropdown-item>{{ $t('topbar.password') }}</el-dropdown-item>
         <lock-modal />
         <el-dropdown-item @click="logout">
@@ -100,9 +103,18 @@ export default defineComponent({
       }
     }
 
+    //个人中心
+    const center = () => {
+      // 跳转到锁屏页面
+      router.push(
+        '/personCenter?redirect=' + router.currentRoute.value.fullPath
+      )
+    }
+
     return {
       userinfo,
       logout,
+      center,
     }
   },
 })

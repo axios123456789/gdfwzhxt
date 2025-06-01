@@ -40,6 +40,7 @@ import transformer from '@/router/modules/transformer'
 import cons from '@/router/modules/cons'
 import droneInspection from '@/router/modules/droneInspection'
 import workOrderControl from '@/router/modules/workOrderControl'
+import personCenter from '@/router/modules/personCenter'
 
 /* 菜单栏的路由 */
 // 固定菜单
@@ -65,6 +66,7 @@ const router = createRouter({
     ...redirect, // 统一的重定向配置
     ...login,
     ...lock,
+    ...personCenter,
     ...fixedRoutes,
     ...error,
   ],
