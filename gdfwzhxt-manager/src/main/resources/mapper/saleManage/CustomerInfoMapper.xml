@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.CustomerInfoMapper">
+    <sql id="columns">
+        id
+        ,
+        customer_name,
+        customer_gender,
+        customer_age,
+        customer_type,
+        customer_tel,
+        customer_email,
+        customer_address,
+        customer_detail,
+        customer_no,
+        create_time,
+        create_by,
+        update_time,
+        update_by,
+        country,
+        `state`,
+        city,
+        postcode,
+        repeat_order_count,
+        customer_picture
+    </sql>
+
+    <!--  添加客户信息  -->
+    <insert id="addCustomerInfo">
+        insert into t_customer_info (id,
+                                     customer_name,
+                                     customer_gender,
+                                     customer_age,
+                                     customer_type,
+                                     customer_tel,
+                                     customer_email,
+                                     customer_address,
+                                     customer_detail,
+                                     customer_no,
+                                     create_time,
+                                     create_by,
+                                     country,
+                                     `state`,
+                                     city,
+                                     postcode,
+                                     repeat_order_count,
+                                     customer_picture)
+        values (#{id},
+                #{customerName},
+                #{customerGender},
+                #{customerAge},
+                #{customerType},
+                #{customerTel},
+                #{customerEmail},
+                #{customerAddress},
+                #{customerDetail},
+                #{customerNo},
+                now(),
+                #{createBy},
+                #{country},
+                #{state},
+                #{city},
+                #{postcode},
+                #{repeatOrderCount},
+                #{customerPicture})
+    </insert>
+
+    <!--  修改客户信息  -->
+    <update id="updateCustomerInfo">
+        update t_customer_info
+        set customer_name      = #{customerName},
+            customer_gender    = #{customerGender},
+            customer_age       = #{customerAge},
+            customer_type      = #{customerType},
+            customer_tel       = #{customerTel},
+            customer_email     = #{customerEmail},
+            customer_address   = #{customerAddress},
+            customer_detail    = #{customerDetail},
+            customer_no        = #{customerNo},
+            country            = #{country},
+            `state`            = #{state},
+            city               = #{city},
+            postcode           = #{postcode},
+            repeat_order_count = #{repeatOrderCount},
+            customer_picture   = #{customerPicture},
+            update_time        = now(),
+            update_by          = #{updateBy}
+        where id = #{id}
+    </update>
+
+    <!--条件查询所有客户信息-->
+    <select id="getCustomerInfoByCondition"
+            resultType="com.wangwen.gdfwzhxt.model.entity.saleManage.CustomerInfo">
+        select
+        <include refid="columns"/>
+        from t_customer_info t
+        <where>
+            <if test="customerName != null and customerName != ''">
+                and t.customer_name like concat('%', #{customerName}, '%')
+            </if>
+            <if test="customerNo != null and customerNo != ''">
+                and t.customer_no like concat('%', #{customerNo}, '%')
+            </if>
+            <if test="customerGender != null">
+                and t.customer_gender = #{customerGender}
+            </if>
+            <if test="customerAgeBegin != null">
+                and t.customer_age > #{customerAgeBegin}
+            </if>
+            <if test="customerAgeEnd != null">
+                and t.customer_age &lt; #{customerAgeEnd}
+            </if>
+            <if test="customerType != null and customerType.size() > 0">
+                and t.customer_type in
+                <foreach collection="customerType" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="country != null and country.size() > 0">
+                and t.country in
+                <foreach collection="country" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="state != null and state != ''">
+                and t.state like concat('%', #{state}, '%')
+            </if>
+            <if test="city != null and city != ''">
+                and t.city like concat('%', #{city}, '%')
+            </if>
+            <if test="repeatOrderCountBegin != null">
+                and t.repeat_order_count > #{repeatOrderCountBegin}
+            </if>
+            <if test="repeatOrderCountEnd != null">
+                and t.repeat_order_count &lt; #{repeatOrderCountEnd}
+            </if>
+        </where>
+        order by t.repeat_order_count desc, t.create_time desc
+    </select>
+</mapper>

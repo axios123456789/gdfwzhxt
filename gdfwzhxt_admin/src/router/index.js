@@ -41,6 +41,7 @@ import cons from '@/router/modules/cons'
 import droneInspection from '@/router/modules/droneInspection'
 import workOrderControl from '@/router/modules/workOrderControl'
 import personCenter from '@/router/modules/personCenter'
+import saleManage from '@/router/modules/saleManage'
 
 /* 菜单栏的路由 */
 // 固定菜单
@@ -54,6 +55,7 @@ export const asyncRoutes = [
   ...cons,
   ...droneInspection,
   ...workOrderControl,
+  ...saleManage,
 ]
 
 const router = createRouter({

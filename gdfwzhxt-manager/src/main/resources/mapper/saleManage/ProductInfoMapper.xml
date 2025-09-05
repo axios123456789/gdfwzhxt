@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.ProductInfoMapper">
+    <sql id="columns">
+        id
+        ,
+        product_name,
+        product_type,
+        product_model,
+        product_image,
+        product_number,
+        product_row_price,
+        product_deal_price,
+        tax_inclusive_price,
+        commission_multiplier,
+        commission_rule,
+        commission_amount,
+        real_commission_amount,
+        product_detail,
+        product_trait,
+        create_time,
+        create_by,
+        update_time,
+        update_by
+    </sql>
+
+    <!--  添加产品信息  -->
+    <insert id="addProductInfo">
+        insert into t_product_info (id,
+                                    product_name,
+                                    product_type,
+                                    product_model,
+                                    product_image,
+                                    product_number,
+                                    product_row_price,
+                                    product_deal_price,
+                                    tax_inclusive_price,
+                                    commission_multiplier,
+                                    commission_rule,
+                                    commission_amount,
+                                    real_commission_amount,
+                                    product_detail,
+                                    product_trait,
+                                    create_time,
+                                    create_by)
+        values (#{id},
+                #{productName},
+                #{productType},
+                #{productModel},
+                #{productImage},
+                #{productNumber},
+                #{productRowPrice},
+                #{productDealPrice},
+                #{taxInclusivePrice},
+                #{commissionMultiplier},
+                #{commissionRule},
+                #{commissionAmount},
+                #{realCommissionAmount},
+                #{productDetail},
+                #{productTrait},
+                now(),
+                #{createBy})
+    </insert>
+
+    <!--  修改产品信息  -->
+    <update id="updateProductInfo">
+        update t_product_info
+        set product_name           = #{productName},
+            product_type           = #{productType},
+            product_model          = #{productModel},
+            product_image          = #{productImage},
+            product_number         = #{productNumber},
+            product_row_price      = #{productRowPrice},
+            product_deal_price     = #{productDealPrice},
+            tax_inclusive_price    = #{taxInclusivePrice},
+            commission_multiplier  = #{commissionMultiplier},
+            commission_rule        = #{commissionRule},
+            commission_amount      = #{commissionAmount},
+            real_commission_amount = #{realCommissionAmount},
+            product_detail         = #{productDetail},
+            product_trait          = #{productTrait},
+            update_time            = now(),
+            update_by              = #{updateBy}
+        where id = #{id}
+    </update>
+
+    <!--  条件查询所有产品信息  -->
+    <select id="getProductInfoByCondition"
+            resultType="com.wangwen.gdfwzhxt.model.entity.saleManage.ProductInfo">
+        select
+        <include refid="columns"/>
+        from t_product_info t
+        <where>
+            <if test="productName != null and productName != ''">
+                and t.product_name like concat('%', #{productName}, '%')
+            </if>
+            <if test="productType != null and productType.size() > 0">
+                and t.product_type in
+                <foreach collection="productType" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="realCommissionAmountBegin != null">
+                and t.real_commission_amount > #{realCommissionAmountBegin}
+            </if>
+            <if test="realCommissionAmountEnd != null">
+                and t.real_commission_amount &lt; #{realCommissionAmountEnd}
+            </if>
+        </where>
+        order by t.real_commission_amount desc, t.create_time desc
+    </select>
+</mapper>
