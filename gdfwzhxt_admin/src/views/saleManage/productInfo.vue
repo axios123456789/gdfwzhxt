@@ -573,6 +573,30 @@ const productInfoTypeChange = () => {
       (productInfo.value.productDealPrice - productInfo.value.productRowPrice) *
       productInfo.value.commissionMultiplier
     productInfo.value.realCommissionAmount = productInfo.value.commissionAmount
+  } else if (productInfo.value.commissionRule == 3) {
+    //售价 * 提成倍率
+    //--------------------基本校验-------------------
+    if (
+      productInfo.value.productDealPrice == undefined ||
+      productInfo.value.productDealPrice == null
+    ) {
+      ElMessage.warning('【产品售价】不能为空！')
+      productInfo.value.commissionRule = null
+      return
+    }
+    if (
+      productInfo.value.commissionMultiplier == undefined ||
+      productInfo.value.commissionMultiplier == null
+    ) {
+      ElMessage.warning('【产品提成倍率】不能为空！')
+      productInfo.value.commissionRule = null
+      return
+    }
+    //------计算--------
+    productInfo.value.commissionAmount =
+      productInfo.value.productDealPrice *
+      productInfo.value.commissionMultiplier
+    productInfo.value.realCommissionAmount = productInfo.value.commissionAmount
   }
 }
 
