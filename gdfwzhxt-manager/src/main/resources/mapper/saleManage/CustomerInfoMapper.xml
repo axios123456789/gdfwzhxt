@@ -22,7 +22,8 @@
         city,
         postcode,
         repeat_order_count,
-        customer_picture
+        customer_picture,
+        analyse
     </sql>
 
     <!--  添加客户信息  -->

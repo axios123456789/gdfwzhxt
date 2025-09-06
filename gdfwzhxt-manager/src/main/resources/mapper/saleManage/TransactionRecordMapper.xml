@@ -1,5 +1,187 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wangwen.gdfwzhxt.manager.mapper.TransactionRecordMapper">
+    <sql id="columns">
+        id,
+        checkout_success_page,
+        tracking_number,
+        is_arrive,
+        customer_id,
+        customer_name,
+        product_id,
+        product_name,
+        trade_time,
+        trade_count,
+        trade_amount,
+        trade_commission_amount,
+        customer_remark,
+        shipping_method,
+        handle_time,
+        delivery_address,
+        recipient,
+        order_close_time,
+        order_close_image,
+        customer_review,
+        review_image,
+        order_status,
+        refund_reason,
+        refund_reason_detail,
+        is_receive_refund_product,
+        not_receive_reason,
+        create_time,
+        create_by,
+        update_time,
+        update_by
+    </sql>
 
+    <!--  添加交易记录  -->
+    <insert id="addTransactionRecord">
+        insert into t_transaction_record (
+            id,
+            checkout_success_page,
+            tracking_number,
+            is_arrive,
+            customer_id,
+            customer_name,
+            product_id,
+            product_name,
+            trade_time,
+            trade_count,
+            trade_amount,
+            trade_commission_amount,
+            customer_remark,
+            shipping_method,
+            handle_time,
+            delivery_address,
+            recipient,
+            order_close_time,
+            order_close_image,
+            customer_review,
+            review_image,
+            order_status,
+            refund_reason,
+            refund_reason_detail,
+            is_receive_refund_product,
+            not_receive_reason,
+            create_time,
+            create_by
+        ) values (
+            #{id},
+            #{checkoutSuccessPage},
+            #{trackingNumber},
+            #{isArrive},
+            #{customerId},
+            #{customerName},
+            #{productId},
+            #{productName},
+            #{tradeTime},
+            #{tradeCount},
+            #{tradeAmount},
+            #{tradeCommissionAmount},
+            #{customerRemark},
+            #{shippingMethod},
+            #{handleTime},
+            #{deliveryAddress},
+            #{recipient},
+            #{orderCloseTime},
+            #{orderCloseImage},
+            #{customerReview},
+            #{reviewImage},
+            #{orderStatus},
+            #{refundReason},
+            #{refundReasonDetail},
+            #{isReceiveRefundProduct},
+            #{notReceiveReason},
+            now(),
+            #{createBy}
+        )
+    </insert>
+
+    <!--  修改交易记录  -->
+    <update id="updateTransactionRecord">
+        update t_transaction_record set
+            checkout_success_page = #{checkoutSuccessPage},
+            tracking_number = #{trackingNumber},
+            is_arrive = #{isArrive},
+            customer_id = #{customerId},
+            customer_name = #{customerName},
+            product_id = #{productId},
+            product_name = #{productName},
+            trade_time = #{tradeTime},
+            trade_count = #{tradeCount},
+            trade_amount = #{tradeAmount},
+            trade_commission_amount = #{tradeCommissionAmount},
+            customer_remark = #{customerRemark},
+            shipping_method = #{shippingMethod},
+            handle_time = #{handleTime},
+            delivery_address = #{deliveryAddress},
+            recipient = #{recipient},
+            order_close_time = #{orderCloseTime},
+            order_close_image = #{orderCloseImage},
+            customer_review = #{customerReview},
+            review_image = #{reviewImage},
+            order_status = #{orderStatus},
+            refund_reason = #{refundReason},
+            refund_reason_detail = #{refundReasonDetail},
+            is_receive_refund_product = #{isReceiveRefundProduct},
+            not_receive_reason = #{notReceiveReason},
+            update_time = now(),
+            update_by = #{updateBy}
+        where id = #{id}
+    </update>
+
+    <!-- 条件查询所有交易记录  -->
+    <select id="getTransactionRecordByCondition"
+            resultType="com.wangwen.gdfwzhxt.model.entity.saleManage.TransactionRecord">
+        select <include refid="columns" />
+            from t_transaction_record t
+        <where>
+            <if test="trackingNumber != null and trackingNumber != ''">
+                and t.tracking_number like concat('%', #{trackingNumber}, '%')
+            </if>
+            <if test="isArrive != null">
+                and t.is_arrive = #{isArrive}
+            </if>
+            <if test="tradeTimeBegin != null and tradeTimeBegin != ''">
+                and t.trade_time &gt;= #{tradeTimeBegin}
+            </if>
+            <if test="tradeTimeEnd != null and tradeTimeEnd != ''">
+                and t.trade_time &lt;= #{tradeTimeEnd}
+            </if>
+            <if test="customerId != null and customerId != ''">
+                and t.customer_id = #{customerId}
+            </if>
+            <if test="productId != null and productId != ''">
+                and t.product_id = #{productId}
+            </if>
+            <if test="tradeCountBegin != null">
+                and t.trade_count &gt; #{tradeCountBegin}
+            </if>
+            <if test="tradeCountEnd != null">
+                and t.trade_count &lt; #{tradeCountEnd}
+            </if>
+            <if test="shippingMethod != null and shippingMethod.size() > 0">
+                and t.shipping_method in
+                <foreach collection="shippingMethod" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="orderStatus != null and orderStatus.size() > 0">
+                and t.order_status in
+                <foreach collection="orderStatus" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="refundReason != null and refundReason.size() > 0">
+                and t.refund_reason in
+                <foreach collection="refundReason" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="isReceiveRefundProduct != null">
+                and t.is_receive_refund_product = #{isReceiveRefundProduct}
+            </if>
+        </where>
+        order by t.trade_time desc
+    </select>
 </mapper>

@@ -29,6 +29,12 @@ public class TransactionRecord {
     @Schema(description = "产品id")
     private String productId;
 
+    @Schema(description = "客户名称")
+    private String customerName;
+
+    @Schema(description = "产品名称")
+    private String productName;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Schema(description = "交易时间")
     private Date tradeTime;

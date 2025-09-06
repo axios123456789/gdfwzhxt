@@ -4,8 +4,10 @@ import com.github.pagehelper.PageInfo;
 import com.wangwen.gdfwzhxt.manager.service.SaleManageService;
 import com.wangwen.gdfwzhxt.model.dto.saleManage.CustomerInfoDto;
 import com.wangwen.gdfwzhxt.model.dto.saleManage.ProductInfoDto;
+import com.wangwen.gdfwzhxt.model.dto.saleManage.TransactionRecordDto;
 import com.wangwen.gdfwzhxt.model.entity.saleManage.CustomerInfo;
 import com.wangwen.gdfwzhxt.model.entity.saleManage.ProductInfo;
+import com.wangwen.gdfwzhxt.model.entity.saleManage.TransactionRecord;
 import com.wangwen.gdfwzhxt.model.vo.common.Result;
 import com.wangwen.gdfwzhxt.model.vo.common.ResultCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,6 +106,51 @@ public class SaleManageController {
             return Result.build(null, ResultCodeEnum.SUCCESS);
         } catch (Exception e) {
             return Result.build(null, 500, "删除产品信息失败，请联系开发者~~");
+        }
+    }
+
+    /**
+     * 条件分页查询交易记录列表
+     * @param current
+     * @param limit
+     * @param transactionRecordDto
+     * @return
+     */
+    @PostMapping("/getTransactionRecordByConditionAndPage/{current}/{limit}")
+    public Result getTransactionRecordByConditionAndPage(@PathVariable("current") Integer current,
+                                                         @PathVariable("limit") Integer limit,
+                                                         @RequestBody TransactionRecordDto transactionRecordDto){
+        PageInfo<TransactionRecord> transactionRecordPageInfo = saleManageService.getTransactionRecordByConditionAndPage(current, limit, transactionRecordDto);
+        return Result.build(transactionRecordPageInfo, ResultCodeEnum.SUCCESS);
+    }
+
+    /**
+     * 保存交易记录
+     * @param transactionRecord
+     * @return
+     */
+    @PostMapping("/saveTransactionRecord")
+    public Result saveTransactionRecord(@RequestBody TransactionRecord transactionRecord){
+        try {
+            saleManageService.saveTransactionRecord(transactionRecord);
+            return Result.build(null, ResultCodeEnum.SUCCESS);
+        } catch (Exception e) {
+            return Result.build(null, 500, "保存交易记录失败，请联系开发者~~");
+        }
+    }
+
+    /**
+     * 根据id删除交易记录
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/deleteTransactionRecordById/{id}")
+    public Result deleteTransactionRecordById(@PathVariable("id") String id){
+        try {
+            saleManageService.deleteTransactionRecordById(id);
+            return Result.build(null, ResultCodeEnum.SUCCESS);
+        } catch (Exception e) {
+            return Result.build(null, 500, "删除交易记录失败，请联系开发者~~");
         }
     }
 }

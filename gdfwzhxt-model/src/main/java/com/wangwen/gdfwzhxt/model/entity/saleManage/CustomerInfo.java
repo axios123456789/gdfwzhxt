@@ -71,4 +71,7 @@ public class CustomerInfo {
 
     @Schema(description = "客户照片")
     private String customerPicture;
+
+    @Schema(description = "客户分析")
+    private String analyse;
 }

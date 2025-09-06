@@ -390,6 +390,21 @@
                 </el-form-item>
               </el-col>
             </el-row>
+            <!--     第十行       -->
+            <el-row>
+              <el-col :span="24">
+                <el-form-item label="客户分析">
+                  <el-input
+                    type="textarea"
+                    style="width: 100%"
+                    :rows="5"
+                    disabled="true"
+                    placeholder="该内容由订单走完后自动生成"
+                    v-model="customerInfo.analyse"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
           </el-form>
         </el-form>
       </div>
@@ -465,6 +480,7 @@
       <el-table-column prop="customerAddress" label="客户地址" width="180" />
       <el-table-column prop="postcode" label="邮编" width="140" />
       <el-table-column prop="customerDetail" label="客户详细信息" width="200" />
+      <el-table-column prop="analyse" label="客户分析" width="200" />
       <el-table-column prop="createTime" label="记录创建时间" width="180" />
       <el-table-column prop="createBy" label="创建人" width="120" />
       <el-table-column prop="updateTime" label="记录修改时间" width="180" />

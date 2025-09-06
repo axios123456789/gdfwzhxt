@@ -61,3 +61,33 @@ export const DeleteProductInfoById = id => {
     method: 'delete',
   })
 }
+
+//条件分页查询交易记录
+export const GetTransactionRecordByConditionAndPage = (
+  current,
+  limit,
+  transactionRecordQueryDto
+) => {
+  return request({
+    url: `${api_name}/getTransactionRecordByConditionAndPage/${current}/${limit}`,
+    method: 'post',
+    data: transactionRecordQueryDto,
+  })
+}
+
+//保存交易记录
+export const SaveTransactionRecord = transactionRecord => {
+  return request({
+    url: `${api_name}/saveTransactionRecord`,
+    method: 'post',
+    data: transactionRecord,
+  })
+}
+
+//根据id删除交易记录
+export const DeleteTransactionRecordById = id => {
+  return request({
+    url: `${api_name}/deleteTransactionRecordById/${id}`,
+    method: 'delete',
+  })
+}
