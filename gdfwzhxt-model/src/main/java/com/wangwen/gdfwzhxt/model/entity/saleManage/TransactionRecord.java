@@ -20,6 +20,9 @@ public class TransactionRecord {
     @Schema(description = "快递单号")
     private String trackingNumber;
 
+    @Schema(description = "订单编号")
+    private String orderNo;
+
     @Schema(description = "是否到货（1是 0否）")
     private Integer isArrive;
 

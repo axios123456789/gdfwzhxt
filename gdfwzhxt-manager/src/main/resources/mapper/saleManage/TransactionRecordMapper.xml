@@ -4,6 +4,7 @@
     <sql id="columns">
         id,
         checkout_success_page,
+        order_no,
         tracking_number,
         is_arrive,
         customer_id,
@@ -64,7 +65,8 @@
             is_receive_refund_product,
             not_receive_reason,
             create_time,
-            create_by
+            create_by,
+            order_no
         ) values (
             #{id},
             #{checkoutSuccessPage},
@@ -93,7 +95,8 @@
             #{isReceiveRefundProduct},
             #{notReceiveReason},
             now(),
-            #{createBy}
+            #{createBy},
+            #{orderNo}
         )
     </insert>
 
@@ -126,7 +129,8 @@
             is_receive_refund_product = #{isReceiveRefundProduct},
             not_receive_reason = #{notReceiveReason},
             update_time = now(),
-            update_by = #{updateBy}
+            update_by = #{updateBy},
+            order_no = #{orderNo}
         where id = #{id}
     </update>
 
@@ -136,6 +140,9 @@
         select <include refid="columns" />
             from t_transaction_record t
         <where>
+            <if test="orderNo != null and orderNo != ''">
+                and t.order_no like concat('%', #{orderNo}, '%')
+            </if>
             <if test="trackingNumber != null and trackingNumber != ''">
                 and t.tracking_number like concat('%', #{trackingNumber}, '%')
             </if>

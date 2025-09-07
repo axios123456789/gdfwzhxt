@@ -14,6 +14,9 @@ public class TransactionRecordDto {
     @Schema(description = "是否到货")
     private Integer isArrive;
 
+    @Schema(description = "订单编号")
+    private String orderNo;
+
     @Schema(description = "交易开始时间")
     private String tradeTimeBegin;
 

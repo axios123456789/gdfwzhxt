@@ -161,6 +161,10 @@ public class SaleManageServiceImpl implements SaleManageService {
 
             //添加交易记录
             transactionRecordMapper.addTransactionRecord(transactionRecord);
+            //根据客户id将客户交易次数加一
+            customerInfoMapper.updateCustomerTradeCountById(transactionRecord.getCustomerId());
+            //根据产品id将产品库存减交易数量
+            productInfoMapper.updateProductInfoNumberById(transactionRecord.getProductId(), transactionRecord.getTradeCount());
         }else {//修改
             transactionRecord.setUpdateBy(AuthContextUtil.get().getName());
 
