@@ -2,6 +2,7 @@ package com.wangwen.gdfwzhxt.manager.mapper;
 
 import com.wangwen.gdfwzhxt.model.dto.saleManage.TransactionRecordDto;
 import com.wangwen.gdfwzhxt.model.entity.saleManage.TransactionRecord;
+import com.wangwen.gdfwzhxt.model.vo.saleManage.CustomerAnalyseVo;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -21,4 +22,7 @@ public interface TransactionRecordMapper {
     //根据id删除交易记录
     @Delete("delete from t_transaction_record where id = #{param1}")
     void deleteTransactionRecordById(String id);
+
+    //获取客户购买产品分析
+    List<CustomerAnalyseVo> getProductAnalyse(String customerId);
 }

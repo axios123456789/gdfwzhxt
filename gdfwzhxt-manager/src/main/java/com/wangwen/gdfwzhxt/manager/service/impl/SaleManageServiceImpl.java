@@ -14,9 +14,11 @@ import com.wangwen.gdfwzhxt.model.dto.saleManage.TransactionRecordDto;
 import com.wangwen.gdfwzhxt.model.entity.saleManage.CustomerInfo;
 import com.wangwen.gdfwzhxt.model.entity.saleManage.ProductInfo;
 import com.wangwen.gdfwzhxt.model.entity.saleManage.TransactionRecord;
+import com.wangwen.gdfwzhxt.model.vo.saleManage.CustomerAnalyseVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -171,6 +173,71 @@ public class SaleManageServiceImpl implements SaleManageService {
             //修改交易记录
             transactionRecordMapper.updateTransactionRecord(transactionRecord);
         }
+        customerAnalyse(transactionRecord);
+    }
+
+    /**
+     * 客户分析
+     * @param transactionRecord
+     */
+    private void customerAnalyse(TransactionRecord transactionRecord){
+        StringBuilder stringBuilder = new StringBuilder();
+        //1.产品层面对客户进行分析
+        //1.1获取各产品情况
+        List<CustomerAnalyseVo> customerAnalyseVos = transactionRecordMapper.getProductAnalyse(transactionRecord.getCustomerId());
+        CustomerAnalyseVo customerAnalyseVoTotal = getTotal(customerAnalyseVos);
+        stringBuilder.append("1.客户总体情况分析：").append(System.lineSeparator());
+        stringBuilder.append("  "+transactionRecord.getCustomerName()+"客户与您总共完成了"+customerAnalyseVoTotal.getTradeCount()+"场交易，");
+        stringBuilder.append("交易产品数量达"+customerAnalyseVoTotal.getTradeSum()+"个；");
+        stringBuilder.append("累计交易金额达到"+customerAnalyseVoTotal.getTradeAmount()+"元，");
+        stringBuilder.append("您在"+transactionRecord.getCustomerName()+"客户身上获取的提成总金额为："+customerAnalyseVoTotal.getTradeCommissionAmount()+"元。");
+        stringBuilder.append(System.lineSeparator());
+        //1.2针对客户购买产品分析
+        stringBuilder.append("2.交易产品分析：").append(System.lineSeparator());
+        stringBuilder.append("  "+transactionRecord.getCustomerName()+"客户与您完成的所有交易中：");
+        for (int i = 0; i < customerAnalyseVos.size(); i++) {
+            stringBuilder.append(customerAnalyseVos.get(i).getProductName()+"产品的交易数量排名第"+(i+1)+"，为"+customerAnalyseVos.get(i).getTradeSum()+"个；");
+            stringBuilder.append("交易的总金额达："+customerAnalyseVos.get(i).getTradeAmount()+"元；");
+            stringBuilder.append("累计获取的提成金额为："+customerAnalyseVos.get(i).getTradeCommissionAmount()+"元。");
+        }
+        stringBuilder.append(System.lineSeparator());
+        stringBuilder.append("  由此分析可判断："+transactionRecord.getCustomerName()+"客户对");
+        stringBuilder.append(customerAnalyseVos.get(0).getProductName()+"产品的中意度比较高，往后可以给客户推荐类似");
+        stringBuilder.append(customerAnalyseVos.get(0).getProductName()+"的产品来获取利益。").append(System.lineSeparator());
+
+        //2.订单状态层面对客户进行分析
+        //获取订单分析结果
+        List<CustomerAnalyseVo> customerAnalyseVoList = customerInfoMapper.getOrderStatusAnalyse(transactionRecord.getCustomerId());
+        CustomerAnalyseVo orderStatusTotal = getTotal(customerAnalyseVoList);
+        stringBuilder.append("3.客户订单状态分析：").append(System.lineSeparator()).append("  "+transactionRecord.getCustomerName()+"客户处于");
+        for (CustomerAnalyseVo customerAnalyseVo : customerAnalyseVoList){
+            stringBuilder.append("【"+customerAnalyseVo.getOrderStatus()+"】的订单数量"+customerAnalyseVo.getTradeCount()+"个，占比");
+            stringBuilder.append(String.format("%.2f", (double)customerAnalyseVo.getTradeCount()/orderStatusTotal.getTradeCount()*100)+"%。");
+        }
+
+        //3.保存客户分析结果
+        customerInfoMapper.saveCustomerAnalyseResult(transactionRecord.getCustomerId(), stringBuilder.toString());
+    }
+
+    /**
+     * 针对各指标求合计
+     * @param customerAnalyseVos
+     * @return
+     */
+    private CustomerAnalyseVo getTotal(List<CustomerAnalyseVo> customerAnalyseVos){
+        CustomerAnalyseVo customerAnalyseVoTotal = new CustomerAnalyseVo();
+        customerAnalyseVoTotal.setProductName("合计");
+        customerAnalyseVoTotal.setTradeCount(0);
+        customerAnalyseVoTotal.setTradeSum(0);
+        customerAnalyseVoTotal.setTradeAmount(BigDecimal.valueOf(0.00));
+        customerAnalyseVoTotal.setTradeCommissionAmount(BigDecimal.valueOf(0.00));
+        for (CustomerAnalyseVo customerAnalyseVo : customerAnalyseVos){
+            customerAnalyseVoTotal.setTradeCount(customerAnalyseVoTotal.getTradeCount() + customerAnalyseVo.getTradeCount());
+            customerAnalyseVoTotal.setTradeSum(customerAnalyseVoTotal.getTradeSum() + customerAnalyseVo.getTradeSum());
+            customerAnalyseVoTotal.setTradeAmount(customerAnalyseVoTotal.getTradeAmount().add(customerAnalyseVo.getTradeAmount()));
+            customerAnalyseVoTotal.setTradeCommissionAmount(customerAnalyseVoTotal.getTradeCommissionAmount().add(customerAnalyseVo.getTradeCommissionAmount()));
+        }
+        return customerAnalyseVoTotal;
     }
 
     /**

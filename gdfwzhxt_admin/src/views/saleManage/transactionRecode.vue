@@ -822,7 +822,18 @@
           label="客户详细信息"
           width="200"
         />
-        <el-table-column prop="analyse" label="客户分析" width="200" />
+        <el-table-column
+          prop="analyse"
+          label="客户分析"
+          width="500"
+          #default="scope"
+        >
+          {{
+            scope.row?.analyse?.length > 200
+              ? scope.row.analyse.substring(0, 200) + '...'
+              : scope.row?.analyse
+          }}
+        </el-table-column>
         <el-table-column prop="createTime" label="记录创建时间" width="180" />
         <el-table-column prop="createBy" label="创建人" width="120" />
         <el-table-column prop="updateTime" label="记录修改时间" width="180" />

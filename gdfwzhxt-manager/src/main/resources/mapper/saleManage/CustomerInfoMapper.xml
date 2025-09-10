@@ -138,4 +138,24 @@
         </where>
         order by t.repeat_order_count desc, t.create_time desc
     </select>
+
+    <!-- 获取订单分析结果   -->
+    <select id="getOrderStatusAnalyse" resultType="com.wangwen.gdfwzhxt.model.vo.saleManage.CustomerAnalyseVo">
+        SELECT
+            ( SELECT c.`value` FROM t_code c WHERE c.type = 't_order_status' AND c.`code` = t.order_status LIMIT 1 ) AS orderStatus,
+	count( 1 ) tradeCount,
+	sum( t.trade_count ) tradeSum,
+	sum( t.trade_amount ) AS tradeAmount,
+	sum( t.trade_commission_amount ) AS tradeCommissionAmount
+        FROM
+            t_transaction_record t
+            JOIN t_customer_info c ON t.customer_id = c.id
+            JOIN t_product_info p ON t.product_id = p.id
+        WHERE
+            t.customer_id = #{param1}
+        GROUP BY
+            t.order_status
+        ORDER BY
+            count( 1 ) DESC
+    </select>
 </mapper>

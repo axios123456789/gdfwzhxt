@@ -191,4 +191,20 @@
         </where>
         order by t.trade_time desc
     </select>
+
+    <!-- 获取客户购买产品分析   -->
+    <select id="getProductAnalyse" resultType="com.wangwen.gdfwzhxt.model.vo.saleManage.CustomerAnalyseVo">
+        select p.product_name                 as productName,
+               count(1)                          tradeCount,
+               sum(t.trade_count)                tradeSum,
+               sum(t.trade_amount)            as tradeAmount,
+               sum(t.trade_commission_amount) as tradeCommissionAmount
+        from t_transaction_record t
+                 join t_customer_info c on t.customer_id = c.id
+                 join t_product_info p on t.product_id = p.id
+        where t.customer_id = #{param1}
+          and t.order_status = 4
+        group by p.product_name
+        order by sum(t.trade_count) desc
+    </select>
 </mapper>
