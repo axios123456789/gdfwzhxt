@@ -15,11 +15,15 @@ import com.wangwen.gdfwzhxt.model.entity.saleManage.CustomerInfo;
 import com.wangwen.gdfwzhxt.model.entity.saleManage.ProductInfo;
 import com.wangwen.gdfwzhxt.model.entity.saleManage.TransactionRecord;
 import com.wangwen.gdfwzhxt.model.vo.saleManage.CustomerAnalyseVo;
+import com.wangwen.gdfwzhxt.model.vo.saleManage.CustomerEchartsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SaleManageServiceImpl implements SaleManageService {
@@ -185,25 +189,27 @@ public class SaleManageServiceImpl implements SaleManageService {
         //1.产品层面对客户进行分析
         //1.1获取各产品情况
         List<CustomerAnalyseVo> customerAnalyseVos = transactionRecordMapper.getProductAnalyse(transactionRecord.getCustomerId());
-        CustomerAnalyseVo customerAnalyseVoTotal = getTotal(customerAnalyseVos);
-        stringBuilder.append("1.客户总体情况分析：").append(System.lineSeparator());
-        stringBuilder.append("  "+transactionRecord.getCustomerName()+"客户与您总共完成了"+customerAnalyseVoTotal.getTradeCount()+"场交易，");
-        stringBuilder.append("交易产品数量达"+customerAnalyseVoTotal.getTradeSum()+"个；");
-        stringBuilder.append("累计交易金额达到"+customerAnalyseVoTotal.getTradeAmount()+"元，");
-        stringBuilder.append("您在"+transactionRecord.getCustomerName()+"客户身上获取的提成总金额为："+customerAnalyseVoTotal.getTradeCommissionAmount()+"元。");
-        stringBuilder.append(System.lineSeparator());
-        //1.2针对客户购买产品分析
-        stringBuilder.append("2.交易产品分析：").append(System.lineSeparator());
-        stringBuilder.append("  "+transactionRecord.getCustomerName()+"客户与您完成的所有交易中：");
-        for (int i = 0; i < customerAnalyseVos.size(); i++) {
-            stringBuilder.append(customerAnalyseVos.get(i).getProductName()+"产品的交易数量排名第"+(i+1)+"，为"+customerAnalyseVos.get(i).getTradeSum()+"个；");
-            stringBuilder.append("交易的总金额达："+customerAnalyseVos.get(i).getTradeAmount()+"元；");
-            stringBuilder.append("累计获取的提成金额为："+customerAnalyseVos.get(i).getTradeCommissionAmount()+"元。");
+        if (customerAnalyseVos.size() > 0){
+            CustomerAnalyseVo customerAnalyseVoTotal = getTotal(customerAnalyseVos);
+            stringBuilder.append("1.客户总体情况分析：").append(System.lineSeparator());
+            stringBuilder.append("  "+transactionRecord.getCustomerName()+"客户与您总共完成了"+customerAnalyseVoTotal.getTradeCount()+"场交易，");
+            stringBuilder.append("交易产品数量达"+customerAnalyseVoTotal.getTradeSum()+"个；");
+            stringBuilder.append("累计交易金额达到"+customerAnalyseVoTotal.getTradeAmount()+"元，");
+            stringBuilder.append("您在"+transactionRecord.getCustomerName()+"客户身上获取的提成总金额为："+customerAnalyseVoTotal.getTradeCommissionAmount()+"元。");
+            stringBuilder.append(System.lineSeparator());
+            //1.2针对客户购买产品分析
+            stringBuilder.append("2.交易产品分析：").append(System.lineSeparator());
+            stringBuilder.append("  "+transactionRecord.getCustomerName()+"客户与您完成的所有交易中：");
+            for (int i = 0; i < customerAnalyseVos.size(); i++) {
+                stringBuilder.append(customerAnalyseVos.get(i).getProductName()+"产品的交易数量排名第"+(i+1)+"，为"+customerAnalyseVos.get(i).getTradeSum()+"个；");
+                stringBuilder.append("交易的总金额达："+customerAnalyseVos.get(i).getTradeAmount()+"元；");
+                stringBuilder.append("累计获取的提成金额为："+customerAnalyseVos.get(i).getTradeCommissionAmount()+"元。");
+            }
+            stringBuilder.append(System.lineSeparator());
+            stringBuilder.append("  由此分析可判断："+transactionRecord.getCustomerName()+"客户对");
+            stringBuilder.append(customerAnalyseVos.get(0).getProductName()+"产品的中意度比较高，往后可以给客户推荐类似");
+            stringBuilder.append(customerAnalyseVos.get(0).getProductName()+"的产品来获取利益。").append(System.lineSeparator());
         }
-        stringBuilder.append(System.lineSeparator());
-        stringBuilder.append("  由此分析可判断："+transactionRecord.getCustomerName()+"客户对");
-        stringBuilder.append(customerAnalyseVos.get(0).getProductName()+"产品的中意度比较高，往后可以给客户推荐类似");
-        stringBuilder.append(customerAnalyseVos.get(0).getProductName()+"的产品来获取利益。").append(System.lineSeparator());
 
         //2.订单状态层面对客户进行分析
         //获取订单分析结果
@@ -247,5 +253,26 @@ public class SaleManageServiceImpl implements SaleManageService {
     @Override
     public void deleteTransactionRecordById(String id) {
         transactionRecordMapper.deleteTransactionRecordById(id);
+    }
+
+    /**
+     * 获取客户分析数据【客户提成金额排名】
+     * @return
+     */
+    @Override
+    public Map<String, Object> getCustomerAnalyseData() {
+        //1.获取客户提成金额排名分析数据
+        List<CustomerEchartsVo> customerEchartsVos = customerInfoMapper.getCustomerAnalyseData();
+
+        //2.封装数据
+        Map<String, Object> map = new HashMap<>();
+        map.put("dataList", customerEchartsVos);
+        List<String> listTitle = new ArrayList<>();
+        for (CustomerEchartsVo customerEchartsVo : customerEchartsVos){
+            listTitle.add(customerEchartsVo.getName());
+        }
+        map.put("dataTitle", listTitle);
+
+        return map;
     }
 }

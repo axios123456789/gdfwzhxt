@@ -3,6 +3,7 @@ package com.wangwen.gdfwzhxt.manager.mapper;
 import com.wangwen.gdfwzhxt.model.dto.saleManage.CustomerInfoDto;
 import com.wangwen.gdfwzhxt.model.entity.saleManage.CustomerInfo;
 import com.wangwen.gdfwzhxt.model.vo.saleManage.CustomerAnalyseVo;
+import com.wangwen.gdfwzhxt.model.vo.saleManage.CustomerEchartsVo;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Update;
@@ -37,4 +38,7 @@ public interface CustomerInfoMapper {
 
     //获取订单分析结果
     List<CustomerAnalyseVo> getOrderStatusAnalyse(String customerId);
+
+    //获取客户提成金额排名分析数据
+    List<CustomerEchartsVo> getCustomerAnalyseData();
 }

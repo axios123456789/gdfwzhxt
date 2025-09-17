@@ -8,6 +8,8 @@ import com.wangwen.gdfwzhxt.model.entity.saleManage.CustomerInfo;
 import com.wangwen.gdfwzhxt.model.entity.saleManage.ProductInfo;
 import com.wangwen.gdfwzhxt.model.entity.saleManage.TransactionRecord;
 
+import java.util.Map;
+
 public interface SaleManageService {
     //条件分页查询客户信息
     PageInfo<CustomerInfo> getCustomerInfoByConditionAndPage(Integer current, Integer limit, CustomerInfoDto customerInfoDto);
@@ -35,4 +37,7 @@ public interface SaleManageService {
 
     //根据id删除交易记录
     void deleteTransactionRecordById(String id);
+
+    //获取客户分析数据【客户提成金额排名】
+    Map<String, Object> getCustomerAnalyseData();
 }

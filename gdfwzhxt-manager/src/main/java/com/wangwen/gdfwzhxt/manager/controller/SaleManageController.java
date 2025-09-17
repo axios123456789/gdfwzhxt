@@ -13,6 +13,8 @@ import com.wangwen.gdfwzhxt.model.vo.common.ResultCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/electricity/saleManage")
 public class SaleManageController {
@@ -152,5 +154,15 @@ public class SaleManageController {
         } catch (Exception e) {
             return Result.build(null, 500, "删除交易记录失败，请联系开发者~~");
         }
+    }
+
+    /**
+     * 获取客户分析数据【客户提成金额排名】
+     * @return
+     */
+    @GetMapping("/getCustomerAnalyseData")
+    public Result getCustomerAnalyseData(){
+        Map<String, Object> map = saleManageService.getCustomerAnalyseData();
+        return Result.build(map, ResultCodeEnum.SUCCESS);
     }
 }

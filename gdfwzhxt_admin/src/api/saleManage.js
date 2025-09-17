@@ -91,3 +91,11 @@ export const DeleteTransactionRecordById = id => {
     method: 'delete',
   })
 }
+
+//获取客户分析数据【客户提成金额排名】
+export const GetCustomerAnalyseData = () => {
+  return request({
+    url: `${api_name}/getCustomerAnalyseData`,
+    method: 'get',
+  })
+}

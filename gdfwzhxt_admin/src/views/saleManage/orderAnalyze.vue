@@ -1,33 +1,53 @@
 <template>
   <el-tabs type="border-card" class="analyseDT">
-    <el-tab-pane label="可视化分析">
+    <el-tab-pane label="客户提成可视化">
       <div
         ref="chart"
         style="width: 1000px; height: 700px; margin-left: 140px"
       ></div>
     </el-tab-pane>
-    <el-tab-pane label="报表分析">报表</el-tab-pane>
+    <!--    <el-tab-pane label="报表分析">报表</el-tab-pane>-->
   </el-tabs>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue'
 import * as echarts from 'echarts'
+import { GetCustomerAnalyseData } from '@/api/saleManage'
 
 onMounted(() => {
-  setChartOption()
+  getCustomerAnalyseData()
 })
-const chart = ref()
-const setChartOption = () => {
+
+//--------------------------------------------------------客户提成金额可视化------------------------------------------
+const chart = ref() //客户提成金额
+
+//获取客户分析数据
+const getCustomerAnalyseData = async () => {
+  const { data } = await GetCustomerAnalyseData()
+  setChartOption(data)
+}
+
+//客户提成金额echarts渲染
+const setChartOption = data => {
+  //获取最大值
+  let maxData = 0
+  for (let i = 0; i < data.dataList.length; i++) {
+    if (data.dataList[i].value >= maxData) {
+      maxData = data.dataList[i].value
+    }
+  }
+  //console.log("数据："+maxData)
+
   const myChart = echarts.init(chart.value)
   // 指定图表的配置项和数据
   const option = {
     title: {
-      text: 'Funnel',
+      text: '提成金额前六客户可视化',
     },
     tooltip: {
       trigger: 'item',
-      formatter: '{a} <br/>{b} : {c}',
+      formatter: '{a} <br/>{b} : {c}(元)',
     },
     toolbox: {
       feature: {
@@ -37,7 +57,7 @@ const setChartOption = () => {
       },
     },
     legend: {
-      data: ['Show', 'Click', 'Visit', 'Inquiry', 'Order'],
+      data: data.dataTitle,
     },
     series: [
       {
@@ -48,7 +68,7 @@ const setChartOption = () => {
         bottom: 60,
         width: '80%',
         min: 0,
-        max: 100,
+        max: maxData,
         minSize: '0%',
         maxSize: '100%',
         sort: 'descending',
@@ -73,13 +93,7 @@ const setChartOption = () => {
             fontSize: 20,
           },
         },
-        data: [
-          { value: 60, name: 'Visit' },
-          { value: 40, name: 'Inquiry' },
-          { value: 20, name: 'Order' },
-          { value: 80, name: 'Click' },
-          { value: 50, name: 'Show' },
-        ],
+        data: data.dataList,
       },
     ],
   }
